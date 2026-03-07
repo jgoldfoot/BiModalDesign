@@ -8,7 +8,7 @@ build/
 
 # Ignore existing tools with browser code (to be fixed later)
 tools/agent-simulator.js
-tools/agentux-cli.js
+tools/bimodal-design-cli.js
 accessibility/compliance-audit.js
 tools/validators/fr1-checker.js
 

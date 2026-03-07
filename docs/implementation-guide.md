@@ -33,7 +33,7 @@ Use this checklist to evaluate your current application:
 
 ```bash
 # Run the BiModal Design assessment (fictional CLI - replace with actual assessment)
-npx @agentux/assessment
+npx @bimodal-design/framework validate
 
 # Manual checks:
 curl -I https://your-app.com/  # Check if content loads without JS
@@ -361,7 +361,7 @@ describe('BiModal Design Compatibility', () => {
 
 ```bash
 # BiModal Design compliance check (use actual validator when available)
-npx @agentux/validator https://your-app.com/
+npx @bimodal-design/framework validate https://your-app.com/
 
 # Manual validation checklist:
 # [ ] Content loads without JavaScript
@@ -604,7 +604,7 @@ axe http://localhost:3000
 lighthouse http://localhost:3000 --only-categories=performance
 
 # BiModal Design-specific validation (when available)
-npx @agentux/validator http://localhost:3000
+npx @bimodal-design/framework validate http://localhost:3000
 ```
 
 ## Performance Optimization
@@ -890,9 +890,9 @@ After completing this implementation guide:
 ## Support and Resources
 
 - **Documentation**: [BiModal Design Framework
-  Documentation](https://github.com/jgoldfoot/BiModal Design/docs)
+  Documentation](https://github.com/jgoldfoot/BiModalDesign/docs)
 - **Examples**: [Complete Implementation
-  Examples](https://github.com/jgoldfoot/BiModal Design/examples)
+  Examples](https://github.com/jgoldfoot/BiModalDesign/examples)
 - **Issues**: [GitHub Issues](https://github.com/jgoldfoot/BiModal
   Design/issues)
 - **Discussions**: [Community Forum](https://github.com/jgoldfoot/BiModal

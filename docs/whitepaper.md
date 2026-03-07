@@ -43,7 +43,7 @@ capability for organizations deploying AI agents at scale.
 3. [Introduction & Current State](#introduction--current-state)
 4. [Research Foundation & Validation Framework](#research-foundation--validation-framework)
 5. [Rendering Strategy for Agent Accessibility](#rendering-strategy)
-6. [BiModal Design Principles & Validated Patterns](#agentux-principles--validated-patterns)
+6. [BiModal Design Principles & Validated Patterns](#bimodal-design-principles--validated-patterns)
 7. [Implementation Framework](#implementation-framework)
 8. [Security, Ethics & Governance](#security-ethics--governance)
 9. [Real-World Implementation & Future Validation](#real-world-implementation--future-validation)
@@ -747,8 +747,8 @@ other optimizations irrelevant.
 ### **7.3 Automated Testing Pipeline**
 
 ```yaml
-# agentux-ci.yml
-agentux_validation:
+# bimodal-design-ci.yml
+bimodal_design_validation:
   stages:
     - initial_payload_check # NEW - Must pass first
     - semantic_validation
@@ -758,7 +758,7 @@ agentux_validation:
 
   initial_payload_check:
     script:
-      - npx agentux-test --check-initial-payload
+      - npx bimodal-design check --check-initial-payload
       - curl -s $DEPLOY_URL | grep -q "<main"
     required: true # Build fails if this fails
 
@@ -771,8 +771,8 @@ agentux_validation:
 
   agent_simulation:
     script:
-      - npx agentux-test --suite=navigation
-      - npx agentux-test --suite=form-completion
+      - npx bimodal-design check --suite=navigation
+      - npx bimodal-design check --suite=form-completion
     success_rate: '>= 75%'
 ```
 
@@ -926,7 +926,7 @@ controlled studies and additional real-world implementations.
 #### **10.1.1 Initial Payload Validator (New)**
 
 ```javascript
-// agentux-payload-validator.js
+// bimodal-design-payload-validator.js
 class InitialPayloadValidator {
   async validate(url) {
     // Simulate agent access (no JavaScript)
@@ -1018,7 +1018,7 @@ class BiModal DesignDevTools {
 ### **10.2 CI/CD Integration**
 
 ```javascript
-// agentux.config.js
+// bimodal-design.config.js
 module.exports = {
   validation: {
     initialPayload: {
@@ -1049,10 +1049,10 @@ module.exports = {
 
 ```javascript
 // next.config.js
-const withBiModal Design = require('@agentux/next-plugin');
+const withBiModalDesign = require('@bimodal-design/next-plugin');
 
-module.exports = withBiModal Design({
-  agentux: {
+module.exports = withBiModalDesign({
+  bimodalDesign: {
     enableStructuredData: true,
     enforceSSG: true, // Ensure static generation
     apiRoutes: '/api/agent/*',
@@ -1284,13 +1284,11 @@ if agents cannot see it.
 
 ### **BiModal Design Resources**
 
-- **Official Website**: [agentux.design](https://agentux.design)
 - **GitHub Repository**:
-  [github.com/agentux/core](https://github.com/agentux/core)
-- **NPM Package**: `@agentux/core`
-- **Documentation**: [docs.agentux.design](https://docs.agentux.design)
-- **Community**: [community.agentux.design](https://community.agentux.design)
-- **Initial Payload Validator**: `npm install @agentux/payload-validator`
+  [github.com/jgoldfoot/BiModalDesign](https://github.com/jgoldfoot/BiModalDesign)
+- **NPM Package**: `@bimodal-design/framework`
+- **Documentation**: [BiModalDesign/docs](https://github.com/jgoldfoot/BiModalDesign/tree/main/docs)
+- **Community**: [GitHub Discussions](https://github.com/jgoldfoot/BiModalDesign/discussions)
 
 ---
 
@@ -1382,7 +1380,7 @@ curl -s https://yoursite.com
 ### **Step 4: Validate Compliance**
 
 ```bash
-npx @agentux/validator https://yoursite.com
+npx @bimodal-design/framework validate https://yoursite.com
 ```
 
 ### **Step 5: Monitor & Iterate**
@@ -1403,7 +1401,7 @@ interaction patterns. He has contributed to accessibility standards, published
 research on agent-interface design, and consulted with Fortune 500 companies on
 AI integration strategies.
 
-**Contact:** [joel@agentux.design](mailto:joel@agentux.design)  
+**Contact:** [joel@goldfoot.com](mailto:joel@goldfoot.com)
 **LinkedIn:** [linkedin.com/in/joelgoldfoot](https://linkedin.com/in/joelgoldfoot)  
 **Website:**
 [ai-plus.design](https://ai-plus.design)

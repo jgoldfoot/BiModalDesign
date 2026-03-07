@@ -136,5 +136,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to get involved. We're especially
 
 ---
 
-[Unreleased]: https://github.com/jgoldfoot/BiModal Design/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/jgoldfoot/BiModal Design/releases/tag/v0.1.0
+[Unreleased]: https://github.com/jgoldfoot/BiModalDesign/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/jgoldfoot/BiModalDesign/releases/tag/v0.1.0

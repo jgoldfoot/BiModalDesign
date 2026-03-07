@@ -23,5 +23,5 @@ examples/*.html
 # Tools with embedded HTML/browser code
 tools/validators/fr1-checker.js
 tools/agent-simulator.js
-tools/agentux-cli.js
+tools/bimodal-design-cli.js
 accessibility/compliance-audit.js

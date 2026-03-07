@@ -181,7 +181,7 @@ function printResults(url, results) {
   console.log(COLORS.gray + 'What is FR-1?' + COLORS.reset);
   console.log('FR-1 (Initial Payload Accessibility) ensures that ~80% of AI');
   console.log('agents can access your content via simple HTTP requests.');
-  console.log('\nLearn more: https://github.com/jgoldfoot/BiModal Design');
+  console.log('\nLearn more: https://github.com/jgoldfoot/BiModalDesign');
   console.log(COLORS.gray + '─'.repeat(60) + COLORS.reset + '\n');
 }
 

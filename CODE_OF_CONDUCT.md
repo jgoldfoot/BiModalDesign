@@ -73,7 +73,7 @@ the community in public spaces.
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at:
 
-**Email**: conduct@agentux.design  
+**Email**: joel@goldfoot.com
 **GitHub**: Create a private issue or contact maintainers directly
 
 All reports will be reviewed and investigated promptly and fairly. All community

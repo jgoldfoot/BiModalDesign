@@ -145,13 +145,13 @@ curl -s https://yoursite.com | grep "your-main-content"
 
 ```bash
 # Install BiModal Design CLI (when available)
-npm install -g @agentux/cli
+npm install -g @bimodal-design/framework
 
 # Run compliance check
-agentux validate https://yoursite.com
+bimodal-design validate https://yoursite.com
 
 # Run agent simulation
-agentux test --suite=basic-navigation
+bimodal-design simulate https://yoursite.com
 ```
 
 ---
@@ -206,4 +206,4 @@ agentux test --suite=basic-navigation
 - [Getting Started Guide](./getting-started.md)
 - [Full White Paper](./whitepaper.md)
 - [Example Implementations](../examples/)
-- [Report Issues](https://github.com/jgoldfoot/BiModal Design/issues)
+- [Report Issues](https://github.com/jgoldfoot/BiModalDesign/issues)

@@ -8,8 +8,8 @@ Accessibility** compliance.
 
 ```bash
 # Create new Next.js project with SSR
-npx create-next-app@latest agentux-example --typescript --app --src-dir
-cd agentux-example
+npx create-next-app@latest bimodal-example --typescript --app --src-dir
+cd bimodal-example
 npm install
 ```
 
@@ -304,7 +304,7 @@ export async function GET(request: NextRequest) {
   const response = NextResponse.json({
     products: filteredProducts,
     total: filteredProducts.length,
-    agentUX: {
+    bimodalDesign: {
       version: '2.1',
       capabilities: ['product-search', 'add-to-cart', 'checkout'],
       endpoints: {

@@ -15,7 +15,7 @@ hydration.
 ## Project Structure
 
 ```
-astro-agentux-app/
+astro-bimodal-app/
 ├── astro.config.mjs
 ├── src/
 │   ├── layouts/
@@ -985,10 +985,10 @@ const pageDescription = 'Get in touch with our support team for questions about 
               <h3>📧 Email Support</h3>
               <p>
                 <a
-                  href="mailto:support@agentux.example.com"
+                  href="mailto:support@example.com"
                   data-agent-action="send-email"
                 >
-                  support@agentux.example.com
+                  support@example.com
                 </a>
               </p>
               <p class="response-time">Response time: 24-48 hours</p>
@@ -1205,7 +1205,7 @@ const pageDescription = 'Get in touch with our support team for questions about 
       "mainEntity": {
         "@type": "Organization",
         "name": "BiModal Design Store",
-        "email": "support@agentux.example.com",
+        "email": "support@example.com",
         "contactPoint": {
           "@type": "ContactPoint",
           "telephone": "+1-555-0123",

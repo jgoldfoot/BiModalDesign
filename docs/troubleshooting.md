@@ -1057,11 +1057,11 @@ If BiModal Design implementation is causing issues in production:
 
 ```javascript
 // Emergency disable - Add to head of page
-window.AGENTUX_DISABLED = true;
+window.BIMODAL_DESIGN_DISABLED = true;
 
 // Update your detection code
 function detectAgent() {
-  if (window.AGENTUX_DISABLED) return false;
+  if (window.BIMODAL_DESIGN_DISABLED) return false;
   // ... normal detection logic
 }
 ```
@@ -1096,7 +1096,7 @@ function detectAgent() {
 
 - **GitHub Issues**: Report bugs and get help from maintainers
 - **Documentation**: Check latest docs for updates and examples
-- **Stack Overflow**: Tag questions with `agentux` and `accessibility`
+- **Stack Overflow**: Tag questions with `bimodal-design` and `accessibility`
 
 ### Professional Support
 

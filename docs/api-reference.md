@@ -740,7 +740,7 @@ Vary: User-Agent
  * Detects and categorizes user agents for optimal experience delivery
  */
 
-class BiModal DesignDetector {
+class BiModalDesignDetector {
   constructor(config = {}) {
     this.config = {
       enableAnalytics: config.enableAnalytics ?? true,
@@ -1369,7 +1369,7 @@ class BiModal DesignDetector {
 }
 
 // Usage Examples
-const agentDetector = new BiModal DesignDetector({
+const agentDetector = new BiModalDesignDetector({
   enableAnalytics: true,
   customPatterns: {
     'custom-bots': [
@@ -1388,12 +1388,12 @@ if (agentInfo.isAgent) {
 
 // Export for use in modules
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = BiModal DesignDetector;
+  module.exports = BiModalDesignDetector;
 }
 
 // Global access for direct script inclusion
 if (typeof window !== 'undefined') {
-  window.BiModal DesignDetector = BiModal DesignDetector;
+  window.BiModalDesignDetector = BiModalDesignDetector;
 }
 ```
 
@@ -1405,7 +1405,7 @@ if (typeof window !== 'undefined') {
  * Additional utilities for enhancing pages for agents
  */
 
-class BiModal DesignEnhancer {
+class BiModalDesignEnhancer {
   constructor(detector) {
     this.detector = detector;
     this.enhancements = new Set();
@@ -1684,7 +1684,7 @@ class BiModal DesignEnhancer {
 }
 
 // Usage
-const enhancer = new BiModal DesignEnhancer(agentDetector);
+const enhancer = new BiModalDesignEnhancer(agentDetector);
 
 // Enhance specific elements
 enhancer.enhanceForms();
@@ -2171,12 +2171,12 @@ module.exports = BiModal DesignServer;
 ```javascript
 // pages/_app.js - Next.js BiModal Design integration
 import { useEffect } from 'react';
-import { BiModal DesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/agentux';
 
 function MyApp({ Component, pageProps, agentInfo }) {
   useEffect(() => {
     if (agentInfo?.isAgent) {
-      const detector = new BiModal DesignDetector();
+      const detector = new BiModalDesignDetector();
       detector.enhance();
     }
   }, [agentInfo]);
@@ -2701,14 +2701,14 @@ test.describe('BiModal Design Accessibility', () => {
 ```javascript
 // hooks/useBiModal Design.js
 import { useState, useEffect } from 'react';
-import { BiModal DesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/agentux';
 
 export function useBiModal Design(options = {}) {
   const [agentInfo, setAgentInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const detector = new BiModal DesignDetector(options);
+    const detector = new BiModalDesignDetector(options);
     const detection = detector.detect();
 
     setAgentInfo(detection);
@@ -2752,14 +2752,14 @@ function MyComponent() {
 ```javascript
 // composables/useBiModal Design.js
 import { ref, onMounted, readonly } from 'vue';
-import { BiModal DesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/agentux';
 
 export function useBiModal Design(options = {}) {
   const agentInfo = ref(null);
   const isLoading = ref(true);
 
   const detect = () => {
-    const detector = new BiModal DesignDetector(options);
+    const detector = new BiModalDesignDetector(options);
     const detection = detector.detect();
 
     agentInfo.value = detection;
@@ -2790,7 +2790,7 @@ export function useBiModal Design(options = {}) {
 // services/agent-ux.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BiModal DesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/agentux';
 
 export interface AgentInfo {
   isAgent: boolean;
@@ -2804,10 +2804,10 @@ export interface AgentInfo {
 })
 export class BiModal DesignService {
   private agentInfoSubject = new BehaviorSubject<AgentInfo | null>(null);
-  private detector: BiModal DesignDetector;
+  private detector: BiModalDesignDetector;
 
   constructor() {
-    this.detector = new BiModal DesignDetector();
+    this.detector = new BiModalDesignDetector();
     this.initializeDetection();
   }
 
@@ -3620,7 +3620,7 @@ Vary: User-Agent
  * Detects and categorizes user agents for optimal experience delivery
  */
 
-class BiModal DesignDetector {
+class BiModalDesignDetector {
   constructor(config = {}) {
     this.config = {
       enableAnalytics: config.enableAnalytics ?? true,
@@ -4248,7 +4248,7 @@ class BiModal DesignDetector {
 }
 
 // Usage Examples
-const agentDetector = new BiModal DesignDetector({
+const agentDetector = new BiModalDesignDetector({
   enableAnalytics: true,
   customPatterns: {
     'custom-bots': [
@@ -4267,12 +4267,12 @@ if (agentInfo.isAgent) {
 
 // Export for use in modules
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = BiModal DesignDetector;
+  module.exports = BiModalDesignDetector;
 }
 
 // Global access for direct script inclusion
 if (typeof window !== 'undefined') {
-  window.BiModal DesignDetector = BiModal DesignDetector;
+  window.BiModalDesignDetector = BiModalDesignDetector;
 }
 ```
 
@@ -4284,7 +4284,7 @@ if (typeof window !== 'undefined') {
  * Additional utilities for enhancing pages for agents
  */
 
-class BiModal DesignEnhancer {
+class BiModalDesignEnhancer {
   constructor(detector) {
     this.detector = detector;
     this.enhancements = new Set();
@@ -4563,7 +4563,7 @@ class BiModal DesignEnhancer {
 }
 
 // Usage
-const enhancer = new BiModal DesignEnhancer(agentDetector);
+const enhancer = new BiModalDesignEnhancer(agentDetector);
 
 // Enhance specific elements
 enhancer.enhanceForms();
@@ -5050,12 +5050,12 @@ module.exports = BiModal DesignServer;
 ```javascript
 // pages/_app.js - Next.js BiModal Design integration
 import { useEffect } from 'react';
-import { BiModal DesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/agentux';
 
 function MyApp({ Component, pageProps, agentInfo }) {
   useEffect(() => {
     if (agentInfo?.isAgent) {
-      const detector = new BiModal DesignDetector();
+      const detector = new BiModalDesignDetector();
       detector.enhance();
     }
   }, [agentInfo]);
@@ -5580,14 +5580,14 @@ test.describe('BiModal Design Accessibility', () => {
 ```javascript
 // hooks/useBiModal Design.js
 import { useState, useEffect } from 'react';
-import { BiModal DesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/agentux';
 
 export function useBiModal Design(options = {}) {
   const [agentInfo, setAgentInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const detector = new BiModal DesignDetector(options);
+    const detector = new BiModalDesignDetector(options);
     const detection = detector.detect();
 
     setAgentInfo(detection);
@@ -5631,14 +5631,14 @@ function MyComponent() {
 ```javascript
 // composables/useBiModal Design.js
 import { ref, onMounted, readonly } from 'vue';
-import { BiModal DesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/agentux';
 
 export function useBiModal Design(options = {}) {
   const agentInfo = ref(null);
   const isLoading = ref(true);
 
   const detect = () => {
-    const detector = new BiModal DesignDetector(options);
+    const detector = new BiModalDesignDetector(options);
     const detection = detector.detect();
 
     agentInfo.value = detection;
@@ -5669,7 +5669,7 @@ export function useBiModal Design(options = {}) {
 // services/agent-ux.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BiModal DesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/agentux';
 
 export interface AgentInfo {
   isAgent: boolean;
@@ -5683,10 +5683,10 @@ export interface AgentInfo {
 })
 export class BiModal DesignService {
   private agentInfoSubject = new BehaviorSubject<AgentInfo | null>(null);
-  private detector: BiModal DesignDetector;
+  private detector: BiModalDesignDetector;
 
   constructor() {
-    this.detector = new BiModal DesignDetector();
+    this.detector = new BiModalDesignDetector();
     this.initializeDetection();
   }
 
@@ -6499,7 +6499,7 @@ Vary: User-Agent
  * Detects and categorizes user agents for optimal experience delivery
  */
 
-class BiModal DesignDetector {
+class BiModalDesignDetector {
   constructor(config = {}) {
     this.config = {
       enableAnalytics: config.enableAnalytics ?? true,
@@ -7127,7 +7127,7 @@ class BiModal DesignDetector {
 }
 
 // Usage Examples
-const agentDetector = new BiModal DesignDetector({
+const agentDetector = new BiModalDesignDetector({
   enableAnalytics: true,
   customPatterns: {
     'custom-bots': [
@@ -7146,12 +7146,12 @@ if (agentInfo.isAgent) {
 
 // Export for use in modules
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = BiModal DesignDetector;
+  module.exports = BiModalDesignDetector;
 }
 
 // Global access for direct script inclusion
 if (typeof window !== 'undefined') {
-  window.BiModal DesignDetector = BiModal DesignDetector;
+  window.BiModalDesignDetector = BiModalDesignDetector;
 }
 ```
 

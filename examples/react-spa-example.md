@@ -1583,7 +1583,7 @@ Traditional Nav │ │ Dynamic Loading │ └───────────
 
 ```
 
-react-spa-agentux/ ├── package.json ├── webpack.config.js ├── server/ │ ├──
+react-spa-bimodal/ ├── package.json ├── webpack.config.js ├── server/ │ ├──
 server.js # Express server with agent detection │ ├── routes/ │ │ ├── api.js #
 API endpoints │ │ └── ssr.js # SSR rendering for agents │ └── templates/ │ ├──
 agent-home.html # Static templates for agents │ ├── agent-products.html │ └──

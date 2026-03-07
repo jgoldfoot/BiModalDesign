@@ -41,7 +41,7 @@ behavior to [joel@goldfoot.com](mailto:joel@goldfoot.com).
    ```
 3. **Set up the original repo as upstream**:
    ```bash
-   git remote add upstream https://github.com/jgoldfoot/BiModal Design.git
+   git remote add upstream https://github.com/jgoldfoot/BiModalDesign.git
    ```
 4. **Install tool dependencies**:
    ```bash

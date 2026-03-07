@@ -18,8 +18,8 @@ const { URL: _URL } = require('url');
 
 // Import our tools
 const FR1Checker = require('./validators/fr1-checker');
-const ComplianceAuditor = require('./validators/compliance-audit');
-const AgentSimulator = require('./testing/agent-simulator');
+const ComplianceAuditor = require('../accessibility/compliance-audit');
+const AgentSimulator = require('./agent-simulator');
 
 class BiModalDesignCLI {
   constructor() {
@@ -189,7 +189,7 @@ For detailed help on a specific command:
   bimodal-design <command> --help
 
 Documentation: https://bimodal-design.design/docs
-Repository: https://github.com/jgoldfoot/BiModal Design
+Repository: https://github.com/jgoldfoot/BiModalDesign
         `);
   }
 

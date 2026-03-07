@@ -193,10 +193,10 @@ Provide meaningful HTML structure before JavaScript loads:
             <p data-agent-content="contact-email">
               Email:
               <a
-                href="mailto:support@agentux.example.com"
+                href="mailto:support@example.com"
                 data-agent-action="send-email"
               >
-                support@agentux.example.com
+                support@example.com
               </a>
             </p>
             <p data-agent-content="contact-phone">

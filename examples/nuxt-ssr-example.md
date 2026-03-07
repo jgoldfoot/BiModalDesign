@@ -14,7 +14,7 @@ excellent human UX.
 ## Project Structure
 
 ```
-nuxt-agentux-app/
+nuxt-bimodal-app/
 ├── nuxt.config.ts
 ├── app.vue
 ├── pages/

@@ -1,10 +1,10 @@
 blank_issues_enabled: true
 contact_links:
   - name: GitHub Discussions
-    url: https://github.com/jgoldfoot/BiModal Design/discussions
+    url: https://github.com/jgoldfoot/BiModalDesign/discussions
     about: Ask questions and discuss ideas with the community
   - name: Security Vulnerability
-    url: https://github.com/jgoldfoot/BiModal Design/security/policy
+    url: https://github.com/jgoldfoot/BiModalDesign/security/policy
     about: Report security vulnerabilities privately (do not use public issues)
   - name: Email Contact
     url: mailto:joel@goldfoot.com

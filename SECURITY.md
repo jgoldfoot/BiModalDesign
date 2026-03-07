@@ -80,11 +80,11 @@ When using BiModal Design tools:
 
 ```bash
 # ✅ Good: Testing your own site
-agentux-validate https://your-own-site.com
+bmd-validate https://your-own-site.com
 
 # ⚠️ Caution: Testing third-party sites
 # Ensure you have permission and understand the site's terms of service
-agentux-validate https://third-party-site.com
+bmd-validate https://third-party-site.com
 ```
 
 ### Disclosure Policy

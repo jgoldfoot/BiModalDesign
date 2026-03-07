@@ -68,7 +68,7 @@ npm create next-app@latest --typescript --app
 
 ```bash
 # Built-in SSR
-npx nuxi@latest init my-agentux-app
+npx nuxi@latest init my-bimodal-app
 ```
 
 ### Astro (Best for content sites)
@@ -112,5 +112,5 @@ curl -s https://yoursite.com | grep "main content"
 ## Need Help?
 
 - 📖 [Full White Paper](./whitepaper.md)
-- 🐛 [Report Issues](https://github.com/jgoldfoot/BiModal Design/issues)
-- 💬 [Discussions](https://github.com/jgoldfoot/BiModal Design/discussions)
+- 🐛 [Report Issues](https://github.com/jgoldfoot/BiModalDesign/issues)
+- 💬 [Discussions](https://github.com/jgoldfoot/BiModalDesign/discussions)

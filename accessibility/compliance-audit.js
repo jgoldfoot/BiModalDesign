@@ -14,11 +14,11 @@ const fs = require('fs').promises;
 const path = require('path');
 const { URL } = require('url');
 
-class BiModal DesignComplianceAuditor {
+class BiModalDesignComplianceAuditor {
     constructor(options = {}) {
         this.options = {
             timeout: 30000,
-            userAgent: 'BiModal Design-Compliance-Auditor/1.0',
+            userAgent: 'BiModalDesign-Compliance-Auditor/1.0',
             viewport: { width: 1200, height: 800 },
             includeScreenshots: false,
             ...options
@@ -972,7 +972,7 @@ https://another-site.com
     }
 
     try {
-        const auditor = new BiModal DesignComplianceAuditor();
+        const auditor = new BiModalDesignComplianceAuditor();
         
         // Parse command line arguments
         const options = {
@@ -1010,7 +1010,7 @@ https://another-site.com
         if (options.config) {
             // Load configuration file
             const configData = JSON.parse(await fs.readFile(options.config, 'utf8'));
-            const configuredAuditor = new BiModal DesignComplianceAuditor(configData.options || {});
+            const configuredAuditor = new BiModalDesignComplianceAuditor(configData.options || {});
             
             results = [];
             for (const url of configData.urls) {
@@ -1065,7 +1065,7 @@ https://another-site.com
 }
 
 // Export for use as module
-module.exports = BiModal DesignComplianceAuditor;
+module.exports = BiModalDesignComplianceAuditor;
 
 // Run CLI if called directly
 if (require.main === module) {
