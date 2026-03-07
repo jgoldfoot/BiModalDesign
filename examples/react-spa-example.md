@@ -1,3 +1,17 @@
+# React SPA BiModal Design Implementation Example
+
+> **v3.0 Migration Note:** This example uses `data-agent-*` attributes from
+> BiModal Design v2.x. In v3.0, these are replaced with established standards:
+> `itemscope`/`itemprop` (schema.org), `aria-label`/`aria-current` (WAI-ARIA),
+> and OpenAPI (API documentation). See the
+> [Next.js SSR Example](./nextjs-ssr-example.md) for a v3.0-native
+> implementation, or the
+> [compliance checklist](../docs/compliance-checklist.md#migration-from-v2x) for
+> the migration table.
+
+---
+
+```jsx
 <button onClick={() => navigate('/')} data-agent-action="go-home" className="btn
 btn-primary" > Go Home </button> </div> ); } };
 

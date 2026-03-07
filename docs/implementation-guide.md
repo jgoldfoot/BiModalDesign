@@ -1,7 +1,7 @@
-# BiModal Design Implementation Guide
+# BiModal Design v3.0 Implementation Guide
 
-A comprehensive guide for implementing BiModal Design patterns in your web
-applications to optimize for both human users and AI agents.
+A comprehensive guide for implementing BiModal Design's Defense in Depth
+strategy across the full Agent Capability Spectrum.
 
 ## Table of Contents
 
@@ -18,384 +18,312 @@ applications to optimize for both human users and AI agents.
 
 ### Prerequisites
 
-Before implementing BiModal Design, ensure your project meets these
-requirements:
-
-- **Development Environment**: Node.js 16+, modern build tools
+- **Development Environment**: Node.js 20+, modern build tools
 - **Framework Knowledge**: Understanding of your chosen framework (React, Vue,
   etc.)
-- **Accessibility Basics**: Familiarity with semantic HTML and ARIA
+- **Accessibility Basics**: Familiarity with semantic HTML, ARIA, and schema.org
 - **Performance Awareness**: Basic understanding of web performance metrics
 
 ### Quick Assessment
 
-Use this checklist to evaluate your current application:
-
 ```bash
-# Run the BiModal Design assessment (fictional CLI - replace with actual assessment)
-npx @bimodal-design/framework validate
+# Test FR-1: Does content load without JS?
+curl -s https://your-app.com/ | grep -E '<(main|nav|h1|article)'
 
-# Manual checks:
-curl -I https://your-app.com/  # Check if content loads without JS
-curl -H "User-Agent: GoogleBot/2.1" https://your-app.com/  # Test agent experience
+# Test structured data
+curl -s https://your-app.com/ | grep "application/ld+json"
 ```
 
 **Assessment Questions:**
 
-- [ ] Does your app serve meaningful content without JavaScript?
-- [ ] Are forms accessible with semantic markup?
-- [ ] Do you use proper HTML5 landmarks?
-- [ ] Is navigation clear and predictable?
-- [ ] Are loading states accessible to screen readers?
+- [ ] Does your app serve meaningful content without JavaScript? (Layer 1)
+- [ ] Are HTML5 landmarks and ARIA labels used properly? (Layer 2)
+- [ ] Is structured data (schema.org/JSON-LD) present? (Layer 3)
+- [ ] Are APIs documented with OpenAPI? (Layer 4)
+- [ ] Are agent protocols (MCP/A2A) available? (Layer 5)
 
 ## Framework Selection
 
 Choose your implementation strategy based on your current architecture:
 
-### Option 1: Server-Side Rendering (SSR) ⭐ **Recommended**
+### Option 1: Server-Side Rendering (SSR) — Recommended
 
-**Best for:** New projects, SEO-critical applications, maximum agent
-compatibility
+**Best for:** New projects, SEO-critical applications, maximum agent coverage
 
-**Frameworks:**
+**Frameworks:** Next.js (React), Nuxt.js (Vue), SvelteKit, Remix
 
-- **Next.js (React)**: Industry standard with excellent SSR support
-- **Nuxt.js (Vue)**: Vue ecosystem with built-in SSR
-- **SvelteKit**: Emerging option with great performance
-- **Remix**: React framework focused on web standards
-
-**Implementation Effort:** Medium **Agent Compatibility:** Excellent (95%+)
-**Human UX:** Excellent
+**Agent Coverage:** Excellent — Levels 0-5 supported
+**Implementation Effort:** Medium
 
 ```javascript
-// Example: Next.js with BiModal Design
-export async function getServerSideProps(context) {
-  const isAgent = detectAgent(context.req.headers['user-agent']);
+// Next.js: Server component ensures FR-1 compliance
+export default async function ProductsPage() {
+  const products = await fetchProducts();
 
-  return {
-    props: {
-      isAgent,
-      data: await fetchData(),
-      agentOptimized: isAgent,
-    },
-  };
+  return (
+    <main aria-label="Product catalog">
+      <h1>Product Catalog</h1>
+      {products.map((product) => (
+        <article
+          key={product.id}
+          itemScope
+          itemType="https://schema.org/Product"
+        >
+          <h2 itemProp="name">{product.name}</h2>
+          <p itemProp="description">{product.description}</p>
+          <span itemProp="price" content={product.price}>
+            ${product.price}
+          </span>
+        </article>
+      ))}
+    </main>
+  );
 }
 ```
 
-### Option 2: Static Site Generation (SSG) ⭐ **Highest Performance**
+### Option 2: Static Site Generation (SSG) — Highest Performance
 
 **Best for:** Content sites, blogs, marketing pages, documentation
 
-**Frameworks:**
+**Frameworks:** Astro, Next.js SSG, Nuxt Generate, 11ty
 
-- **Astro**: Modern static site generator with component islands
-- **Next.js SSG**: Static generation with React
-- **Nuxt Generate**: Vue-based static generation
-- **Gatsby**: React-based with GraphQL layer
+**Agent Coverage:** Excellent — Levels 0-5 supported
+**Implementation Effort:** Low
 
-**Implementation Effort:** Low **Agent Compatibility:** Excellent (98%+) **Human
-UX:** Excellent
-
-```javascript
-// Example: Astro with BiModal Design
+```astro
 ---
-// All content is pre-rendered at build time
+// Astro: All content is pre-rendered at build time
 const products = await fetchProducts();
 ---
-<html data-agent-framework="astro">
-  <ProductList products={products} />
-</html>
+<main aria-label="Product catalog">
+  {products.map((product) => (
+    <article itemscope itemtype="https://schema.org/Product">
+      <h2 itemprop="name">{product.name}</h2>
+      <p itemprop="description">{product.description}</p>
+    </article>
+  ))}
+</main>
 ```
 
-### Option 3: CSR with Mitigation 🛠️ **Requires Work**
+### Option 3: CSR with Mitigation — Requires Work
 
 **Best for:** Existing SPAs where SSR isn't feasible
 
-**Implementation Effort:** High **Agent Compatibility:** Good (75-85%) **Human
-UX:** Excellent
+**Agent Coverage:** Partial — Level 0-1 require skeleton content
+**Implementation Effort:** High
 
-```javascript
-// Requires comprehensive fallback strategy
-<div id="app">
-  <!-- Skeleton content for agents -->
-  <div class="fallback-content">
-    <nav><!-- Static navigation --></nav>
-    <main><!-- Static content --></main>
-  </div>
-</div>
-```
+See [CSR Mitigation Guide](../examples/csr-mitigation.md) for detailed
+strategies.
 
-### Option 4: Hybrid SPA/SSR 🔄 **Most Flexible**
+### Option 4: Hybrid SSR/CSR — Most Flexible
 
-**Best for:** Complex applications needing both SPA and agent support
+**Best for:** Complex applications needing both SPA interactivity and agent
+support
 
-**Implementation Effort:** High **Agent Compatibility:** Excellent (90%+)
-**Human UX:** Excellent
-
-```javascript
-// Automatic routing based on agent detection
-app.get('*', (req, res) => {
-  if (detectAgent(req.headers['user-agent'])) {
-    return renderSSR(req, res);
-  }
-  return serveSPA(req, res);
-});
-```
+**Agent Coverage:** Excellent when properly implemented
+**Implementation Effort:** High
 
 ## Implementation Phases
 
-### Phase 1: Infrastructure Assessment (Week 1)
+### Phase 1: Layer 1 — Content Accessibility (Week 1)
 
-**Goal:** Understand current state and plan implementation
+**Goal:** Ensure FR-1 compliance — content in the initial HTML response.
 
 #### Step 1.1: Test FR-1 Compliance
 
 ```bash
-# Test initial payload accessibility
 curl -s https://your-app.com/ | grep -E '<(nav|main|h1|form)'
-
-# Should return meaningful semantic elements
-# If empty, your app fails FR-1 and needs SSR/SSG
+# Should return meaningful semantic elements with content
 ```
 
-#### Step 1.2: Audit Current Rendering Strategy
+#### Step 1.2: Implement SSR/SSG
 
-**Client-Side Rendering Check:**
+If your site fails FR-1, switch to server rendering or static generation. This
+is the single most impactful change for agent accessibility.
 
-```javascript
-// Add to your app temporarily
-console.log(
-  'Content available:',
-  document.querySelector('main')?.textContent?.length > 100
-);
-// If false when JS is disabled, you need SSR/SSG
-```
-
-**Performance Audit:**
+#### Step 1.3: Verify Agent Levels 0-1
 
 ```bash
-npm install -g lighthouse
-lighthouse https://your-app.com/ --only-categories=performance,accessibility
+# Level 0 (HTTP Retriever): Does curl return content?
+curl -s https://your-app.com/ | wc -c
+# Should be >5000 bytes of meaningful HTML
+
+# Level 1 (LLM Browser): Is content parseable?
+curl -s https://your-app.com/ | grep -E '<(h1|h2|p|article|section)'
 ```
 
-#### Step 1.3: Identify CSR-Only Components
+**Deliverable:** FR-1 passing, content visible without JavaScript
 
-Document components that require JavaScript:
+### Phase 2: Layer 2 — Semantic Structure (Weeks 2-3)
 
-- Interactive widgets
-- Real-time data updates
-- Complex form validations
-- Dynamic content loading
-
-**Deliverable:** Architecture decision document
-
-### Phase 2: Semantic Foundation (Weeks 2-3)
-
-**Goal:** Establish accessible semantic structure
+**Goal:** Establish accessible semantic structure for Levels 1-3.
 
 #### Step 2.1: Add HTML5 Landmarks
 
 ```html
-<!-- Essential landmarks for agents -->
-<header role="banner">
-  <nav role="navigation" aria-label="Main navigation">
-    <!-- Navigation content -->
+<header>
+  <nav aria-label="Main navigation">
+    <ul>
+      <li><a href="/products" aria-current="page">Products</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
   </nav>
 </header>
 
-<main role="main" id="main-content">
+<main aria-label="Product catalog">
   <!-- Primary content -->
 </main>
 
-<aside role="complementary">
-  <!-- Sidebar content -->
+<aside aria-label="Related products">
+  <!-- Complementary content -->
 </aside>
 
-<footer role="contentinfo">
+<footer>
   <!-- Site footer -->
 </footer>
 ```
 
-#### Step 2.2: Implement ARIA Roles and Labels
+#### Step 2.2: Implement ARIA Labels
 
 ```html
-<!-- Form accessibility -->
-<form role="form" aria-labelledby="contact-heading">
-  <h2 id="contact-heading">Contact Information</h2>
-
+<form aria-label="Contact form" method="POST" action="/contact">
   <fieldset>
-    <legend>Personal Details</legend>
-
+    <legend>Contact Information</legend>
     <label for="name">Full Name *</label>
-    <input id="name" required aria-describedby="name-help" />
+    <input id="name" required aria-required="true" aria-describedby="name-help" />
     <small id="name-help">Your legal name for our records</small>
   </fieldset>
 </form>
 ```
 
-#### Step 2.3: Structure Forms with Fieldsets
+#### Step 2.3: Ensure Heading Hierarchy
 
 ```html
-<!-- Agent-friendly form structure -->
-<form data-agent-component="contact-form">
-  <fieldset data-agent-section="contact-info">
-    <legend>Contact Information</legend>
-    <!-- Contact fields -->
-  </fieldset>
-
-  <fieldset data-agent-section="inquiry-details">
-    <legend>Inquiry Details</legend>
-    <!-- Inquiry fields -->
-  </fieldset>
-</form>
+<h1>Product Catalog</h1>
+  <h2>Electronics</h2>
+    <h3>Wireless Headphones</h3>
+    <h3>Smart Speakers</h3>
+  <h2>Clothing</h2>
+    <h3>T-Shirts</h3>
 ```
 
-**Deliverable:** Semantic HTML audit report
+**Deliverable:** Semantic HTML audit report, ARIA labels on all interactive
+elements
 
-### Phase 3: Agent Optimization (Weeks 4-5)
+### Phase 3: Layer 3 — Structured Data (Weeks 3-4)
 
-**Goal:** Add agent-specific enhancements
+**Goal:** Add schema.org structured data for enhanced agent understanding.
 
-#### Step 3.1: Add data-agent-\* Attributes
+#### Step 3.1: Add Inline Microdata
 
 ```html
-<!-- Navigation with agent guidance -->
-<nav data-agent-component="primary-navigation">
-  <a href="/" data-agent-action="go-home">Home</a>
-  <a href="/products" data-agent-action="browse-products">Products</a>
-  <a href="/contact" data-agent-action="get-support">Contact</a>
-</nav>
-
-<!-- Content with agent labels -->
-<main data-agent-component="product-catalog">
-  <h1 data-agent-content="page-title">Product Catalog</h1>
-  <p data-agent-content="page-description">Browse our products...</p>
-
-  <div data-agent-component="product-list" data-agent-count="12">
-    <!-- Product items -->
+<article itemscope itemtype="https://schema.org/Product">
+  <h2 itemprop="name">Wireless Headphones</h2>
+  <p itemprop="description">High-quality wireless audio</p>
+  <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+    <span itemprop="price" content="99.99">$99.99</span>
+    <meta itemprop="priceCurrency" content="USD" />
+    <link itemprop="availability" href="https://schema.org/InStock" />
   </div>
-</main>
+</article>
 ```
 
-#### Step 3.2: Implement State Management
-
-```javascript
-// Agent-aware state management
-const AgentContext = createContext();
-
-export const AgentProvider = ({ children }) => {
-  const [agentInfo, setAgentInfo] = useState(null);
-
-  useEffect(() => {
-    const detected = detectAgent();
-    setAgentInfo(detected);
-
-    if (detected.isAgent) {
-      document.documentElement.setAttribute('data-agent-context', 'detected');
-      enhanceForAgents(detected);
-    }
-  }, []);
-
-  return (
-    <AgentContext.Provider value={agentInfo}>{children}</AgentContext.Provider>
-  );
-};
-```
-
-#### Step 3.3: Add Structured Data
+#### Step 3.2: Add JSON-LD Blocks
 
 ```html
-<!-- Product page structured data -->
 <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "Product Name",
-    "description": "Product description",
-    "offers": {
-      "@type": "Offer",
-      "price": "29.99",
-      "priceCurrency": "USD",
-      "availability": "https://schema.org/InStock"
-    }
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Wireless Headphones",
+  "description": "High-quality wireless audio",
+  "offers": {
+    "@type": "Offer",
+    "price": "99.99",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
   }
+}
 </script>
 ```
 
-**Deliverable:** Agent optimization implementation
+**Deliverable:** Structured data passing Google Rich Results Test
 
-### Phase 4: Testing & Validation (Week 6)
+### Phase 4: Layer 4 — API Surface (Weeks 4-5)
 
-**Goal:** Ensure implementation works across agent types
+**Goal:** Expose programmatic access for Level 4 agents.
 
-#### Step 4.1: Set Up Automated Testing
+#### Step 4.1: Document APIs with OpenAPI
+
+```yaml
+openapi: 3.0.0
+info:
+  title: Product Catalog API
+  version: 1.0.0
+paths:
+  /api/products:
+    get:
+      summary: List all products
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+```
+
+#### Step 4.2: Make APIs Discoverable
+
+```html
+<link rel="api" type="application/openapi+json" href="/api/openapi.json" />
+```
+
+**Deliverable:** OpenAPI spec published, API endpoints tested
+
+### Phase 5: Layer 5 — Agent Protocols (Weeks 5-6)
+
+**Goal:** Enable protocol-native agent access for Level 5.
+
+#### Step 5.1: Implement MCP Server
 
 ```javascript
-// Agent compatibility test suite
-describe('BiModal Design Compatibility', () => {
-  const agentUserAgents = [
-    'GoogleBot/2.1',
-    'curl/7.68.0',
-    'Mozilla/5.0 (compatible; bingbot/2.0)',
-    'HeadlessChrome/91.0.4472.124',
-  ];
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-  agentUserAgents.forEach((userAgent) => {
-    test(`Works with ${userAgent}`, async () => {
-      await page.setUserAgent(userAgent);
-      await page.goto('http://localhost:3000');
+const server = new McpServer({ name: "product-catalog", version: "1.0.0" });
 
-      // Verify content accessibility
-      const content = await page.textContent('main');
-      expect(content.length).toBeGreaterThan(100);
-
-      // Check agent attributes
-      const agentComponents = await page.$$('[data-agent-component]');
-      expect(agentComponents.length).toBeGreaterThan(0);
-    });
-  });
+server.tool("search_products", { query: z.string() }, async ({ query }) => {
+  const results = await searchProducts(query);
+  return { content: [{ type: "text", text: JSON.stringify(results) }] };
 });
 ```
 
-#### Step 4.2: Run Compliance Audit
+#### Step 5.2: Publish Agent Card (A2A)
 
-```bash
-# BiModal Design compliance check (use actual validator when available)
-npx @bimodal-design/framework validate https://your-app.com/
-
-# Manual validation checklist:
-# [ ] Content loads without JavaScript
-# [ ] Forms have proper fieldsets and labels
-# [ ] Navigation has semantic structure
-# [ ] Agent attributes are present
-# [ ] Structured data validates
+```json
+// /.well-known/agent.json
+{
+  "name": "Product Catalog Agent",
+  "description": "Search and browse product catalog",
+  "capabilities": ["product-search", "product-details", "add-to-cart"],
+  "protocols": ["mcp", "a2a"]
+}
 ```
 
-#### Step 4.3: Performance Testing
+**Deliverable:** MCP server functional, Agent Card published
 
-```javascript
-// Performance monitoring for agents
-const performanceTest = async (userAgent) => {
-  const startTime = Date.now();
+### Phase 6: Testing & Validation (Week 6)
 
-  const response = await fetch('https://your-app.com/', {
-    headers: { 'User-Agent': userAgent },
-  });
+**Goal:** Verify implementation across all agent levels.
 
-  const contentLoadTime = Date.now() - startTime;
-  const html = await response.text();
-
-  return {
-    userAgent,
-    loadTime: contentLoadTime,
-    hasContent: html.includes('<main'),
-    contentLength: html.length,
-    agentOptimized: html.includes('data-agent-'),
-  };
-};
-```
-
-**Deliverable:** Testing and validation report
+See [Testing and Validation](#testing-and-validation) below.
 
 ## Code Integration Patterns
 
@@ -403,435 +331,265 @@ const performanceTest = async (userAgent) => {
 
 Start with accessible HTML, enhance with JavaScript:
 
-```javascript
-// Base HTML (works for agents)
-<button data-agent-action="add-to-cart" data-product-id="123">
-  Add to Cart
-</button>;
+```html
+<!-- Base: Works for all agent levels -->
+<button type="button" aria-label="Add to cart">Add to Cart</button>
 
-// Progressive enhancement (for humans)
-useEffect(() => {
-  const buttons = document.querySelectorAll(
-    '[data-agent-action="add-to-cart"]'
-  );
-  buttons.forEach((button) => {
-    button.addEventListener('click', handleAddToCart);
-  });
-}, []);
+<!-- Enhanced: JavaScript adds interactivity for humans -->
+<script>
+  document.querySelector('[aria-label="Add to cart"]')
+    .addEventListener('click', handleAddToCart);
+</script>
 ```
 
-### Pattern 2: Conditional Rendering
+### Pattern 2: Standards-Based Data Markup
 
-Render different content based on agent detection:
+Use schema.org and ARIA instead of custom attributes:
 
-```javascript
-const ProductPage = ({ isAgent, product }) => {
-  if (isAgent) {
-    return (
-      <StaticProductView product={product} structured={true} enhanced={true} />
-    );
-  }
-
-  return (
-    <InteractiveProductView
-      product={product}
-      animations={true}
-      dynamic={true}
-    />
-  );
-};
+```html
+<!-- v3.0: Standards-based approach -->
+<article itemscope itemtype="https://schema.org/Product">
+  <h2 itemprop="name">Wireless Headphones</h2>
+  <p itemprop="description">Premium wireless audio</p>
+  <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+    <span itemprop="price" content="99.99">$99.99</span>
+  </div>
+  <button aria-label="Add Wireless Headphones to cart">Add to Cart</button>
+</article>
 ```
 
-### Pattern 3: Component Enhancement
+### Pattern 3: Server-First Forms
 
-Enhance existing components with agent support:
+Forms that work without JavaScript:
 
-```javascript
-const Button = ({ children, onClick, agentAction, ...props }) => {
-  const agentProps = agentAction
-    ? {
-        'data-agent-action': agentAction,
-        'data-agent-component': 'button',
-      }
-    : {};
-
-  return (
-    <button onClick={onClick} {...agentProps} {...props}>
-      {children}
-    </button>
-  );
-};
-
-// Usage
-<Button agentAction="submit-form" onClick={handleSubmit}>
-  Submit
-</Button>;
+```html
+<form method="POST" action="/api/contact" aria-label="Contact form">
+  <fieldset>
+    <legend>Contact Information</legend>
+    <label for="email">Email *</label>
+    <input id="email" type="email" name="email" required aria-required="true" />
+  </fieldset>
+  <button type="submit">Send Message</button>
+</form>
 ```
 
-### Pattern 4: Agent-Aware Routing
+### Pattern 4: Layered Content Delivery
 
-Different routing strategies for agents vs humans:
+Serve content at multiple levels simultaneously:
 
-```javascript
-// React Router with agent awareness
-const AppRouter = ({ isAgent }) => {
-  if (isAgent) {
-    // Use traditional page-based routing for agents
-    return <StaticRouter context={staticContext} />;
-  }
+```html
+<!-- Layer 1: Content in HTML -->
+<main aria-label="Product catalog">
+  <h1>Our Products</h1>
 
-  // Use client-side routing for humans
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-    </BrowserRouter>
-  );
-};
-```
+  <!-- Layer 2: Semantic structure -->
+  <section aria-labelledby="electronics-heading">
+    <h2 id="electronics-heading">Electronics</h2>
 
-### Pattern 5: Form Enhancement
+    <!-- Layer 3: Structured data -->
+    <article itemscope itemtype="https://schema.org/Product">
+      <h3 itemprop="name">Wireless Headphones</h3>
+    </article>
+  </section>
+</main>
 
-Layer interactive features on accessible forms:
+<!-- Layer 3: JSON-LD for richer structured data -->
+<script type="application/ld+json">
+{ "@context": "https://schema.org", "@type": "ItemList", ... }
+</script>
 
-```javascript
-const ContactForm = ({ isAgent }) => {
-  return (
-    <form data-agent-component="contact-form" method="POST" action="/contact">
-      <fieldset>
-        <legend>Contact Information</legend>
-
-        <FormField
-          label="Name"
-          name="name"
-          required
-          agentField="customer-name"
-          validation={!isAgent ? 'real-time' : 'server-side'}
-        />
-
-        <FormField
-          label="Email"
-          name="email"
-          type="email"
-          required
-          agentField="customer-email"
-        />
-      </fieldset>
-
-      <button type="submit" data-agent-action="submit-contact-form">
-        Send Message
-      </button>
-    </form>
-  );
-};
+<!-- Layer 4: API link for programmatic access -->
+<link rel="api" href="/api/openapi.json" />
 ```
 
 ## Testing and Validation
 
-### Automated Testing Setup
+### Testing by Agent Level
+
+```bash
+# Level 0: HTTP Retriever
+curl -s https://your-app.com/ | grep -E '<(main|nav|h1)'
+# Expected: semantic HTML with content
+
+# Level 1: LLM Browser
+curl -s https://your-app.com/ | grep "application/ld+json"
+# Expected: structured data present
+
+# Level 2: Browser Automation
+npx playwright test --project=chromium
+# Expected: all flows complete
+
+# Level 4: Tool-Use Agent
+curl https://your-app.com/api/products
+# Expected: JSON response with typed data
+
+# Level 5: Protocol-Native
+# Test MCP server connectivity
+```
+
+### Automated Test Suite
 
 ```javascript
 // playwright.config.js
 module.exports = {
   projects: [
     {
-      name: 'human-users',
+      name: 'level-0-http',
+      use: { javaScriptEnabled: false },
+    },
+    {
+      name: 'level-2-automation',
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: 'search-bots',
+      name: 'level-3-vision',
       use: {
-        userAgent: 'GoogleBot/2.1 (+http://www.google.com/bot.html)',
-      },
-    },
-    {
-      name: 'automation-tools',
-      use: {
-        userAgent:
-          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 HeadlessChrome/91.0.4472.124',
-      },
-    },
-    {
-      name: 'cli-agents',
-      use: {
-        userAgent: 'curl/7.68.0',
+        ...devices['Desktop Chrome'],
+        screenshot: 'on',
       },
     },
   ],
 };
 ```
 
-### Testing Checklist
+### Validation Checklist
 
-**Functional Tests:**
+**Layer 1 — Content Accessibility:**
 
 - [ ] Content loads without JavaScript
-- [ ] Forms submit successfully
 - [ ] Navigation works with keyboard only
-- [ ] Error states are accessible
-- [ ] Loading states have proper ARIA labels
+- [ ] Forms submit successfully server-side
 
-**Agent-Specific Tests:**
+**Layer 2 — Semantic Structure:**
 
-- [ ] Agent attributes are present
-- [ ] Structured data validates
-- [ ] Agent actions are clear and actionable
-- [ ] Content is meaningful without CSS
-- [ ] Performance meets agent requirements
+- [ ] HTML5 landmarks present
+- [ ] ARIA labels on interactive elements
+- [ ] Heading hierarchy correct
 
-**Cross-Browser Tests:**
+**Layer 3 — Structured Data:**
 
-- [ ] Works in Chrome (most automation tools)
-- [ ] Works with JavaScript disabled
-- [ ] Works with screen readers
-- [ ] Works on mobile devices
-- [ ] Works with slow connections
+- [ ] JSON-LD validates (Google Rich Results Test)
+- [ ] schema.org types correct
+- [ ] OpenGraph meta tags present
 
-### Validation Tools
+**Layer 4 — API Surface:**
 
-```bash
-# HTML validation
-npx html-validate src/**/*.html
+- [ ] OpenAPI spec validates
+- [ ] API endpoints return correct data
+- [ ] Error responses are clear
 
-# Accessibility testing
-npm install -g @axe-core/cli
-axe http://localhost:3000
+**Layer 5 — Agent Protocols:**
 
-# Performance testing
-lighthouse http://localhost:3000 --only-categories=performance
-
-# BiModal Design-specific validation (when available)
-npx @bimodal-design/framework validate http://localhost:3000
-```
+- [ ] MCP tools callable
+- [ ] Agent Card accessible at `/.well-known/agent.json`
 
 ## Performance Optimization
 
-### Core Web Vitals for Agents
+### Core Web Vitals Targets
 
-**First Contentful Paint (FCP):** < 1.0s
-
-- Pre-render critical content
-- Inline critical CSS
-- Minimize initial JavaScript
-
-**Largest Contentful Paint (LCP):** < 1.5s
-
-- Optimize images with proper sizing
-- Use CDN for static assets
-- Implement proper caching strategies
-
-**Cumulative Layout Shift (CLS):** < 0.1
-
-- Reserve space for dynamic content
-- Avoid late-loading fonts
-- Use CSS transforms over layout changes
+- **First Contentful Paint (FCP):** < 1.0s
+- **Largest Contentful Paint (LCP):** < 1.5s
+- **Cumulative Layout Shift (CLS):** < 0.1
+- **Time to First Byte (TTFB):** < 200ms for agents
 
 ### Agent-Specific Optimizations
 
-```javascript
-// Disable animations for agents
-if (isAgent) {
-  const style = document.createElement('style');
-  style.textContent = `
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-delay: -0.01ms !important;
-      transition-duration: 0.01ms !important;
-      transition-delay: -0.01ms !important;
-    }
-  `;
-  document.head.appendChild(style);
-}
+```html
+<!-- Inline critical CSS for faster agent parsing -->
+<style>
+  main { display: block; }
+  nav { display: flex; }
+</style>
+
+<!-- Defer non-critical JavaScript -->
+<script src="/app.js" defer></script>
 ```
 
-### Content Delivery Optimization
+### Content Delivery
 
 ```nginx
-# Nginx configuration for agent optimization
-location / {
-  # Compress content for agents
-  gzip on;
-  gzip_vary on;
-  gzip_types text/html text/css application/javascript application/json;
+# Compress content
+gzip on;
+gzip_types text/html text/css application/javascript application/json;
 
-  # Cache static content aggressively
-  location ~* \.(css|js|png|jpg|jpeg|gif|svg|woff2)$ {
-    expires 1y;
-    add_header Cache-Control "public, immutable";
-  }
-
-  # Agent-specific caching
-  if ($http_user_agent ~* "bot|crawler|spider") {
-    add_header Cache-Control "public, max-age=3600";
-  }
+# Cache static assets
+location ~* \.(css|js|png|jpg|svg|woff2)$ {
+  expires 1y;
+  add_header Cache-Control "public, immutable";
 }
 ```
 
 ## Deployment Strategies
 
-### Strategy 1: Single Deployment with Agent Detection
+### Strategy 1: Universal SSR (Recommended)
 
-**Pros:** Simple deployment, single codebase **Cons:** Server-side complexity
+Single deployment with server rendering for all users:
 
 ```javascript
-// Express.js with agent routing
-app.get('*', (req, res) => {
-  const isAgent = detectAgent(req.headers['user-agent']);
-
-  if (isAgent) {
-    return res.render('agent-optimized', { data: serverData });
-  }
-
-  return res.sendFile(path.join(__dirname, 'build/index.html'));
-});
+// Next.js App Router: server components by default
+export default async function Page() {
+  const data = await fetchData();
+  return <MainContent data={data} />;
+}
 ```
 
-### Strategy 2: Separate Builds
+### Strategy 2: Static Generation with ISR
 
-**Pros:** Optimal performance for each audience **Cons:** Deployment complexity
+Pre-build pages, revalidate on a schedule:
 
-```bash
-# Build for agents (SSR/SSG)
-npm run build:agents
+```javascript
+// Next.js: Incremental Static Regeneration
+export const revalidate = 3600; // Revalidate every hour
 
-# Build for humans (SPA)
-npm run build:spa
-
-# Deploy to different subdomains
-# agents.example.com -> Agent-optimized build
-# www.example.com -> Human-optimized build
+export default async function Page() {
+  const data = await fetchData();
+  return <MainContent data={data} />;
+}
 ```
 
 ### Strategy 3: Edge Computing
 
-**Pros:** Lowest latency, global distribution **Cons:** Platform-specific
-implementation
+Deploy at the edge for lowest latency:
 
 ```javascript
-// Cloudflare Workers example
-addEventListener('fetch', (event) => {
-  event.respondWith(handleRequest(event.request));
-});
+// Cloudflare Workers / Vercel Edge
+export const runtime = 'edge';
 
-async function handleRequest(request) {
-  const userAgent = request.headers.get('User-Agent');
-  const isAgent = /bot|crawler|spider/i.test(userAgent);
-
-  if (isAgent) {
-    return fetch(`${AGENT_ORIGIN}${url.pathname}`);
-  }
-
-  return fetch(`${SPA_ORIGIN}${url.pathname}`);
+export default async function Page() {
+  const data = await fetchData();
+  return <MainContent data={data} />;
 }
-```
-
-### Docker Deployment
-
-```dockerfile
-# Multi-stage build for optimal deployment
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-FROM node:18-alpine AS production
-WORKDIR /app
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/server ./server
-COPY package*.json ./
-RUN npm ci --only=production
-
-# Add agent detection configuration
-ENV AGENT_DETECTION_ENABLED=true
-ENV SSR_FALLBACK_ENABLED=true
-
-EXPOSE 3000
-CMD ["node", "server/index.js"]
 ```
 
 ## Monitoring and Analytics
 
-### Agent Analytics Setup
+### Key Metrics to Track
 
-```javascript
-// Track agent interactions
-const trackAgentInteraction = (action, metadata) => {
-  if (isAgent) {
-    fetch('/api/analytics/agent-interaction', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userAgent: navigator.userAgent,
-        action,
-        metadata,
-        timestamp: Date.now(),
-        url: window.location.href,
-      }),
-    });
-  }
-};
+**Agent Coverage Metrics:**
 
-// Usage
-document.addEventListener('click', (event) => {
-  const target = event.target.closest('[data-agent-action]');
-  if (target) {
-    trackAgentInteraction(target.getAttribute('data-agent-action'), {
-      component: target.getAttribute('data-agent-component'),
-      text: target.textContent.trim(),
-    });
-  }
-});
-```
-
-### Key Metrics to Monitor
-
-**Agent Success Metrics:**
-
-- Agent detection accuracy (% correctly identified)
-- Content accessibility rate (% agents seeing content)
-- Interaction success rate (% completing intended actions)
-- Error rates by agent type
-- Performance metrics (load time, content ready time)
+- Content accessibility rate by agent level
+- Structured data validation pass rate
+- API response times and error rates
+- MCP tool invocation success rate
 
 **Business Impact Metrics:**
 
-- Conversion rates by user type (human vs agent)
-- SEO performance improvements
+- AI-assisted discovery rate (GEO performance)
+- Search engine indexing coverage
+- Agent task completion rates
 - Accessibility compliance scores
-- User satisfaction ratings
-- Support ticket reduction
 
-### Dashboard Configuration
+### Monitoring Setup
 
-```javascript
-// Sample metrics dashboard data
-const agentMetrics = {
-  detection: {
-    total_visits: 10000,
-    agents_detected: 2500,
-    accuracy_rate: 0.95,
-  },
-  performance: {
-    avg_load_time_agents: 850,
-    avg_load_time_humans: 1200,
-    content_accessibility: 0.98,
-  },
-  interactions: {
-    successful_form_submissions: 0.78,
-    navigation_success_rate: 0.92,
-    error_rate: 0.05,
-  },
-  business_impact: {
-    seo_score_improvement: 0.25,
-    conversion_rate_agents: 0.15,
-    support_ticket_reduction: 0.3,
-  },
-};
+```bash
+# Periodic FR-1 check
+curl -s https://your-app.com/ | grep -c '<(main|nav|h1|article)'
+
+# Structured data validation
+curl -s https://your-app.com/ | grep -c 'application/ld+json'
+
+# API health
+curl -s -o /dev/null -w "%{http_code}" https://your-app.com/api/products
 ```
 
 ## Implementation Checklist
@@ -839,61 +597,58 @@ const agentMetrics = {
 ### Pre-Implementation
 
 - [ ] Framework selection completed
-- [ ] Team training on BiModal Design principles
-- [ ] Development environment setup
-- [ ] Testing strategy defined
+- [ ] Team trained on BiModal Design v3.0 concepts
+- [ ] Agent Capability Spectrum understood
+- [ ] Defense in Depth layers prioritized
 
-### Phase 1: Foundation
+### Layer 1: Content Accessibility
 
-- [ ] FR-1 compliance tested
-- [ ] Current rendering strategy audited
-- [ ] CSR-only components identified
-- [ ] Performance baseline established
+- [ ] FR-1 compliance verified
+- [ ] SSR/SSG implemented
+- [ ] Content visible without JavaScript
 
-### Phase 2: Semantic Structure
+### Layer 2: Semantic Structure
 
 - [ ] HTML5 landmarks added
-- [ ] ARIA roles and labels implemented
-- [ ] Forms structured with fieldsets
-- [ ] Accessibility audit completed
+- [ ] ARIA labels implemented
+- [ ] Heading hierarchy correct
+- [ ] Forms properly structured
 
-### Phase 3: Agent Optimization
+### Layer 3: Structured Data
 
-- [ ] data-agent-\* attributes added
-- [ ] Agent detection implemented
-- [ ] Structured data integrated
-- [ ] State management updated
+- [ ] schema.org microdata on key content
+- [ ] JSON-LD blocks for rich data
+- [ ] OpenGraph meta tags present
 
-### Phase 4: Testing & Validation
+### Layer 4: API Surface
 
-- [ ] Automated tests written
-- [ ] Cross-agent testing completed
-- [ ] Performance optimization done
-- [ ] Compliance audit passed
+- [ ] REST/GraphQL endpoints documented
+- [ ] OpenAPI specification published
+- [ ] API discoverable via link tags
 
-### Deployment
+### Layer 5: Agent Protocols
 
-- [ ] Production environment configured
-- [ ] Monitoring and analytics setup
-- [ ] Documentation updated
-- [ ] Team training completed
+- [ ] MCP server implemented (optional)
+- [ ] Agent Card published (optional)
+- [ ] NLWeb endpoint available (optional)
+
+### Validation
+
+- [ ] All agent levels tested
+- [ ] Performance benchmarks met
+- [ ] Compliance checklist passed
+- [ ] Monitoring configured
 
 ## Next Steps
 
-After completing this implementation guide:
+1. **Review the whitepaper** — [BiModal Design v3.0](./whitepaper.md)
+2. **Check compliance** — [Compliance Checklist](./compliance-checklist.md)
+3. **See examples** — [Implementation Examples](../examples/)
+4. **Troubleshoot issues** — [Troubleshooting Guide](./troubleshooting.md)
 
-1. **Review Case Studies** - See real-world examples and results
-2. **Check API Reference** - Understand technical specifications
-3. **Use Troubleshooting Guide** - Solve common implementation issues
-4. **Join Community** - Connect with other BiModal Design implementers
+## Support
 
-## Support and Resources
-
-- **Documentation**: [BiModal Design Framework
-  Documentation](https://github.com/jgoldfoot/BiModalDesign/docs)
-- **Examples**: [Complete Implementation
-  Examples](https://github.com/jgoldfoot/BiModalDesign/examples)
-- **Issues**: [GitHub Issues](https://github.com/jgoldfoot/BiModal
-  Design/issues)
-- **Discussions**: [Community Forum](https://github.com/jgoldfoot/BiModal
-  Design/discussions)
+- **Documentation**: [BiModal Design Docs](https://github.com/jgoldfoot/BiModalDesign/docs)
+- **Examples**: [Implementation Examples](https://github.com/jgoldfoot/BiModalDesign/examples)
+- **Issues**: [GitHub Issues](https://github.com/jgoldfoot/BiModalDesign/issues)
+- **Discussions**: [Community Forum](https://github.com/jgoldfoot/BiModalDesign/discussions)

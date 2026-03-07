@@ -1,13 +1,12 @@
-# Next.js SSR BiModal Design Example
+# Next.js SSR BiModal Design v3.0 Example
 
-This example demonstrates how to implement BiModal Design patterns in a Next.js
-application with Server-Side Rendering to ensure **FR-1: Initial Payload
-Accessibility** compliance.
+This example demonstrates how to implement BiModal Design v3.0 patterns in a
+Next.js application with Server-Side Rendering, ensuring compliance across all
+five Defense in Depth layers.
 
 ## Project Setup
 
 ```bash
-# Create new Next.js project with SSR
 npx create-next-app@latest bimodal-example --typescript --app --src-dir
 cd bimodal-example
 npm install
@@ -20,10 +19,10 @@ npm install
 ```tsx
 import { Metadata } from 'next';
 
-// This runs on the server - ensures FR-1 compliance
+// Server component: ensures Layer 1 (FR-1) compliance
 async function getProducts() {
   const res = await fetch(`${process.env.API_BASE_URL}/api/products`, {
-    cache: 'no-store', // Always fresh for agents
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -42,34 +41,64 @@ export default async function ProductsPage() {
   const products = await getProducts();
 
   return (
-    <main role="main" data-agent-context="product-catalog">
-      <header>
-        <h1>Product Catalog</h1>
-        <nav role="navigation" aria-label="Product filters">
-          <ul>
-            <li>
-              <a href="/products?category=electronics">Electronics</a>
-            </li>
-            <li>
-              <a href="/products?category=clothing">Clothing</a>
-            </li>
-            <li>
-              <a href="/products?category=books">Books</a>
-            </li>
-          </ul>
-        </nav>
-      </header>
+    <>
+      {/* Layer 2: Semantic HTML5 structure with ARIA */}
+      <main aria-label="Product catalog">
+        <header>
+          <h1>Product Catalog</h1>
+          <nav aria-label="Product filters">
+            <ul>
+              <li>
+                <a href="/products?category=electronics">Electronics</a>
+              </li>
+              <li>
+                <a href="/products?category=clothing">Clothing</a>
+              </li>
+              <li>
+                <a href="/products?category=books">Books</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
 
-      <section aria-labelledby="products-heading">
-        <h2 id="products-heading">Available Products</h2>
+        <section aria-labelledby="products-heading">
+          <h2 id="products-heading">Available Products</h2>
 
-        <div className="product-grid" data-agent-group="product-list">
-          {products.map((product: any) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-    </main>
+          <div className="product-grid">
+            {products.map((product: any) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      </main>
+
+      {/* Layer 3: JSON-LD structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: 'Product Catalog',
+            numberOfItems: products.length,
+            itemListElement: products.map((p: any, i: number) => ({
+              '@type': 'Product',
+              position: i + 1,
+              name: p.name,
+              description: p.description,
+              offers: {
+                '@type': 'Offer',
+                price: p.price,
+                priceCurrency: 'USD',
+                availability: p.inStock
+                  ? 'https://schema.org/InStock'
+                  : 'https://schema.org/OutOfStock',
+              },
+            })),
+          }),
+        }}
+      />
+    </>
   );
 }
 
@@ -77,23 +106,34 @@ function ProductCard({ product }: { product: any }) {
   return (
     <article
       className="product-card"
-      data-agent-intent="product-view"
       itemScope
       itemType="https://schema.org/Product"
     >
       <header>
         <h3 itemProp="name">{product.name}</h3>
-        <p className="price" itemProp="price">
-          ${product.price}
-        </p>
       </header>
 
       <div className="product-details">
         <p itemProp="description">{product.description}</p>
-        <span
-          itemProp="availability"
-          content={product.inStock ? 'InStock' : 'OutOfStock'}
+        <div
+          itemProp="offers"
+          itemScope
+          itemType="https://schema.org/Offer"
         >
+          <span className="price" itemProp="price" content={String(product.price)}>
+            ${product.price}
+          </span>
+          <meta itemProp="priceCurrency" content="USD" />
+          <link
+            itemProp="availability"
+            href={
+              product.inStock
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock'
+            }
+          />
+        </div>
+        <span aria-label={product.inStock ? 'In stock' : 'Out of stock'}>
           {product.inStock ? 'In Stock' : 'Out of Stock'}
         </span>
       </div>
@@ -101,8 +141,7 @@ function ProductCard({ product }: { product: any }) {
       <footer className="product-actions">
         <button
           type="button"
-          data-agent-action="add-to-cart"
-          data-agent-product-id={product.id}
+          aria-label={`Add ${product.name} to cart`}
           aria-describedby={`product-${product.id}-status`}
           disabled={!product.inStock}
         >
@@ -117,32 +156,12 @@ function ProductCard({ product }: { product: any }) {
           {product.inStock ? 'Available' : 'Currently unavailable'}
         </div>
       </footer>
-
-      {/* Structured data for agents */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Product',
-            name: product.name,
-            description: product.description,
-            offers: {
-              '@type': 'Offer',
-              price: product.price,
-              availability: product.inStock
-                ? 'https://schema.org/InStock'
-                : 'https://schema.org/OutOfStock',
-            },
-          }),
-        }}
-      />
     </article>
   );
 }
 ```
 
-## BiModal Design-Optimized Checkout Form
+## Checkout Form (Layer 2: Semantic Forms)
 
 ### `/src/app/checkout/page.tsx`
 
@@ -152,29 +171,27 @@ function ProductCard({ product }: { product: any }) {
 import { useState } from 'react';
 
 export default function CheckoutPage() {
-  const [formState, setFormState] = useState('ready');
+  const [formState, setFormState] = useState<'ready' | 'submitting' | 'success'>('ready');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormState('submitting');
-
     // Form submission logic here
-
     setFormState('success');
   };
 
   return (
-    <main role="main" data-agent-context="checkout-flow">
+    <main aria-label="Checkout">
       <h1>Checkout</h1>
 
       <form
         onSubmit={handleSubmit}
-        data-agent-intent="order-completion"
-        data-agent-state={formState}
+        aria-label="Order completion"
+        aria-busy={formState === 'submitting'}
         noValidate
       >
         {/* Shipping Information */}
-        <fieldset data-agent-group="shipping-info">
+        <fieldset>
           <legend>Shipping Information</legend>
 
           <div className="form-group">
@@ -182,16 +199,12 @@ export default function CheckoutPage() {
             <input
               id="shipping-name"
               type="text"
-              data-agent-field="shipping.fullName"
+              name="shipping_name"
               aria-required="true"
               aria-describedby="shipping-name-error"
               autoComplete="shipping name"
             />
-            <div
-              id="shipping-name-error"
-              className="error-message"
-              aria-live="polite"
-            />
+            <div id="shipping-name-error" aria-live="polite" />
           </div>
 
           <div className="form-group">
@@ -199,61 +212,25 @@ export default function CheckoutPage() {
             <input
               id="shipping-address"
               type="text"
-              data-agent-field="shipping.address"
+              name="shipping_address"
               aria-required="true"
-              aria-describedby="shipping-address-error"
               autoComplete="shipping street-address"
-            />
-            <div
-              id="shipping-address-error"
-              className="error-message"
-              aria-live="polite"
-            />
-          </div>
-        </fieldset>
-
-        {/* Payment Information */}
-        <fieldset data-agent-group="payment-info">
-          <legend>Payment Information</legend>
-
-          <div className="form-group">
-            <label htmlFor="card-number">Card Number *</label>
-            <input
-              id="card-number"
-              type="text"
-              data-agent-field="payment.cardNumber"
-              aria-required="true"
-              aria-describedby="card-number-error card-number-help"
-              autoComplete="cc-number"
-            />
-            <div id="card-number-help" className="help-text">
-              16-digit card number
-            </div>
-            <div
-              id="card-number-error"
-              className="error-message"
-              aria-live="polite"
             />
           </div>
         </fieldset>
 
         {/* Submit Actions */}
-        <div className="form-actions" data-agent-group="checkout-actions">
+        <div className="form-actions">
           <button
             type="submit"
-            data-agent-action="complete-order"
-            data-agent-state={formState}
+            aria-label="Complete order"
             aria-describedby="checkout-status"
             disabled={formState === 'submitting'}
           >
             {formState === 'submitting' ? 'Processing...' : 'Complete Order'}
           </button>
 
-          <div
-            id="checkout-status"
-            className="status-message"
-            aria-live="polite"
-          >
+          <div id="checkout-status" aria-live="polite">
             {formState === 'ready' && 'Ready to place order'}
             {formState === 'submitting' && 'Processing your order...'}
             {formState === 'success' && 'Order completed successfully!'}
@@ -265,7 +242,7 @@ export default function CheckoutPage() {
 }
 ```
 
-## API Route for Agent Access
+## API Route (Layer 4: API Surface)
 
 ### `/src/app/api/products/route.ts`
 
@@ -276,7 +253,6 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const category = searchParams.get('category');
 
-  // Mock data - replace with real database
   const products = [
     {
       id: 1,
@@ -300,25 +276,10 @@ export async function GET(request: NextRequest) {
     ? products.filter((p) => p.category === category)
     : products;
 
-  // Agent-friendly response headers
-  const response = NextResponse.json({
+  return NextResponse.json({
     products: filteredProducts,
     total: filteredProducts.length,
-    bimodalDesign: {
-      version: '2.1',
-      capabilities: ['product-search', 'add-to-cart', 'checkout'],
-      endpoints: {
-        'add-to-cart': '/api/cart/add',
-        checkout: '/api/checkout',
-      },
-    },
   });
-
-  // CORS for agent access
-  response.headers.set('Access-Control-Allow-Origin', '*');
-  response.headers.set('X-BiModal Design-Compatible', 'true');
-
-  return response;
 }
 ```
 
@@ -327,54 +288,48 @@ export async function GET(request: NextRequest) {
 ### Verify Server-Side Rendering
 
 ```bash
-# Test that content is visible to agents
+# Layer 1: Content visible to Level 0 agents
 curl -s http://localhost:3000/products | grep "Wireless Headphones"
-
 # Should return the product name, proving SSR works
+
+# Layer 3: Structured data present
+curl -s http://localhost:3000/products | grep "application/ld+json"
+# Should find JSON-LD block
 ```
 
 ### Disable JavaScript Test
 
 1. Open Chrome DevTools
-2. Settings → Preferences → Debugger → "Disable JavaScript"
+2. Settings > Preferences > Debugger > "Disable JavaScript"
 3. Navigate to your site
 4. Verify core functionality still works
 
-## Key BiModal Design Features Demonstrated
+## BiModal Design v3.0 Layers Demonstrated
 
-✅ **FR-1 Compliance**: Server-side rendering ensures content in initial
-payload  
-✅ **Semantic HTML**: Proper landmarks, headings, form structure  
-✅ **Agent Attributes**: data-agent-\* attributes for automation  
-✅ **Structured Data**: JSON-LD for enhanced agent understanding  
-✅ **Stable Selectors**: Consistent IDs and classes  
-✅ **State Management**: aria-live regions and data-agent-state  
-✅ **API Integration**: Agent-friendly endpoints with metadata
+- **Layer 1 (FR-1)**: Server components render content in initial HTML
+- **Layer 2**: Semantic landmarks (`<main>`, `<nav>`, `<header>`), ARIA labels,
+  heading hierarchy, accessible forms with `<fieldset>` and `<label>`
+- **Layer 3**: schema.org microdata (`itemscope`, `itemprop`) and JSON-LD
+- **Layer 4**: REST API with typed responses
 
 ## Running the Example
 
 ```bash
-# Install dependencies
 npm install
-
-# Set environment variables
 echo "API_BASE_URL=http://localhost:3000" > .env.local
-
-# Run development server
 npm run dev
-
 # Visit http://localhost:3000/products
 ```
 
-## Agent Testing
+## Agent-Level Testing
 
 ```bash
-# Test with cURL (simulates basic agent)
-curl -H "User-Agent: BiModal Design-Test/1.0" http://localhost:3000/products
+# Level 0 (HTTP Retriever): Content in HTML?
+curl -s http://localhost:3000/products | grep -c '<article'
 
-# Test API endpoint
+# Level 1 (LLM Browser): Structured data?
+curl -s http://localhost:3000/products | grep "schema.org"
+
+# Level 4 (Tool-Use Agent): API access?
 curl http://localhost:3000/api/products?category=electronics
 ```
-
-This example provides a complete foundation for building agent-accessible
-Next.js applications while maintaining excellent human user experience.

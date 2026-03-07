@@ -1,429 +1,337 @@
-# BiModal Design Troubleshooting Guide
+# BiModal Design v3.0 Troubleshooting Guide
 
 Common issues, solutions, and debugging techniques for BiModal Design
-implementations.
+implementations across the Agent Capability Spectrum.
 
 ## Table of Contents
 
 1. [Quick Diagnostics](#quick-diagnostics)
-2. [Agent Detection Issues](#agent-detection-issues)
-3. [Content Accessibility Problems](#content-accessibility-problems)
-4. [Performance Issues](#performance-issues)
-5. [Framework-Specific Problems](#framework-specific-problems)
-6. [SEO and Indexing Issues](#seo-and-indexing-issues)
-7. [Accessibility Compliance Problems](#accessibility-compliance-problems)
-8. [Debugging Tools and Techniques](#debugging-tools-and-techniques)
-9. [Common Implementation Mistakes](#common-implementation-mistakes)
-10. [Performance Optimization Issues](#performance-optimization-issues)
+2. [Layer 1: Content Accessibility Issues](#layer-1-content-accessibility-issues)
+3. [Layer 2: Semantic Structure Issues](#layer-2-semantic-structure-issues)
+4. [Layer 3: Structured Data Issues](#layer-3-structured-data-issues)
+5. [Layer 4: API Surface Issues](#layer-4-api-surface-issues)
+6. [Layer 5: Agent Protocol Issues](#layer-5-agent-protocol-issues)
+7. [Performance Issues](#performance-issues)
+8. [Framework-Specific Problems](#framework-specific-problems)
+9. [SEO and GEO Issues](#seo-and-geo-issues)
+10. [Debugging Tools and Techniques](#debugging-tools-and-techniques)
 
 ## Quick Diagnostics
 
 ### 5-Minute Health Check
 
-Run these quick tests to identify major issues:
+Test each Defense in Depth layer:
 
 ```bash
-# Test 1: Basic content accessibility
+# Layer 1: Content in initial HTML?
 curl -s "https://your-site.com/" | grep -E '<(main|nav|h1)'
-# Expected: Should return semantic HTML elements
+# Expected: semantic HTML elements with content
 
-# Test 2: Agent detection
-curl -H "User-Agent: GoogleBot/2.1" "https://your-site.com/"
-# Expected: Should return content without JavaScript dependency
+# Layer 2: Semantic structure?
+curl -s "https://your-site.com/" | grep -E 'aria-label|role='
+# Expected: ARIA attributes present
 
-# Test 3: Structured data presence
+# Layer 3: Structured data?
 curl -s "https://your-site.com/" | grep "application/ld+json"
-# Expected: Should find structured data scripts
+# Expected: JSON-LD scripts found
 
-# Test 4: Agent attributes
-curl -s "https://your-site.com/" | grep "data-agent-"
-# Expected: Should find BiModal Design attributes
+# Layer 4: API available?
+curl -s "https://your-site.com/api/openapi.json" | head -5
+# Expected: OpenAPI spec or API response
 
-# Test 5: Performance check
-curl -w "@curl-format.txt" -o /dev/null -s "https://your-site.com/"
-# Expected: Time total should be < 2 seconds for agents
+# Layer 5: Agent protocols?
+curl -s "https://your-site.com/.well-known/agent.json"
+# Expected: Agent Card (if implemented)
 ```
 
-### Automated Diagnostic Script
+### Diagnostic Script
 
 ```javascript
-// diagnostic.js - Run this in browser console
-function runBiModal DesignDiagnostic() {
-  const results = {
-    timestamp: new Date().toISOString(),
-    url: window.location.href,
-    issues: [],
-    warnings: [],
-    passed: [],
-  };
+// Run in browser console
+function runDiagnostic() {
+  const results = { passed: [], issues: [], warnings: [] };
 
-  // Check 1: Semantic structure
-  const semanticElements = [
-    'main',
-    'nav',
-    'header',
-    'footer',
-    'article',
-    'section',
-  ];
-  const foundElements = semanticElements.filter((tag) =>
-    document.querySelector(tag)
+  // Layer 1: Content accessibility
+  const main = document.querySelector('main');
+  if (main && main.textContent.trim().length > 100) {
+    results.passed.push('Layer 1: Content present in HTML');
+  } else {
+    results.issues.push('Layer 1: Missing or empty main content');
+  }
+
+  // Layer 2: Semantic structure
+  const landmarks = ['main', 'nav', 'header', 'footer'].filter(
+    tag => document.querySelector(tag)
   );
-
-  if (foundElements.length >= 3) {
-    results.passed.push('✅ Semantic HTML structure present');
+  if (landmarks.length >= 3) {
+    results.passed.push('Layer 2: Semantic landmarks present (' + landmarks.join(', ') + ')');
   } else {
-    results.issues.push(
-      '❌ Missing semantic HTML elements. Found: ' + foundElements.join(', ')
-    );
+    results.issues.push('Layer 2: Missing landmarks. Found: ' + landmarks.join(', '));
   }
 
-  // Check 2: Agent attributes
-  const agentComponents = document.querySelectorAll('[data-agent-component]');
-  const agentActions = document.querySelectorAll('[data-agent-action]');
-
-  if (agentComponents.length > 0 && agentActions.length > 0) {
-    results.passed.push('✅ Agent attributes present');
+  const ariaLabels = document.querySelectorAll('[aria-label]');
+  if (ariaLabels.length > 0) {
+    results.passed.push('Layer 2: ARIA labels present (' + ariaLabels.length + ')');
   } else {
-    results.issues.push('❌ Missing BiModal Design attributes');
+    results.warnings.push('Layer 2: No aria-label attributes found');
   }
 
-  // Check 3: Forms accessibility
+  // Layer 3: Structured data
+  const jsonLd = document.querySelectorAll('script[type="application/ld+json"]');
+  const microdata = document.querySelectorAll('[itemscope]');
+  if (jsonLd.length > 0 || microdata.length > 0) {
+    results.passed.push('Layer 3: Structured data present');
+  } else {
+    results.warnings.push('Layer 3: No structured data found');
+  }
+
+  // Forms check
   const forms = document.querySelectorAll('form');
   if (forms.length > 0) {
-    const fieldsets = document.querySelectorAll('fieldset');
-    const labels = document.querySelectorAll('label[for]');
-
-    if (fieldsets.length > 0 && labels.length > 0) {
-      results.passed.push('✅ Forms have proper accessibility structure');
+    const labelsOk = document.querySelectorAll('label[for]').length > 0;
+    if (labelsOk) {
+      results.passed.push('Forms: Labels properly associated');
     } else {
-      results.warnings.push('⚠️ Forms may lack proper accessibility structure');
+      results.issues.push('Forms: Missing label associations');
     }
   }
 
-  // Check 4: Navigation
-  const nav = document.querySelector('nav[role="navigation"]');
-  if (nav) {
-    results.passed.push('✅ Accessible navigation present');
-  } else {
-    results.issues.push('❌ Missing accessible navigation');
-  }
-
-  // Check 5: Structured data
-  const structuredData = document.querySelectorAll(
-    'script[type="application/ld+json"]'
-  );
-  if (structuredData.length > 0) {
-    results.passed.push('✅ Structured data present');
-  } else {
-    results.warnings.push('⚠️ No structured data found');
-  }
-
-  console.log('BiModal Design Diagnostic Results:', results);
+  console.table(results);
   return results;
 }
 
-// Run diagnostic
-runBiModal DesignDiagnostic();
+runDiagnostic();
 ```
 
-## Agent Detection Issues
+## Layer 1: Content Accessibility Issues
 
-### Problem: Agents Not Being Detected
+### Problem: Empty Content for Agents (FR-1 Failure)
 
 **Symptoms:**
 
-- No agent-specific styling applied
-- All users getting same experience
-- Analytics showing no agent visits
-
-**Common Causes:**
-
-1. **Missing User-Agent Detection**
-
-```javascript
-// ❌ Wrong - Not checking user agent
-function detectAgent() {
-  return false; // Always returns false
-}
-
-// ✅ Correct - Proper user agent checking
-function detectAgent() {
-  const userAgent = navigator.userAgent || '';
-  return /bot|crawler|spider/i.test(userAgent);
-}
-```
-
-2. **Server-Side Detection Issues**
-
-```javascript
-// ❌ Wrong - Missing header check
-app.use((req, res, next) => {
-  req.isAgent = false; // Never detects agents
-  next();
-});
-
-// ✅ Correct - Proper header detection
-app.use((req, res, next) => {
-  const userAgent = req.get('User-Agent') || '';
-  req.isAgent = /bot|crawler|spider/i.test(userAgent);
-  next();
-});
-```
-
-**Solutions:**
-
-1. **Verify Detection Logic**
-
-```javascript
-// Test your detection function
-const testUserAgents = [
-  'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-  'curl/7.68.0',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-];
-
-testUserAgents.forEach((ua) => {
-  console.log(`${ua}: ${detectAgent(ua) ? 'AGENT' : 'HUMAN'}`);
-});
-```
-
-2. **Add Debug Logging**
-
-```javascript
-function detectAgent(userAgent = navigator.userAgent) {
-  console.log('Detecting agent for:', userAgent);
-
-  const patterns = [/bot/i, /crawler/i, /spider/i];
-  const isAgent = patterns.some((pattern) => pattern.test(userAgent));
-
-  console.log('Agent detected:', isAgent);
-  return isAgent;
-}
-```
-
-### Problem: False Positives/Negatives
-
-**Symptoms:**
-
-- Human users getting agent experience
-- Agents getting human experience
-- Inconsistent detection results
-
-**Solutions:**
-
-1. **Improve Pattern Specificity**
-
-```javascript
-// ❌ Too broad - catches human browsers
-const patterns = [/chrome/i, /safari/i];
-
-// ✅ More specific - targets actual agents
-const patterns = [
-  /googlebot/i,
-  /bingbot/i,
-  /facebookexternalhit/i,
-  /headless/i,
-];
-```
-
-2. **Add Confidence Scoring**
-
-```javascript
-function detectAgentWithConfidence(userAgent) {
-  const highConfidence = [/googlebot/i, /bingbot/i];
-  const mediumConfidence = [/bot/i, /crawler/i];
-
-  for (const pattern of highConfidence) {
-    if (pattern.test(userAgent)) {
-      return { isAgent: true, confidence: 0.95 };
-    }
-  }
-
-  for (const pattern of mediumConfidence) {
-    if (pattern.test(userAgent)) {
-      return { isAgent: true, confidence: 0.7 };
-    }
-  }
-
-  return { isAgent: false, confidence: 0.9 };
-}
-```
-
-## Content Accessibility Problems
-
-### Problem: Empty Content for Agents
-
-**Symptoms:**
-
-- Agents receive blank pages
-- Content requires JavaScript to load
+- `curl` returns empty `<div id="root"></div>`
+- Level 0-1 agents see no content
 - Search engines not indexing content
 
-**Common Causes:**
+**Cause:** Client-side only rendering.
 
-1. **Client-Side Only Rendering**
-
-```javascript
-// ❌ Wrong - Content only available after JS execution
-function App() {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    fetchData().then(setData);
-  }, []);
-
-  if (!data) return <div>Loading...</div>;
-
-  return <div>{data.content}</div>;
-}
-```
-
-2. **Missing SSR Implementation**
-
-```html
-<!-- ❌ Wrong - Empty HTML shell -->
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>My App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script src="/app.js"></script>
-  </body>
-</html>
-```
-
-**Solutions:**
-
-1. **Implement Server-Side Rendering**
+**Solution:** Implement SSR or SSG:
 
 ```javascript
-// ✅ Correct - SSR with data fetching
-export async function getServerSideProps() {
+// Next.js: Use server components (default in App Router)
+export default async function Page() {
   const data = await fetchData();
-
-  return {
-    props: { data },
-  };
-}
-
-function App({ data }) {
   return (
-    <div data-agent-component="main-content">
-      <h1 data-agent-content="page-title">{data.title}</h1>
-      <p data-agent-content="page-description">{data.description}</p>
-    </div>
+    <main aria-label="Products">
+      <h1>Product Catalog</h1>
+      {data.map(item => (
+        <article key={item.id} itemScope itemType="https://schema.org/Product">
+          <h2 itemProp="name">{item.name}</h2>
+        </article>
+      ))}
+    </main>
   );
 }
 ```
 
-2. **Add Meaningful Fallback Content**
-
-```html
-<!-- ✅ Correct - Content available without JS -->
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>My App</title>
-  </head>
-  <body>
-    <div id="root">
-      <main role="main" data-agent-component="main-content">
-        <h1 data-agent-content="page-title">Welcome to My App</h1>
-        <p data-agent-content="page-description">
-          Discover our products and services designed for everyone.
-        </p>
-        <nav data-agent-component="navigation">
-          <a href="/products" data-agent-action="view-products">Products</a>
-          <a href="/contact" data-agent-action="get-support">Contact</a>
-        </nav>
-      </main>
-    </div>
-    <script src="/app.js"></script>
-  </body>
-</html>
-```
-
-### Problem: Missing Agent Attributes
+### Problem: Navigation Requires JavaScript
 
 **Symptoms:**
 
-- Agents struggle to understand page structure
-- Low interaction success rates
-- Poor analytics data
+- Menu items invisible with JS disabled
+- Level 0 agents can't discover pages
 
-**Solutions:**
+**Solution:** Server-render navigation HTML:
 
-1. **Audit Existing Markup**
-
-```javascript
-// Audit script - run in browser console
-function auditAgentAttributes() {
-  const components = document.querySelectorAll('[data-agent-component]');
-  const actions = document.querySelectorAll('[data-agent-action]');
-  const content = document.querySelectorAll('[data-agent-content]');
-
-  console.log('Agent Components:', components.length);
-  console.log('Agent Actions:', actions.length);
-  console.log('Agent Content:', content.length);
-
-  // Check for missing attributes on interactive elements
-  const buttons = document.querySelectorAll('button:not([data-agent-action])');
-  const links = document.querySelectorAll('a:not([data-agent-action])');
-
-  if (buttons.length > 0) {
-    console.warn('Buttons missing agent actions:', buttons.length);
-  }
-
-  if (links.length > 0) {
-    console.warn('Links missing agent actions:', links.length);
-  }
-}
-
-auditAgentAttributes();
+```html
+<nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/products">Products</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</nav>
 ```
 
-2. **Systematic Attribute Addition**
+## Layer 2: Semantic Structure Issues
+
+### Problem: Missing Landmarks
+
+**Symptoms:**
+
+- Screen readers and LLM browsers can't parse page structure
+- Level 1-2 agents struggle to find content
+
+**Solution:** Replace `<div>` with semantic elements:
+
+```html
+<!-- Before -->
+<div class="header">
+  <div class="nav">...</div>
+</div>
+<div class="content">...</div>
+
+<!-- After -->
+<header>
+  <nav aria-label="Main navigation">...</nav>
+</header>
+<main aria-label="Page content">...</main>
+```
+
+### Problem: Broken Heading Hierarchy
+
+**Symptoms:**
+
+- Agents misinterpret content structure
+- Accessibility tools report errors
+
+**Solution:**
+
+```html
+<!-- Wrong: Skipped level -->
+<h1>Main Title</h1>
+<h3>Subsection</h3>
+
+<!-- Correct: Sequential hierarchy -->
+<h1>Main Title</h1>
+<h2>Section</h2>
+<h3>Subsection</h3>
+```
+
+### Problem: Missing Form Labels
+
+**Symptoms:**
+
+- Level 2 agents can't fill forms
+- Accessibility failures
+
+**Solution:**
+
+```html
+<!-- Wrong -->
+<input type="email" placeholder="Email" />
+
+<!-- Correct -->
+<label for="email">Email Address *</label>
+<input type="email" id="email" name="email" required aria-required="true" />
+```
+
+### Problem: Dynamic IDs Breaking Selectors
+
+**Symptoms:**
+
+- Level 2 automation breaks between page loads
+- IDs like `btn-xyz123` change every render
+
+**Solution:** Use stable, semantic selectors:
+
+```html
+<!-- Wrong: Dynamic ID -->
+<button id="btn-a7x9k2">Submit</button>
+
+<!-- Correct: Stable selector -->
+<button type="submit" aria-label="Submit contact form">Submit</button>
+```
+
+## Layer 3: Structured Data Issues
+
+### Problem: No Structured Data
+
+**Symptoms:**
+
+- No rich results in search
+- AI assistants can't extract product/business data
+
+**Solution:** Add JSON-LD:
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Wireless Headphones",
+  "description": "High-quality wireless audio",
+  "offers": {
+    "@type": "Offer",
+    "price": "99.99",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+```
+
+### Problem: Invalid Structured Data
+
+**Symptoms:**
+
+- Google Rich Results Test shows errors
+- Required fields missing
+
+**Solution:** Validate with Google Rich Results Test and fix missing fields.
+Common missing fields: `@context`, `price`, `availability`, `image`.
+
+## Layer 4: API Surface Issues
+
+### Problem: No API Documentation
+
+**Symptoms:**
+
+- Level 4 agents can't discover endpoints
+- Integration requires manual documentation
+
+**Solution:** Publish an OpenAPI specification:
+
+```html
+<link rel="api" type="application/openapi+json" href="/api/openapi.json" />
+```
+
+### Problem: Inconsistent API Responses
+
+**Symptoms:**
+
+- Different endpoints return different formats
+- Error responses lack structure
+
+**Solution:** Standardize response format:
 
 ```javascript
-// Add missing attributes programmatically
-function enhanceAgentAttributes() {
-  // Enhance buttons
-  document
-    .querySelectorAll('button:not([data-agent-action])')
-    .forEach((button) => {
-      const text = button.textContent.toLowerCase();
+// Consistent success response
+{ "data": [...], "meta": { "total": 42, "page": 1 } }
 
-      if (text.includes('submit')) {
-        button.setAttribute('data-agent-action', 'submit-form');
-      } else if (text.includes('search')) {
-        button.setAttribute('data-agent-action', 'perform-search');
-      } else {
-        button.setAttribute('data-agent-action', 'button-click');
-      }
-    });
+// Consistent error response
+{ "error": { "code": "NOT_FOUND", "message": "Product not found" } }
+```
 
-  // Enhance navigation links
-  document
-    .querySelectorAll('nav a:not([data-agent-action])')
-    .forEach((link) => {
-      const href = link.getAttribute('href');
+## Layer 5: Agent Protocol Issues
 
-      if (href === '/') {
-        link.setAttribute('data-agent-action', 'go-home');
-      } else if (href.includes('product')) {
-        link.setAttribute('data-agent-action', 'view-products');
-      } else if (href.includes('contact')) {
-        link.setAttribute('data-agent-action', 'get-support');
-      } else {
-        link.setAttribute('data-agent-action', 'navigate');
-      }
-    });
-}
+### Problem: MCP Server Not Responding
 
-enhanceAgentAttributes();
+**Symptoms:**
+
+- Protocol-native agents can't connect
+- Tools fail to execute
+
+**Debugging:**
+
+```bash
+# Test MCP server directly
+npx @modelcontextprotocol/inspector your-mcp-server
+
+# Check server logs for errors
+```
+
+### Problem: Agent Card Not Discoverable
+
+**Symptoms:**
+
+- A2A agents can't find your service
+
+**Solution:** Ensure `/.well-known/agent.json` is accessible:
+
+```bash
+curl -s https://your-site.com/.well-known/agent.json
+# Should return valid JSON with capabilities
 ```
 
 ## Performance Issues
@@ -434,692 +342,208 @@ enhanceAgentAttributes();
 
 - High Time to First Byte (TTFB)
 - Agents timing out
-- Poor Core Web Vitals scores
-
-**Common Causes:**
-
-1. **Unnecessary JavaScript Execution**
-
-```javascript
-// ❌ Wrong - Loading heavy JS for agents
-if (isAgent) {
-  // Still loading full React bundle
-  return <ComplexSPAComponent />;
-}
-```
-
-2. **Unoptimized Images and Assets**
-
-```html
-<!-- ❌ Wrong - Large unoptimized images -->
-<img src="/hero-image-4k.jpg" alt="Hero image" />
-```
+- Poor Core Web Vitals
 
 **Solutions:**
 
-1. **Agent-Specific Optimizations**
+1. **Inline critical CSS** — Reduce render-blocking resources
+2. **Defer non-critical JS** — `<script src="app.js" defer>`
+3. **Use CDN** — Serve static assets from edge locations
+4. **Compress responses** — Enable gzip/brotli
 
-```javascript
-// ✅ Correct - Lightweight version for agents
-if (isAgent) {
-  return (
-    <StaticContent
-      title={data.title}
-      description={data.description}
-      structured={true}
-    />
-  );
-}
-
-return <FullInteractiveComponent data={data} />;
-```
-
-2. **Conditional Asset Loading**
-
-```html
-<!-- ✅ Correct - Optimized images for agents -->
-<img
-  src="/hero-image-optimized.jpg"
-  alt="Hero image"
-  width="800"
-  height="400"
-  loading="lazy"
-/>
-```
-
-### Problem: Cache Issues for Agents
+### Problem: Large HTML Payloads
 
 **Symptoms:**
 
-- Agents receiving stale content
-- Inconsistent responses
-- Cache misses
+- Level 0 agents slow to parse
+- Bandwidth-constrained agents fail
 
-**Solutions:**
-
-1. **Agent-Aware Caching**
-
-```javascript
-// Express.js cache configuration
-app.use((req, res, next) => {
-  if (req.isAgent) {
-    // Cache static content for agents
-    res.set('Cache-Control', 'public, max-age=3600');
-  } else {
-    // No cache for dynamic human content
-    res.set('Cache-Control', 'no-cache');
-  }
-  next();
-});
-```
-
-2. **Vary Header Implementation**
-
-```javascript
-// Ensure proper cache variation
-app.use((req, res, next) => {
-  res.set('Vary', 'User-Agent');
-  next();
-});
-```
+**Solution:** Keep initial HTML focused on content, lazy-load non-critical
+elements.
 
 ## Framework-Specific Problems
 
-### React Issues
-
-**Problem: Hydration Mismatches**
+### React / Next.js: Hydration Mismatches
 
 **Symptoms:**
 
 - Console warnings about hydration
-- Different content on server vs client
-- Flash of incorrect content
+- Content flickers on load
 
-**Solutions:**
-
-1. **Consistent Rendering**
+**Solution:** Ensure server and client render the same content:
 
 ```javascript
-// ❌ Wrong - Different content on server/client
-function Component() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  return <div>{isClient ? 'Client content' : 'Server content'}</div>;
-}
-
-// ✅ Correct - Consistent rendering
-function Component({ isAgent }) {
-  return (
-    <div data-agent-detected={isAgent}>
-      {isAgent ? <StaticContent /> : <InteractiveContent />}
-    </div>
-  );
-}
+// Use server components for static content (Next.js App Router)
+// Only use 'use client' for truly interactive elements
 ```
 
-2. **Proper SSR Setup**
+### Vue / Nuxt: Client-Side Navigation Issues
+
+**Symptoms:**
+
+- Page transitions break agent experience
+- Direct URL access works but navigation doesn't
+
+**Solution:** Ensure all routes are server-renderable in Nuxt:
 
 ```javascript
-// pages/_app.js
-function MyApp({ Component, pageProps, agentInfo }) {
-  return (
-    <AgentProvider agentInfo={agentInfo}>
-      <Component {...pageProps} />
-    </AgentProvider>
-  );
-}
-
-MyApp.getInitialProps = async (appContext) => {
-  const agentInfo = detectServerSideAgent(appContext.ctx.req);
-  return { agentInfo };
-};
+// nuxt.config.ts
+export default defineNuxtConfig({
+  ssr: true, // Ensure SSR is enabled
+});
 ```
 
-### Vue/Nuxt Issues
+### Astro: Missing Interactivity
 
-**Problem: Client-Side Navigation Breaking Agent Experience**
+**Symptoms:**
 
-**Solutions:**
+- Static pages lack interactive features
 
-1. **Agent-Aware Router Configuration**
+**Solution:** Use Astro's component islands for selective hydration:
 
-```javascript
-// nuxt.config.js
-export default {
-  router: {
-    middleware: 'agent-detection'
-  }
-};
-
-// middleware/agent-detection.js
-export default function ({ req, redirect, route }) {
-  const userAgent = process.server ? req.headers['user-agent'] : navigator.userAgent;
-  const isAgent = /bot|crawler|spider/i.test(userAgent);
-
-  if (isAgent && route.path.includes('?')) {
-    // Redirect to clean URLs for agents
-    return redirect(route.path.split('?')[0]);
-  }
-}
+```astro
+---
+import InteractiveWidget from './InteractiveWidget.jsx';
+---
+<!-- Static content (no JS) -->
+<main>
+  <h1>Product Page</h1>
+  <!-- Island: only this component loads JS -->
+  <InteractiveWidget client:visible />
+</main>
 ```
 
-### Angular Issues
+## SEO and GEO Issues
 
-**Problem: Zone.js Conflicts with Agent Detection**
-
-**Solutions:**
-
-1. **Proper Zone Configuration**
-
-```typescript
-// main.ts
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppModule } from './app/app.module';
-
-// Detect agent before Angular bootstrap
-const isAgent = /bot|crawler|spider/i.test(navigator.userAgent);
-
-if (isAgent) {
-  // Disable unnecessary Zone.js features for agents
-  (window as any).__Zone_disable_requestAnimationFrame = true;
-  (window as any).__Zone_disable_on_property = true;
-}
-
-platformBrowserDynamic().bootstrapModule(AppModule);
-```
-
-## SEO and Indexing Issues
-
-### Problem: Content Not Being Indexed
+### Problem: Content Not Indexed
 
 **Symptoms:**
 
 - Pages missing from search results
-- Low organic traffic
-- Search console errors
-
-**Diagnostic Steps:**
-
-1. **Test with Search Console**
-
-```bash
-# Use Google Search Console URL Inspection Tool
-# Check "Live Test" to see how Googlebot renders your page
-```
-
-2. **Manual Googlebot Simulation**
-
-```bash
-curl -H "User-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" \
-     -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" \
-     "https://your-site.com/"
-```
+- AI assistants can't find your content
 
 **Solutions:**
 
-1. **Verify Robots.txt**
+1. **Verify robots.txt** allows crawling
+2. **Submit sitemap** to Google Search Console
+3. **Ensure FR-1 compliance** — content in initial HTML
+4. **Add structured data** — helps AI understand content
 
-```txt
-# robots.txt
-User-agent: *
-Allow: /
-
-# Sitemap location
-Sitemap: https://your-site.com/sitemap.xml
-```
-
-2. **Add Structured Data**
-
-```html
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Page Title",
-    "description": "Page description",
-    "url": "https://your-site.com/page"
-  }
-</script>
-```
-
-### Problem: Duplicate Content Issues
+### Problem: Poor GEO Performance
 
 **Symptoms:**
 
-- Multiple URLs serving same content
-- Canonical URL warnings
-- Diluted search rankings
+- AI assistants don't cite your content
+- Low visibility in AI-generated answers
 
 **Solutions:**
 
-1. **Implement Canonical URLs**
-
-```html
-<link rel="canonical" href="https://your-site.com/canonical-url" />
-```
-
-2. **Redirect Duplicate URLs**
-
-```javascript
-// Express.js redirect handling
-app.get(['/products/', '/products/index.html'], (req, res) => {
-  res.redirect(301, '/products');
-});
-```
-
-## Accessibility Compliance Problems
-
-### Problem: WCAG Compliance Failures
-
-**Symptoms:**
-
-- Automated accessibility testing failures
-- Screen reader compatibility issues
-- Keyboard navigation problems
-
-**Common Issues and Solutions:**
-
-1. **Missing Alt Text**
-
-```html
-<!-- ❌ Wrong -->
-<img src="/product.jpg" />
-
-<!-- ✅ Correct -->
-<img src="/product.jpg" alt="Wireless Bluetooth Headphones - Black" />
-```
-
-2. **Improper Heading Hierarchy**
-
-```html
-<!-- ❌ Wrong - Skipped heading level -->
-<h1>Main Title</h1>
-<h3>Subsection</h3>
-
-<!-- ✅ Correct - Proper hierarchy -->
-<h1>Main Title</h1>
-<h2>Section</h2>
-<h3>Subsection</h3>
-```
-
-3. **Missing Form Labels**
-
-```html
-<!-- ❌ Wrong - No label association -->
-<input type="email" placeholder="Email" />
-
-<!-- ✅ Correct - Proper labeling -->
-<label for="email">Email Address</label>
-<input type="email" id="email" name="email" required />
-```
-
-### Problem: Agent-Specific Accessibility Issues
-
-**Solutions:**
-
-1. **Enhanced ARIA for Agents**
-
-```html
-<nav
-  role="navigation"
-  aria-label="Main navigation"
-  data-agent-component="navigation"
->
-  <ul role="list">
-    <li>
-      <a
-        href="/products"
-        data-agent-action="view-products"
-        aria-describedby="products-desc"
-      >
-        Products
-      </a>
-      <span id="products-desc" class="sr-only">
-        Browse our complete product catalog
-      </span>
-    </li>
-  </ul>
-</nav>
-```
-
-2. **Skip Links for Agents**
-
-```html
-<a href="#main-content" class="skip-link" data-agent-action="skip-to-content">
-  Skip to main content
-</a>
-```
+1. **Clear, factual content** — AI prefers authoritative sources
+2. **Structured data** — Helps AI extract and attribute information
+3. **Unique perspectives** — Original insights get cited more
+4. **FAQ schema** — Increases chances of appearing in AI answers
 
 ## Debugging Tools and Techniques
 
-### Browser DevTools Debugging
-
-1. **Network Tab Analysis**
-
-```javascript
-// Check for agent-specific responses
-// Look for X-Agent-Detected headers
-// Verify different content for different user agents
-```
-
-2. **Console Debugging**
-
-```javascript
-// Add to your page for debugging
-window.debugBiModal Design = function () {
-  const agentComponents = document.querySelectorAll('[data-agent-component]');
-  const agentActions = document.querySelectorAll('[data-agent-action]');
-  const agentContent = document.querySelectorAll('[data-agent-content]');
-
-  console.group('BiModal Design Debug Info');
-  console.log('Components:', agentComponents.length);
-  console.log('Actions:', agentActions.length);
-  console.log('Content labels:', agentContent.length);
-  console.log('User Agent:', navigator.userAgent);
-  console.log('Detected as agent:', window.isAgent || false);
-  console.groupEnd();
-
-  return {
-    components: agentComponents,
-    actions: agentActions,
-    content: agentContent,
-  };
-};
-```
-
 ### Command Line Testing
-
-1. **Multi-Agent Testing Script**
 
 ```bash
 #!/bin/bash
-# test-agents.sh
-
-AGENTS=(
-  "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
-  "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)"
-  "curl/7.68.0"
-  "facebookexternalhit/1.1"
-)
+# test-agent-levels.sh — Test across agent levels
 
 URL="https://your-site.com"
 
-for agent in "${AGENTS[@]}"; do
-  echo "Testing with: $agent"
-  curl -H "User-Agent: $agent" -s "$URL" | head -20
-  echo "---"
-done
+echo "=== Level 0: HTTP Retriever ==="
+curl -s "$URL" | grep -c '<main'
+
+echo "=== Level 1: Content Parsing ==="
+curl -s "$URL" | grep -c 'application/ld+json'
+
+echo "=== Level 2: Semantic Structure ==="
+curl -s "$URL" | grep -c 'aria-label'
+
+echo "=== Layer 4: API Surface ==="
+curl -s -o /dev/null -w "%{http_code}" "$URL/api/products"
 ```
 
-2. **Performance Testing**
-
-```bash
-# Test loading speed for agents
-curl -w "@curl-format.txt" -o /dev/null -s \
-  -H "User-Agent: Mozilla/5.0 (compatible; Googlebot/2.1)" \
-  "https://your-site.com/"
-```
-
-### Automated Testing Setup
-
-1. **Playwright Agent Testing**
+### Playwright Testing
 
 ```javascript
-// tests/agent-compatibility.spec.js
 const { test, expect } = require('@playwright/test');
 
-const agentUserAgents = {
-  googlebot: 'Mozilla/5.0 (compatible; Googlebot/2.1)',
-  curl: 'curl/7.68.0',
-};
+test('Level 0: Content accessible without JS', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto('/');
 
-Object.entries(agentUserAgents).forEach(([name, userAgent]) => {
-  test(`${name} compatibility`, async ({ page }) => {
-    await page.setUserAgent(userAgent);
-    await page.goto('/');
+  const main = await page.textContent('main');
+  expect(main.length).toBeGreaterThan(100);
+  await context.close();
+});
 
-    // Verify content is accessible
-    const mainContent = await page.textContent('main');
-    expect(mainContent.length).toBeGreaterThan(100);
+test('Level 2: Semantic structure present', async ({ page }) => {
+  await page.goto('/');
+  const landmarks = await page.$$('main, nav, header, footer');
+  expect(landmarks.length).toBeGreaterThanOrEqual(3);
 
-    // Verify agent attributes
-    const agentComponents = await page.$$('[data-agent-component]');
-    expect(agentComponents.length).toBeGreaterThan(0);
-  });
+  const ariaLabels = await page.$$('[aria-label]');
+  expect(ariaLabels.length).toBeGreaterThan(0);
+});
+
+test('Level 3: Structured data valid', async ({ page }) => {
+  await page.goto('/');
+  const jsonLd = await page.$eval(
+    'script[type="application/ld+json"]',
+    el => JSON.parse(el.textContent)
+  );
+  expect(jsonLd['@context']).toBe('https://schema.org');
 });
 ```
 
-## Common Implementation Mistakes
+### Browser DevTools
 
-### Mistake 1: Over-Engineering Agent Detection
+1. **Elements tab**: Inspect semantic structure, ARIA attributes
+2. **Network tab**: Check response sizes, TTFB
+3. **Lighthouse**: Run accessibility and performance audits
+4. **Console**: Run the diagnostic script from [Quick Diagnostics](#quick-diagnostics)
 
-**Problem:**
+### External Tools
 
-```javascript
-// ❌ Too complex - Hard to maintain
-function detectAgent(userAgent) {
-  const ml_model = loadTensorFlowModel();
-  const features = extractUserAgentFeatures(userAgent);
-  const prediction = ml_model.predict(features);
-  return prediction > 0.8;
-}
-```
+- **Google Rich Results Test** — Validate structured data
+- **axe DevTools** — Accessibility testing
+- **Lighthouse CI** — Automated performance monitoring
+- **Wave** — Manual accessibility testing
+- **Schema.org Validator** — Verify microdata
 
-**Solution:**
+## Quick Fixes for Common Issues
 
-```javascript
-// ✅ Simple and effective
-function detectAgent(userAgent) {
-  const agentPatterns = [
-    /googlebot/i,
-    /bingbot/i,
-    /facebookexternalhit/i,
-    /bot/i,
-    /crawler/i,
-    /spider/i,
-  ];
-  return agentPatterns.some((pattern) => pattern.test(userAgent));
-}
-```
+| Issue                            | Fix                                              |
+| -------------------------------- | ------------------------------------------------ |
+| Content invisible to agents      | Implement SSR/SSG (Layer 1)                      |
+| Missing semantic structure       | Replace `<div>` with HTML5 landmarks (Layer 2)   |
+| Forms fail for agents            | Add `<label>`, `<fieldset>`, `aria-*` (Layer 2)  |
+| No structured data               | Add JSON-LD with schema.org types (Layer 3)      |
+| APIs undiscoverable              | Publish OpenAPI spec (Layer 4)                   |
+| Dynamic selectors break agents   | Use stable classes, `aria-label`, `data-testid`  |
+| Slow agent performance           | Inline critical CSS, defer JS                    |
 
-### Mistake 2: Ignoring Human UX Impact
+## Migration from v2.x
 
-**Problem:**
+If your codebase uses `data-agent-*` attributes from v2.x, migrate to
+established standards:
 
-```javascript
-// ❌ Breaks experience for humans
-if (isAgent) {
-  // Remove all styling and interactions
-  return <PlainTextVersion />;
-}
-```
-
-**Solution:**
-
-```javascript
-// ✅ Maintains quality for both
-if (isAgent) {
-  return <OptimizedButUsableVersion />;
-}
-return <FullInteractiveVersion />;
-```
-
-### Mistake 3: Inconsistent Implementation
-
-**Problem:**
-
-- Some pages have agent optimization
-- Others don't
-- Mixed attribute naming
-
-**Solution:**
-
-```javascript
-// Create consistent implementation guidelines
-const AGENT_STANDARDS = {
-  components: {
-    navigation: 'data-agent-component="navigation"',
-    productList: 'data-agent-component="product-list"',
-    form: 'data-agent-component="form"',
-  },
-  actions: {
-    navigate: 'data-agent-action="navigate"',
-    submit: 'data-agent-action="submit-form"',
-    purchase: 'data-agent-action="add-to-cart"',
-  },
-};
-```
-
-## Performance Optimization Issues
-
-### Problem: Memory Leaks in Agent Detection
-
-**Symptoms:**
-
-- Increasing memory usage over time
-- Browser slowdown
-- Page crashes
-
-**Causes and Solutions:**
-
-1. **Event Listener Cleanup**
-
-```javascript
-// ❌ Wrong - Memory leak
-function setupAgentDetection() {
-  window.addEventListener('resize', updateAgentLayout);
-  // Never removed!
-}
-
-// ✅ Correct - Proper cleanup
-function setupAgentDetection() {
-  function handleResize() {
-    updateAgentLayout();
-  }
-
-  window.addEventListener('resize', handleResize);
-
-  // Cleanup function
-  return () => {
-    window.removeEventListener('resize', handleResize);
-  };
-}
-```
-
-2. **Observer Cleanup**
-
-```javascript
-// ✅ Proper MutationObserver cleanup
-function startObserving() {
-  const observer = new MutationObserver(handleMutations);
-  observer.observe(document.body, { childList: true, subtree: true });
-
-  // Return cleanup function
-  return () => observer.disconnect();
-}
-```
-
-### Problem: Excessive DOM Manipulation
-
-**Solutions:**
-
-1. **Batch DOM Updates**
-
-```javascript
-// ❌ Wrong - Multiple reflows
-elements.forEach((el) => {
-  el.setAttribute('data-agent-component', 'item');
-  el.style.display = 'block';
-  el.classList.add('agent-optimized');
-});
-
-// ✅ Correct - Batched updates
-const fragment = document.createDocumentFragment();
-elements.forEach((el) => {
-  const clone = el.cloneNode(true);
-  clone.setAttribute('data-agent-component', 'item');
-  clone.style.display = 'block';
-  clone.classList.add('agent-optimized');
-  fragment.appendChild(clone);
-});
-document.body.appendChild(fragment);
-```
-
-## Emergency Fixes
-
-### Quick Disable Agent Features
-
-If BiModal Design implementation is causing issues in production:
-
-```javascript
-// Emergency disable - Add to head of page
-window.BIMODAL_DESIGN_DISABLED = true;
-
-// Update your detection code
-function detectAgent() {
-  if (window.BIMODAL_DESIGN_DISABLED) return false;
-  // ... normal detection logic
-}
-```
-
-### Rollback to Basic Implementation
-
-```html
-<!-- Minimal BiModal Design implementation -->
-<html>
-  <head>
-    <title>Site Title</title>
-    <meta name="description" content="Site description" />
-  </head>
-  <body>
-    <nav role="navigation">
-      <a href="/">Home</a>
-      <a href="/products">Products</a>
-      <a href="/contact">Contact</a>
-    </nav>
-
-    <main role="main">
-      <h1>Page Title</h1>
-      <p>Page content accessible without JavaScript</p>
-    </main>
-  </body>
-</html>
-```
+| v2.x                              | v3.0                                            |
+| --------------------------------- | ----------------------------------------------- |
+| `data-agent-component="nav"`      | `<nav aria-label="...">`                        |
+| `data-agent-action="buy"`         | `aria-label="Add to cart"`                      |
+| `data-agent-field="price"`        | `itemprop="price"`                              |
+| `data-agent-context="product"`    | `itemscope itemtype="schema.org/Product"`       |
+| `data-agent-state="loading"`      | `aria-busy="true"`                              |
+| `data-agent-intent="checkout"`    | `<form aria-label="Checkout">`                  |
 
 ## Getting Help
 
-### Community Resources
-
-- **GitHub Issues**: Report bugs and get help from maintainers
-- **Documentation**: Check latest docs for updates and examples
-- **Stack Overflow**: Tag questions with `bimodal-design` and `accessibility`
-
-### Professional Support
-
-For enterprise implementations requiring guaranteed uptime and performance:
-
-- Code review services
-- Implementation consulting
-- Performance optimization
-- Compliance auditing
-
-### Useful External Tools
-
-1. **Testing Tools**
-   - Lighthouse CI for performance
-   - axe-core for accessibility
-   - Wave for manual accessibility testing
-
-2. **Monitoring Tools**
-   - Google Search Console for SEO
-   - Core Web Vitals monitoring
-   - Uptime monitoring with agent simulation
-
-3. **Debug Tools**
-   - Browser DevTools
-   - Postman for API testing
-   - curl for command-line testing
+- **Documentation**: [BiModal Design v3.0 Whitepaper](./whitepaper.md)
+- **Compliance**: [Compliance Checklist](./compliance-checklist.md)
+- **GitHub Issues**: [Report bugs](https://github.com/jgoldfoot/BiModalDesign/issues)
+- **Discussions**: [Community forum](https://github.com/jgoldfoot/BiModalDesign/discussions)

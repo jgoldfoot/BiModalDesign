@@ -8,6 +8,62 @@
   <meta property="og:title" content="Premium Tech Accessories">
   <meta property="og:description" content="Browse our curated collection of productivity tools">
   <meta property="og:type" content="website">
+
+  <!-- Layer 3: Structured data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Premium Tech Accessories",
+    "description": "Browse our curated collection of productivity tools",
+    "numberOfItems": 6,
+    "itemListElement": [
+      {
+        "@type": "Product",
+        "position": 1,
+        "name": "Wireless Headphones",
+        "description": "Premium noise-cancelling over-ear headphones",
+        "offers": { "@type": "Offer", "price": "99.99", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "Product",
+        "position": 2,
+        "name": "Smart Watch",
+        "description": "Fitness tracking with heart rate monitor",
+        "offers": { "@type": "Offer", "price": "299.99", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "Product",
+        "position": 3,
+        "name": "Laptop Stand",
+        "description": "Ergonomic aluminum adjustable stand",
+        "offers": { "@type": "Offer", "price": "49.99", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "Product",
+        "position": 4,
+        "name": "USB-C Hub",
+        "description": "7-in-1 multiport adapter",
+        "offers": { "@type": "Offer", "price": "39.99", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "Product",
+        "position": 5,
+        "name": "Mechanical Keyboard",
+        "description": "RGB backlit with cherry MX switches",
+        "offers": { "@type": "Offer", "price": "149.99", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "Product",
+        "position": 6,
+        "name": "Webcam 4K",
+        "description": "Ultra HD video conferencing camera",
+        "offers": { "@type": "Offer", "price": "129.99", "priceCurrency": "USD" }
+      }
+    ]
+  }
+  </script>
+
   <style>
     body {
       font-family: system-ui, sans-serif;
@@ -28,14 +84,8 @@
       padding: 20px;
       border-radius: 8px;
     }
-    h1 {
-      margin: 0 0 10px 0;
-      color: #333;
-    }
-    .intro {
-      color: #666;
-      margin-bottom: 20px;
-    }
+    h1 { margin: 0 0 10px 0; color: #333; }
+    .intro { color: #666; margin-bottom: 20px; }
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -59,109 +109,118 @@
       border-radius: 4px;
       background: #f0f0f0;
     }
-    .product-title {
-      font-weight: 600;
-      margin: 10px 0 5px 0;
-      font-size: 1.1em;
-    }
-    .product-price {
-      color: #0066cc;
-      font-size: 1.3em;
-      font-weight: bold;
-    }
-    .product-description {
-      color: #666;
-      font-size: 0.9em;
-      margin: 8px 0;
-    }
-    .enhanced-only {
-      display: none;
-    }
+    .product-title { font-weight: 600; margin: 10px 0 5px 0; font-size: 1.1em; }
+    .product-price { color: #0066cc; font-size: 1.3em; font-weight: bold; }
+    .product-description { color: #666; font-size: 0.9em; margin: 8px 0; }
   </style>
 </head>
 <body>
   <div class="banner">
-    <strong>✅ SSR Example (PASSES FR-1)</strong><br>
-    All content is in the initial HTML payload. AI agents can read this page with simple HTTP requests.
+    <strong>SSR Example (PASSES FR-1)</strong><br>
+    All content is in the initial HTML payload. AI agents can read this page with simple HTTP requests.<br>
+    <strong>BiModal Design v3.0 layers demonstrated:</strong> Layer 1 (content in HTML), Layer 2 (semantic structure), Layer 3 (schema.org JSON-LD).<br>
     Test it: <code>node tools/validators/fr1-validator.js file:///path/to/this/file.html</code>
   </div>
 
-  <!-- All content is present in the initial HTML - this is what makes it FR-1 compliant -->
-  <main>
-    <header>
-      <h1>Premium Tech Accessories</h1>
-      <p class="intro">Browse our curated collection of productivity tools</p>
-    </header>
+  <!-- Layer 1: All content present in initial HTML (FR-1 compliant) -->
+  <!-- Layer 2: Semantic HTML5 structure with ARIA -->
+  <header>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="/" aria-current="page">Home</a></li>
+        <li><a href="/products">Products</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <section class="product-grid">
-      <article class="product-card">
+  <main aria-label="Product catalog">
+    <h1>Premium Tech Accessories</h1>
+    <p class="intro">Browse our curated collection of productivity tools</p>
+
+    <!-- Layer 3: schema.org microdata on product cards -->
+    <section class="product-grid" aria-label="Product list">
+      <article class="product-card" itemscope itemtype="https://schema.org/Product">
         <img src="https://via.placeholder.com/250x200/4A90E2/fff?text=Headphones" alt="Wireless Headphones" />
-        <h2 class="product-title">Wireless Headphones</h2>
-        <p class="product-description">Premium noise-cancelling over-ear headphones</p>
-        <div class="product-price">$99.99</div>
+        <h2 class="product-title" itemprop="name">Wireless Headphones</h2>
+        <p class="product-description" itemprop="description">Premium noise-cancelling over-ear headphones</p>
+        <div class="product-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <span itemprop="price" content="99.99">$99.99</span>
+          <meta itemprop="priceCurrency" content="USD" />
+        </div>
       </article>
 
-      <article class="product-card">
+      <article class="product-card" itemscope itemtype="https://schema.org/Product">
         <img src="https://via.placeholder.com/250x200/7B68EE/fff?text=Watch" alt="Smart Watch" />
-        <h2 class="product-title">Smart Watch</h2>
-        <p class="product-description">Fitness tracking with heart rate monitor</p>
-        <div class="product-price">$299.99</div>
+        <h2 class="product-title" itemprop="name">Smart Watch</h2>
+        <p class="product-description" itemprop="description">Fitness tracking with heart rate monitor</p>
+        <div class="product-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <span itemprop="price" content="299.99">$299.99</span>
+          <meta itemprop="priceCurrency" content="USD" />
+        </div>
       </article>
 
-      <article class="product-card">
+      <article class="product-card" itemscope itemtype="https://schema.org/Product">
         <img src="https://via.placeholder.com/250x200/50C878/fff?text=Stand" alt="Laptop Stand" />
-        <h2 class="product-title">Laptop Stand</h2>
-        <p class="product-description">Ergonomic aluminum adjustable stand</p>
-        <div class="product-price">$49.99</div>
+        <h2 class="product-title" itemprop="name">Laptop Stand</h2>
+        <p class="product-description" itemprop="description">Ergonomic aluminum adjustable stand</p>
+        <div class="product-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <span itemprop="price" content="49.99">$49.99</span>
+          <meta itemprop="priceCurrency" content="USD" />
+        </div>
       </article>
 
-      <article class="product-card">
+      <article class="product-card" itemscope itemtype="https://schema.org/Product">
         <img src="https://via.placeholder.com/250x200/FF6347/fff?text=Hub" alt="USB-C Hub" />
-        <h2 class="product-title">USB-C Hub</h2>
-        <p class="product-description">7-in-1 multiport adapter</p>
-        <div class="product-price">$39.99</div>
+        <h2 class="product-title" itemprop="name">USB-C Hub</h2>
+        <p class="product-description" itemprop="description">7-in-1 multiport adapter</p>
+        <div class="product-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <span itemprop="price" content="39.99">$39.99</span>
+          <meta itemprop="priceCurrency" content="USD" />
+        </div>
       </article>
 
-      <article class="product-card">
+      <article class="product-card" itemscope itemtype="https://schema.org/Product">
         <img src="https://via.placeholder.com/250x200/FFD700/333?text=Keyboard" alt="Mechanical Keyboard" />
-        <h2 class="product-title">Mechanical Keyboard</h2>
-        <p class="product-description">RGB backlit with cherry MX switches</p>
-        <div class="product-price">$149.99</div>
+        <h2 class="product-title" itemprop="name">Mechanical Keyboard</h2>
+        <p class="product-description" itemprop="description">RGB backlit with cherry MX switches</p>
+        <div class="product-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <span itemprop="price" content="149.99">$149.99</span>
+          <meta itemprop="priceCurrency" content="USD" />
+        </div>
       </article>
 
-      <article class="product-card">
+      <article class="product-card" itemscope itemtype="https://schema.org/Product">
         <img src="https://via.placeholder.com/250x200/FF69B4/fff?text=Webcam" alt="Webcam 4K" />
-        <h2 class="product-title">Webcam 4K</h2>
-        <p class="product-description">Ultra HD video conferencing camera</p>
-        <div class="product-price">$129.99</div>
+        <h2 class="product-title" itemprop="name">Webcam 4K</h2>
+        <p class="product-description" itemprop="description">Ultra HD video conferencing camera</p>
+        <div class="product-price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <span itemprop="price" content="129.99">$129.99</span>
+          <meta itemprop="priceCurrency" content="USD" />
+        </div>
       </article>
     </section>
   </main>
+
+  <footer>
+    <p>&copy; 2026 BiModal Design Example. All content in initial HTML.</p>
+  </footer>
 
   <!-- Progressive enhancement: JavaScript adds interactivity WITHOUT being required -->
   <script>
     // This JavaScript is optional - the page works fine without it
     // It only adds enhanced features for human users with JS enabled
-    
     document.addEventListener('DOMContentLoaded', () => {
       const cards = document.querySelectorAll('.product-card');
-      
       cards.forEach(card => {
-        // Add click handler for enhanced UX
-        card.addEventListener('click', () => {
-          const title = card.querySelector('.product-title').textContent;
-          console.log(`Product clicked: ${title}`);
-          // In a real app, this might open a modal or navigate to product page
-        });
-        
-        // Add "Add to Cart" button for JS-enabled users
+        const name = card.querySelector('.product-title').textContent;
         const button = document.createElement('button');
         button.textContent = 'Add to Cart';
-        button.className = 'enhanced-only';
+        button.setAttribute('aria-label', `Add ${name} to cart`);
         button.style.cssText = 'display: block; margin-top: 10px; padding: 8px 16px; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;';
         button.addEventListener('click', (e) => {
           e.stopPropagation();
-          alert('Added to cart! (This is an enhanced feature)');
+          alert(`Added ${name} to cart!`);
         });
         card.appendChild(button);
       });

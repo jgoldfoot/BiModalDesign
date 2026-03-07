@@ -1,5 +1,14 @@
 # Client-Side Rendering (CSR) Mitigation for BiModal Design
 
+> **v3.0 Migration Note:** This example uses `data-agent-*` attributes from
+> BiModal Design v2.x. In v3.0, these are replaced with established standards:
+> `itemscope`/`itemprop` (schema.org), `aria-label`/`aria-current` (WAI-ARIA),
+> and OpenAPI (API documentation). See the
+> [Next.js SSR Example](./nextjs-ssr-example.md) for a v3.0-native
+> implementation, or the
+> [compliance checklist](../docs/compliance-checklist.md#migration-from-v2x) for
+> the migration table.
+
 This guide demonstrates strategies for implementing BiModal Design patterns in
 client-side rendered applications where server-side rendering is not possible.
 While SSR/SSG is preferred for agent accessibility, these techniques ensure

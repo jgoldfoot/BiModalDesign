@@ -1,37 +1,45 @@
-# BiModal Design Compliance Checklist
+# BiModal Design v3.0 Compliance Checklist
 
-## FR-1: Initial Payload Accessibility (BLOCKING)
+## Layer 1: Content Accessibility — FR-1 (BLOCKING)
 
-**🚨 Must pass before implementing other BiModal Design patterns**
+**Must pass before implementing other layers.**
 
 ### Test Method
 
 ```bash
 # Test your live site
-curl -s https://yoursite.com | grep "your-main-content"
+curl -s https://yoursite.com | grep -E '<(main|nav|h1|article)'
 ```
 
-- [ ] **Content visible in server response** - Core content appears in HTML
-      source
-- [ ] **Navigation accessible** - Main menu items visible without JavaScript
-- [ ] **Forms functional** - Basic form submission works with JS disabled
-- [ ] **Critical user flows work** - Key actions (signup, purchase) function
+- [ ] **Content visible in server response** — Core content appears in HTML
+      source (SSR/SSG)
+- [ ] **Navigation accessible** — Main menu items visible without JavaScript
+- [ ] **Forms functional** — Basic form submission works with JS disabled
+- [ ] **Critical user flows work** — Key actions (signup, purchase) function
       server-side
 
-**❌ Fail = Stop here. Fix rendering strategy first.**  
-**✅ Pass = Continue with semantic optimization below.**
+**Agent Coverage:** Level 0 (HTTP Retrievers), Level 1 (LLM Browsers)
+
+**Fail = Stop here. Fix rendering strategy first.**
+**Pass = Continue with Layer 2 below.**
 
 ---
 
-## Level 1: Semantic Foundation (Target: 80%+ compliance)
+## Layer 2: Semantic Structure (Target: 80%+ compliance)
 
-### HTML5 Structure
+### HTML5 Landmarks
 
 - [ ] `<main>` element wraps primary content
 - [ ] `<nav>` elements for navigation sections
 - [ ] `<header>` and `<footer>` for page structure
 - [ ] `<section>` and `<article>` for content grouping
 - [ ] `<aside>` for complementary content
+
+### Heading Hierarchy
+
+- [ ] Single `<h1>` per page
+- [ ] No skipped heading levels (h1 → h2 → h3, not h1 → h3)
+- [ ] Headings describe content structure, not visual styling
 
 ### ARIA Roles & Properties
 
@@ -40,6 +48,7 @@ curl -s https://yoursite.com | grep "your-main-content"
 - [ ] `aria-required="true"` on mandatory form fields
 - [ ] `aria-live` regions for dynamic content updates
 - [ ] `aria-describedby` linking help text to form fields
+- [ ] `aria-current="page"` on active navigation links
 
 ### Form Structure
 
@@ -48,31 +57,6 @@ curl -s https://yoursite.com | grep "your-main-content"
 - [ ] Required fields marked with `aria-required="true"`
 - [ ] Error messages linked via `aria-describedby`
 
----
-
-## Level 2: Agent-Aware Attributes (Target: 90%+ compliance)
-
-### Data Attributes for Agent Context
-
-- [ ] `data-agent-intent` on forms (e.g., "user-registration", "checkout")
-- [ ] `data-agent-group` on fieldsets (e.g., "personal-info", "payment")
-- [ ] `data-agent-field` on inputs (e.g., "user.email", "address.street")
-- [ ] `data-agent-action` on buttons (e.g., "submit-form", "add-to-cart")
-- [ ] `data-agent-state` for component states (e.g., "loading", "error",
-      "success")
-
-### Example Implementation
-
-```html
-<form data-agent-intent="user-registration">
-  <fieldset data-agent-group="personal-info">
-    <legend>Personal Information</legend>
-    <input data-agent-field="user.email" type="email" required />
-  </fieldset>
-  <button data-agent-action="submit-registration">Create Account</button>
-</form>
-```
-
 ### Stable Selectors
 
 - [ ] Static CSS classes (avoid randomly generated class names)
@@ -80,30 +64,90 @@ curl -s https://yoursite.com | grep "your-main-content"
 - [ ] Semantic HTML elements as primary selectors
 - [ ] `data-testid` attributes for testing hooks
 
+**Agent Coverage:** Level 1 (LLM Browsers), Level 2 (Browser Automation),
+Level 3 (Vision Agents)
+
 ---
 
-## Level 3: Structured Data & APIs (Target: 95%+ compliance)
+## Layer 3: Structured Data (Target: 90%+ compliance)
 
-### JSON-LD Structured Data
+### JSON-LD / schema.org
 
-- [ ] Schema.org vocabulary implemented
-- [ ] Product/Service/Organization markup where applicable
-- [ ] Breadcrumb navigation structured data
-- [ ] FAQ/How-to structured data for content pages
+- [ ] `itemscope` and `itemtype` on key content containers
+- [ ] `itemprop` on data fields (name, price, description, etc.)
+- [ ] JSON-LD `<script type="application/ld+json">` blocks for rich data
+- [ ] Schema.org vocabulary: Product, Organization, BreadcrumbList, FAQPage,
+      HowTo, etc.
+
+### OpenGraph & Meta Tags
+
+- [ ] `og:title`, `og:description`, `og:image` for social/AI sharing
+- [ ] `<meta name="description">` on every page
+- [ ] Canonical URLs with `<link rel="canonical">`
+
+### Example: v3.0 Standards-Based Markup
+
+```html
+<!-- v3.0: Use schema.org instead of data-agent-* -->
+<article itemscope itemtype="https://schema.org/Product">
+  <h2 itemprop="name">Wireless Headphones</h2>
+  <p itemprop="description">High-quality wireless headphones</p>
+  <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+    <span itemprop="price" content="99.99">$99.99</span>
+    <link itemprop="availability" href="https://schema.org/InStock" />
+  </div>
+  <button type="button" aria-label="Add Wireless Headphones to cart">
+    Add to Cart
+  </button>
+</article>
+```
+
+**Agent Coverage:** Level 1-3 (LLM Browsers, Browser Automation, Vision Agents)
+
+---
+
+## Layer 4: API Surface (Target: 95%+ compliance)
 
 ### API Discoverability
 
-- [ ] REST endpoints documented with OpenAPI
-- [ ] GraphQL schema introspection enabled
-- [ ] API endpoints hinted in HTML (`data-agent-api` attributes)
+- [ ] REST or GraphQL endpoints documented with OpenAPI / GraphQL introspection
+- [ ] API endpoints discoverable via `<link rel="api" href="/api/openapi.json">`
 - [ ] Rate limiting and authentication clearly documented
+- [ ] Consistent response formats (JSON with typed fields)
+- [ ] Error responses include actionable messages
 
-### Performance Optimization
+### OpenAPI Specification
 
-- [ ] Server-side rendering or static generation
-- [ ] Critical CSS inlined
-- [ ] Resource hints (`preload`, `prefetch`) implemented
-- [ ] Lazy loading for non-critical content
+- [ ] `openapi.json` or `openapi.yaml` available at a well-known path
+- [ ] All endpoints described with parameters, request bodies, and responses
+- [ ] Example requests and responses included
+- [ ] Authentication schemes documented
+
+**Agent Coverage:** Level 4 (Tool-Use Agents), Level 5 (Protocol-Native Agents)
+
+---
+
+## Layer 5: Agent Protocols (Target: Full agent-native coverage)
+
+### MCP (Model Context Protocol)
+
+- [ ] MCP server exposes tools for key actions (search, purchase, etc.)
+- [ ] MCP resources expose structured data (product catalog, etc.)
+- [ ] MCP prompts provide guided workflows for common tasks
+
+### A2A (Agent-to-Agent Protocol)
+
+- [ ] Agent Card published at `/.well-known/agent.json`
+- [ ] Capabilities declared (what the agent/service can do)
+- [ ] Input/output schemas defined
+
+### NLWeb (Natural Language Web)
+
+- [ ] NLWeb endpoint accepts natural language queries
+- [ ] Responses include schema.org-typed results
+- [ ] Query intent classification documented
+
+**Agent Coverage:** Level 5 (Protocol-Native Agents)
 
 ---
 
@@ -115,6 +159,12 @@ curl -s https://yoursite.com | grep "your-main-content"
 - [ ] Rate limiting implemented for automated requests
 - [ ] CORS policies configured for agent access
 - [ ] Authentication requirements documented
+
+### Prompt Injection Defense
+
+- [ ] User-generated content sanitized before rendering
+- [ ] No hidden instructions in HTML comments or metadata
+- [ ] Content boundaries clearly marked for agent consumption
 
 ### Privacy Controls
 
@@ -131,79 +181,68 @@ curl -s https://yoursite.com | grep "your-main-content"
 
 - [ ] HTML validation (W3C validator)
 - [ ] Accessibility testing (axe-core)
+- [ ] Structured data validation (Google Rich Results Test)
 - [ ] Performance testing (Lighthouse)
-- [ ] Agent simulation testing
+
+### Agent-Level Testing
+
+- [ ] **Level 0**: `curl` returns meaningful HTML content
+- [ ] **Level 1**: Content parseable without JS execution
+- [ ] **Level 2**: Playwright/Puppeteer can complete key flows
+- [ ] **Level 3**: Visual hierarchy clear in screenshots
+- [ ] **Level 4**: API endpoints return correct data
+- [ ] **Level 5**: MCP/A2A tools callable and functional
 
 ### Manual Testing
 
-- [ ] Disable JavaScript - site still functional
+- [ ] Disable JavaScript — site still functional
 - [ ] Screen reader testing
 - [ ] Mobile device testing
 - [ ] Cross-browser validation
-
-### Agent Testing Tools
-
-```bash
-# Install BiModal Design CLI (when available)
-npm install -g @bimodal-design/framework
-
-# Run compliance check
-bimodal-design validate https://yoursite.com
-
-# Run agent simulation
-bimodal-design simulate https://yoursite.com
-```
 
 ---
 
 ## Scoring Your Compliance
 
-### Calculation Method
+### Maturity Levels
 
-1. **Count passed items** in each level
-2. **Calculate percentage** per level
-3. **Overall score** = weighted average
+| Level | Name                  | Layers  | Agent Coverage | Target |
+| ----- | --------------------- | ------- | -------------- | ------ |
+| 0     | Infrastructure Ready  | Layer 1 | Level 0-1      | 40-65% |
+| 1     | Semantically Accessible | Layers 1-2 | Level 0-2  | 55-75% |
+| 2     | Data-Rich             | Layers 1-3 | Level 0-3   | 65-85% |
+| 3     | API-Enabled           | Layers 1-4 | Level 0-4   | 80-92% |
+| 4     | Agent-Native          | Layers 1-5 | All levels  | 90-98% |
 
-### Compliance Levels
+### Minimum Requirements by Maturity Level
 
-- **🥇 BiModal Design Certified (90%+)**: Ready for production agent deployment
-- **🥈 BiModal Design Advanced (75-89%)**: Good foundation, minor improvements
-  needed
-- **🥉 BiModal Design Basic (60-74%)**: Functional but needs optimization
-- **🚨 BiModal Design At Risk (<60%)**: Major issues, requires redesign
-
-### Minimum Requirements by Level
-
-- **Level 1**: FR-1 + 80% semantic compliance
-- **Level 2**: Level 1 + 70% agent attributes
-- **Level 3**: Level 2 + 60% structured data
-- **Level 4**: Level 3 + 90% security compliance
+- **Level 0**: FR-1 (Layer 1) passes
+- **Level 1**: Layer 1 + 80% Layer 2 compliance
+- **Level 2**: Level 1 + 70% Layer 3 compliance
+- **Level 3**: Level 2 + 60% Layer 4 compliance
+- **Level 4**: Level 3 + Layer 5 protocols implemented
 
 ---
 
-## Quick Fixes for Common Issues
+## Migration from v2.x
 
-### Issue: Content not visible to agents
+If upgrading from BiModal Design v2.x, replace custom attributes with standards:
 
-**Fix**: Implement SSR/SSG or add server-side fallbacks
-
-### Issue: Forms fail for agents
-
-**Fix**: Add proper labels, fieldsets, and data-agent attributes
-
-### Issue: Dynamic selectors break automation
-
-**Fix**: Use stable CSS classes and data attributes
-
-### Issue: Missing semantic structure
-
-**Fix**: Replace generic `<div>` with HTML5 landmarks
+| v2.x Attribute                    | v3.0 Replacement                              |
+| --------------------------------- | --------------------------------------------- |
+| `data-agent-context="product"`    | `itemscope itemtype="schema.org/Product"`      |
+| `data-agent-action="buy"`         | `aria-label="Add to cart"`                     |
+| `data-agent-field="price"`        | `itemprop="price"`                             |
+| `data-agent-component="nav"`      | `<nav aria-label="Main navigation">`           |
+| `data-agent-intent="checkout"`    | `<form aria-label="Checkout" method="POST">`   |
+| `data-agent-state="loading"`      | `aria-busy="true"`                             |
 
 ---
 
 ## Resources
 
 - [Getting Started Guide](./getting-started.md)
-- [Full White Paper](./whitepaper.md)
+- [White Paper v3.0](./whitepaper.md)
+- [Implementation Guide](./implementation-guide.md)
 - [Example Implementations](../examples/)
 - [Report Issues](https://github.com/jgoldfoot/BiModalDesign/issues)
