@@ -52,8 +52,8 @@ Choose your implementation strategy based on your current architecture:
 
 **Frameworks:** Next.js (React), Nuxt.js (Vue), SvelteKit, Remix
 
-**Agent Coverage:** Excellent — Levels 0-5 supported
-**Implementation Effort:** Medium
+**Agent Coverage:** Excellent — Levels 0-5 supported **Implementation Effort:**
+Medium
 
 ```javascript
 // Next.js: Server component ensures FR-1 compliance
@@ -87,8 +87,8 @@ export default async function ProductsPage() {
 
 **Frameworks:** Astro, Next.js SSG, Nuxt Generate, 11ty
 
-**Agent Coverage:** Excellent — Levels 0-5 supported
-**Implementation Effort:** Low
+**Agent Coverage:** Excellent — Levels 0-5 supported **Implementation Effort:**
+Low
 
 ```astro
 ---
@@ -120,8 +120,8 @@ strategies.
 **Best for:** Complex applications needing both SPA interactivity and agent
 support
 
-**Agent Coverage:** Excellent when properly implemented
-**Implementation Effort:** High
+**Agent Coverage:** Excellent when properly implemented **Implementation
+Effort:** High
 
 ## Implementation Phases
 
@@ -190,7 +190,12 @@ curl -s https://your-app.com/ | grep -E '<(h1|h2|p|article|section)'
   <fieldset>
     <legend>Contact Information</legend>
     <label for="name">Full Name *</label>
-    <input id="name" required aria-required="true" aria-describedby="name-help" />
+    <input
+      id="name"
+      required
+      aria-required="true"
+      aria-describedby="name-help"
+    />
     <small id="name-help">Your legal name for our records</small>
   </fieldset>
 </form>
@@ -200,11 +205,11 @@ curl -s https://your-app.com/ | grep -E '<(h1|h2|p|article|section)'
 
 ```html
 <h1>Product Catalog</h1>
-  <h2>Electronics</h2>
-    <h3>Wireless Headphones</h3>
-    <h3>Smart Speakers</h3>
-  <h2>Clothing</h2>
-    <h3>T-Shirts</h3>
+<h2>Electronics</h2>
+<h3>Wireless Headphones</h3>
+<h3>Smart Speakers</h3>
+<h2>Clothing</h2>
+<h3>T-Shirts</h3>
 ```
 
 **Deliverable:** Semantic HTML audit report, ARIA labels on all interactive
@@ -232,18 +237,18 @@ elements
 
 ```html
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "Wireless Headphones",
-  "description": "High-quality wireless audio",
-  "offers": {
-    "@type": "Offer",
-    "price": "99.99",
-    "priceCurrency": "USD",
-    "availability": "https://schema.org/InStock"
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Wireless Headphones",
+    "description": "High-quality wireless audio",
+    "offers": {
+      "@type": "Offer",
+      "price": "99.99",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    }
   }
-}
 </script>
 ```
 
@@ -295,13 +300,13 @@ paths:
 #### Step 5.1: Implement MCP Server
 
 ```javascript
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
-const server = new McpServer({ name: "product-catalog", version: "1.0.0" });
+const server = new McpServer({ name: 'product-catalog', version: '1.0.0' });
 
-server.tool("search_products", { query: z.string() }, async ({ query }) => {
+server.tool('search_products', { query: z.string() }, async ({ query }) => {
   const results = await searchProducts(query);
-  return { content: [{ type: "text", text: JSON.stringify(results) }] };
+  return { content: [{ type: 'text', text: JSON.stringify(results) }] };
 });
 ```
 
@@ -337,7 +342,8 @@ Start with accessible HTML, enhance with JavaScript:
 
 <!-- Enhanced: JavaScript adds interactivity for humans -->
 <script>
-  document.querySelector('[aria-label="Add to cart"]')
+  document
+    .querySelector('[aria-label="Add to cart"]')
     .addEventListener('click', handleAddToCart);
 </script>
 ```
@@ -395,7 +401,7 @@ Serve content at multiple levels simultaneously:
 
 <!-- Layer 3: JSON-LD for richer structured data -->
 <script type="application/ld+json">
-{ "@context": "https://schema.org", "@type": "ItemList", ... }
+  { "@context": "https://schema.org", "@type": "ItemList", ... }
 </script>
 
 <!-- Layer 4: API link for programmatic access -->
@@ -497,8 +503,12 @@ module.exports = {
 ```html
 <!-- Inline critical CSS for faster agent parsing -->
 <style>
-  main { display: block; }
-  nav { display: flex; }
+  main {
+    display: block;
+  }
+  nav {
+    display: flex;
+  }
 </style>
 
 <!-- Defer non-critical JavaScript -->
@@ -648,7 +658,10 @@ curl -s -o /dev/null -w "%{http_code}" https://your-app.com/api/products
 
 ## Support
 
-- **Documentation**: [BiModal Design Docs](https://github.com/jgoldfoot/BiModalDesign/docs)
-- **Examples**: [Implementation Examples](https://github.com/jgoldfoot/BiModalDesign/examples)
+- **Documentation**:
+  [BiModal Design Docs](https://github.com/jgoldfoot/BiModalDesign/docs)
+- **Examples**:
+  [Implementation Examples](https://github.com/jgoldfoot/BiModalDesign/examples)
 - **Issues**: [GitHub Issues](https://github.com/jgoldfoot/BiModalDesign/issues)
-- **Discussions**: [Community Forum](https://github.com/jgoldfoot/BiModalDesign/discussions)
+- **Discussions**:
+  [Community Forum](https://github.com/jgoldfoot/BiModalDesign/discussions)

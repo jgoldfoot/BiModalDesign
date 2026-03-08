@@ -1,7 +1,7 @@
 # **BiModal Design**
 
-> **A design framework for building interfaces that work across the full AI agent
-> capability spectrum — from HTTP retrievers to protocol-native agents.**
+> **A design framework for building interfaces that work across the full AI
+> agent capability spectrum — from HTTP retrievers to protocol-native agents.**
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Status: Research Framework](https://img.shields.io/badge/Status-Research%20Framework-yellow.svg)]()
@@ -54,14 +54,14 @@ there.
 
 Interfaces today face a spectrum of AI consumers, not a single one:
 
-| Agent Level | Example | What They See |
-| --- | --- | --- |
-| Level 0 — HTTP Retrievers | curl, web scrapers | Raw HTML only |
-| Level 1 — LLM Browsers | ChatGPT Browse, Perplexity | Parsed HTML, no JS |
-| Level 2 — Browser Automation | Playwright agents | Full rendered DOM |
-| Level 3 — Vision Agents | Claude Computer Use | Screenshots |
-| Level 4 — Tool-Use Agents | OpenAI function calling | API responses |
-| Level 5 — Protocol-Native | MCP-connected agents | Protocol data |
+| Agent Level                  | Example                    | What They See      |
+| ---------------------------- | -------------------------- | ------------------ |
+| Level 0 — HTTP Retrievers    | curl, web scrapers         | Raw HTML only      |
+| Level 1 — LLM Browsers       | ChatGPT Browse, Perplexity | Parsed HTML, no JS |
+| Level 2 — Browser Automation | Playwright agents          | Full rendered DOM  |
+| Level 3 — Vision Agents      | Claude Computer Use        | Screenshots        |
+| Level 4 — Tool-Use Agents    | OpenAI function calling    | API responses      |
+| Level 5 — Protocol-Native    | MCP-connected agents       | Protocol data      |
 
 A CSR-only app with `<div id="root"></div>` is invisible to Levels 0-1, fragile
 for Levels 2-3, and unreachable for Levels 4-5 without an API. Most interfaces
@@ -141,17 +141,17 @@ node fr1-checker.js https://your-site.com --verbose
 
 <!-- Layer 3: Structured data with schema.org -->
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "Wireless Headphones",
-  "offers": {
-    "@type": "Offer",
-    "price": "99.99",
-    "priceCurrency": "USD",
-    "availability": "https://schema.org/InStock"
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Wireless Headphones",
+    "offers": {
+      "@type": "Offer",
+      "price": "99.99",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    }
   }
-}
 </script>
 
 <!-- Layer 4: API documented via OpenAPI -->
@@ -171,11 +171,11 @@ response. This is Layer 1 of defense in depth — the floor, not the ceiling.
 
 v3.0 migrates from custom `data-agent-*` attributes to established standards:
 
-| v2.x | v3.0 |
-| --- | --- |
+| v2.x                           | v3.0                                      |
+| ------------------------------ | ----------------------------------------- |
 | `data-agent-context="product"` | `itemscope itemtype="schema.org/Product"` |
-| `data-agent-action="buy"` | `aria-label="Add to cart"` |
-| `data-agent-field="price"` | `itemprop="price"` |
+| `data-agent-action="buy"`      | `aria-label="Add to cart"`                |
+| `data-agent-field="price"`     | `itemprop="price"`                        |
 
 ### Agent Protocols
 
@@ -195,13 +195,13 @@ AI-assisted discoverability.
 
 ## Documentation
 
-| Document | Description |
-| --- | --- |
-| [White Paper](docs/whitepaper.md) | Framework specification v3.0 |
-| [Implementation Guide](docs/implementation-guide.md) | Development & deployment practices |
-| [Compliance Checklist](docs/compliance-checklist.md) | Layer-by-layer compliance criteria |
-| [API Reference](docs/api-reference.md) | Tool and validator API documentation |
-| [Troubleshooting](docs/troubleshooting.md) | Common errors and corrections |
+| Document                                             | Description                          |
+| ---------------------------------------------------- | ------------------------------------ |
+| [White Paper](docs/whitepaper.md)                    | Framework specification v3.0         |
+| [Implementation Guide](docs/implementation-guide.md) | Development & deployment practices   |
+| [Compliance Checklist](docs/compliance-checklist.md) | Layer-by-layer compliance criteria   |
+| [API Reference](docs/api-reference.md)               | Tool and validator API documentation |
+| [Troubleshooting](docs/troubleshooting.md)           | Common errors and corrections        |
 
 ---
 
@@ -225,13 +225,13 @@ AI-assisted discoverability.
 
 ## Maturity Levels
 
-| Level | Name | Layers | Agent Coverage | Success Rate |
-| --- | --- | --- | --- | --- |
-| 0 | Infrastructure Ready | Layer 1 | Level 0-1 | 40-65% |
-| 1 | Semantically Accessible | Layers 1-2 | Level 0-2 | 55-75% |
-| 2 | Data-Rich | Layers 1-3 | Level 0-3 | 65-85% |
-| 3 | API-Enabled | Layers 1-4 | Level 0-4 | 80-92% |
-| 4 | Agent-Native | Layers 1-5 | All levels | 90-98% |
+| Level | Name                    | Layers     | Agent Coverage | Success Rate |
+| ----- | ----------------------- | ---------- | -------------- | ------------ |
+| 0     | Infrastructure Ready    | Layer 1    | Level 0-1      | 40-65%       |
+| 1     | Semantically Accessible | Layers 1-2 | Level 0-2      | 55-75%       |
+| 2     | Data-Rich               | Layers 1-3 | Level 0-3      | 65-85%       |
+| 3     | API-Enabled             | Layers 1-4 | Level 0-4      | 80-92%       |
+| 4     | Agent-Native            | Layers 1-5 | All levels     | 90-98%       |
 
 ---
 
@@ -282,15 +282,13 @@ npm test
 
 ## License
 
-Licensed under the Apache License 2.0.
-See [LICENSE](LICENSE) for full details.
+Licensed under the Apache License 2.0. See [LICENSE](LICENSE) for full details.
 
 ---
 
 ## Author
 
-**Joel Goldfoot**
-Design Leader | AI + Human-Agent Interaction Researcher
+**Joel Goldfoot** Design Leader | AI + Human-Agent Interaction Researcher
 
 [joel@goldfoot.com](mailto:joel@goldfoot.com)
 [linkedin.com/in/joelgoldfoot](https://linkedin.com/in/joelgoldfoot)

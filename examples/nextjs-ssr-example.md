@@ -115,12 +115,12 @@ function ProductCard({ product }: { product: any }) {
 
       <div className="product-details">
         <p itemProp="description">{product.description}</p>
-        <div
-          itemProp="offers"
-          itemScope
-          itemType="https://schema.org/Offer"
-        >
-          <span className="price" itemProp="price" content={String(product.price)}>
+        <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
+          <span
+            className="price"
+            itemProp="price"
+            content={String(product.price)}
+          >
             ${product.price}
           </span>
           <meta itemProp="priceCurrency" content="USD" />
@@ -171,7 +171,9 @@ function ProductCard({ product }: { product: any }) {
 import { useState } from 'react';
 
 export default function CheckoutPage() {
-  const [formState, setFormState] = useState<'ready' | 'submitting' | 'success'>('ready');
+  const [formState, setFormState] = useState<
+    'ready' | 'submitting' | 'success'
+  >('ready');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -7,8 +7,8 @@ your interface works across the full **Agent Capability Spectrum** — from simp
 HTTP crawlers to protocol-native AI agents.
 
 Before implementing any patterns, ensure your application meets **FR-1: Initial
-Payload Accessibility** — the foundational requirement that content exists in the
-server response.
+Payload Accessibility** — the foundational requirement that content exists in
+the server response.
 
 ### Step 1: Check Your Rendering Strategy (Layer 1)
 
@@ -90,14 +90,14 @@ npx nuxi@latest init my-bimodal-app
 
 Understanding which agents consume your interface helps prioritize layers:
 
-| Level | Agent Type          | What They See          | Critical Layer |
-| ----- | ------------------- | ---------------------- | -------------- |
-| 0     | HTTP Retrievers     | Raw HTML only          | Layer 1        |
-| 1     | LLM Browsers        | Parsed HTML, no JS     | Layer 1-2      |
-| 2     | Browser Automation  | Full rendered DOM      | Layer 2-3      |
-| 3     | Vision Agents       | Screenshots            | Layer 2-3      |
-| 4     | Tool-Use Agents     | API responses          | Layer 4        |
-| 5     | Protocol-Native     | Protocol data          | Layer 5        |
+| Level | Agent Type         | What They See      | Critical Layer |
+| ----- | ------------------ | ------------------ | -------------- |
+| 0     | HTTP Retrievers    | Raw HTML only      | Layer 1        |
+| 1     | LLM Browsers       | Parsed HTML, no JS | Layer 1-2      |
+| 2     | Browser Automation | Full rendered DOM  | Layer 2-3      |
+| 3     | Vision Agents      | Screenshots        | Layer 2-3      |
+| 4     | Tool-Use Agents    | API responses      | Layer 4        |
+| 5     | Protocol-Native    | Protocol data      | Layer 5        |
 
 ## Testing Agent Accessibility
 
@@ -122,8 +122,8 @@ curl -s https://yoursite.com | grep "main content"
 - **Dynamic IDs** — `id="btn-xyz123"` breaks agent selectors
 - **Visual-only cues** — Color changes without semantic updates
 - **Missing labels** — Agents need `aria-label` or explicit labels
-- **Custom attributes over standards** — Use `itemprop`, `aria-label`, schema.org
-  instead of custom `data-agent-*` attributes
+- **Custom attributes over standards** — Use `itemprop`, `aria-label`,
+  schema.org instead of custom `data-agent-*` attributes
 
 ## Next Steps
 

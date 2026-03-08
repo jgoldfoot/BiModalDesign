@@ -20,7 +20,7 @@ return ( <div className="router-container" data-agent-component="spa-router">
 
 export default Router;
 
-````
+```
 
 ### src/components/Navigation.js
 
@@ -131,7 +131,7 @@ const Navigation = ({ isAgent }) => {
 };
 
 export default Navigation;
-````
+```
 
 ### src/pages/Home.js
 

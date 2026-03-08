@@ -60,24 +60,32 @@ function runDiagnostic() {
   }
 
   // Layer 2: Semantic structure
-  const landmarks = ['main', 'nav', 'header', 'footer'].filter(
-    tag => document.querySelector(tag)
+  const landmarks = ['main', 'nav', 'header', 'footer'].filter((tag) =>
+    document.querySelector(tag)
   );
   if (landmarks.length >= 3) {
-    results.passed.push('Layer 2: Semantic landmarks present (' + landmarks.join(', ') + ')');
+    results.passed.push(
+      'Layer 2: Semantic landmarks present (' + landmarks.join(', ') + ')'
+    );
   } else {
-    results.issues.push('Layer 2: Missing landmarks. Found: ' + landmarks.join(', '));
+    results.issues.push(
+      'Layer 2: Missing landmarks. Found: ' + landmarks.join(', ')
+    );
   }
 
   const ariaLabels = document.querySelectorAll('[aria-label]');
   if (ariaLabels.length > 0) {
-    results.passed.push('Layer 2: ARIA labels present (' + ariaLabels.length + ')');
+    results.passed.push(
+      'Layer 2: ARIA labels present (' + ariaLabels.length + ')'
+    );
   } else {
     results.warnings.push('Layer 2: No aria-label attributes found');
   }
 
   // Layer 3: Structured data
-  const jsonLd = document.querySelectorAll('script[type="application/ld+json"]');
+  const jsonLd = document.querySelectorAll(
+    'script[type="application/ld+json"]'
+  );
   const microdata = document.querySelectorAll('[itemscope]');
   if (jsonLd.length > 0 || microdata.length > 0) {
     results.passed.push('Layer 3: Structured data present');
@@ -124,7 +132,7 @@ export default async function Page() {
   return (
     <main aria-label="Products">
       <h1>Product Catalog</h1>
-      {data.map(item => (
+      {data.map((item) => (
         <article key={item.id} itemScope itemType="https://schema.org/Product">
           <h2 itemProp="name">{item.name}</h2>
         </article>
@@ -246,18 +254,18 @@ export default async function Page() {
 
 ```html
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "Wireless Headphones",
-  "description": "High-quality wireless audio",
-  "offers": {
-    "@type": "Offer",
-    "price": "99.99",
-    "priceCurrency": "USD",
-    "availability": "https://schema.org/InStock"
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Wireless Headphones",
+    "description": "High-quality wireless audio",
+    "offers": {
+      "@type": "Offer",
+      "price": "99.99",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    }
   }
-}
 </script>
 ```
 
@@ -492,9 +500,8 @@ test('Level 2: Semantic structure present', async ({ page }) => {
 
 test('Level 3: Structured data valid', async ({ page }) => {
   await page.goto('/');
-  const jsonLd = await page.$eval(
-    'script[type="application/ld+json"]',
-    el => JSON.parse(el.textContent)
+  const jsonLd = await page.$eval('script[type="application/ld+json"]', (el) =>
+    JSON.parse(el.textContent)
   );
   expect(jsonLd['@context']).toBe('https://schema.org');
 });
@@ -505,7 +512,8 @@ test('Level 3: Structured data valid', async ({ page }) => {
 1. **Elements tab**: Inspect semantic structure, ARIA attributes
 2. **Network tab**: Check response sizes, TTFB
 3. **Lighthouse**: Run accessibility and performance audits
-4. **Console**: Run the diagnostic script from [Quick Diagnostics](#quick-diagnostics)
+4. **Console**: Run the diagnostic script from
+   [Quick Diagnostics](#quick-diagnostics)
 
 ### External Tools
 
@@ -517,33 +525,35 @@ test('Level 3: Structured data valid', async ({ page }) => {
 
 ## Quick Fixes for Common Issues
 
-| Issue                            | Fix                                              |
-| -------------------------------- | ------------------------------------------------ |
-| Content invisible to agents      | Implement SSR/SSG (Layer 1)                      |
-| Missing semantic structure       | Replace `<div>` with HTML5 landmarks (Layer 2)   |
-| Forms fail for agents            | Add `<label>`, `<fieldset>`, `aria-*` (Layer 2)  |
-| No structured data               | Add JSON-LD with schema.org types (Layer 3)      |
-| APIs undiscoverable              | Publish OpenAPI spec (Layer 4)                   |
-| Dynamic selectors break agents   | Use stable classes, `aria-label`, `data-testid`  |
-| Slow agent performance           | Inline critical CSS, defer JS                    |
+| Issue                          | Fix                                             |
+| ------------------------------ | ----------------------------------------------- |
+| Content invisible to agents    | Implement SSR/SSG (Layer 1)                     |
+| Missing semantic structure     | Replace `<div>` with HTML5 landmarks (Layer 2)  |
+| Forms fail for agents          | Add `<label>`, `<fieldset>`, `aria-*` (Layer 2) |
+| No structured data             | Add JSON-LD with schema.org types (Layer 3)     |
+| APIs undiscoverable            | Publish OpenAPI spec (Layer 4)                  |
+| Dynamic selectors break agents | Use stable classes, `aria-label`, `data-testid` |
+| Slow agent performance         | Inline critical CSS, defer JS                   |
 
 ## Migration from v2.x
 
 If your codebase uses `data-agent-*` attributes from v2.x, migrate to
 established standards:
 
-| v2.x                              | v3.0                                            |
-| --------------------------------- | ----------------------------------------------- |
-| `data-agent-component="nav"`      | `<nav aria-label="...">`                        |
-| `data-agent-action="buy"`         | `aria-label="Add to cart"`                      |
-| `data-agent-field="price"`        | `itemprop="price"`                              |
-| `data-agent-context="product"`    | `itemscope itemtype="schema.org/Product"`       |
-| `data-agent-state="loading"`      | `aria-busy="true"`                              |
-| `data-agent-intent="checkout"`    | `<form aria-label="Checkout">`                  |
+| v2.x                           | v3.0                                      |
+| ------------------------------ | ----------------------------------------- |
+| `data-agent-component="nav"`   | `<nav aria-label="...">`                  |
+| `data-agent-action="buy"`      | `aria-label="Add to cart"`                |
+| `data-agent-field="price"`     | `itemprop="price"`                        |
+| `data-agent-context="product"` | `itemscope itemtype="schema.org/Product"` |
+| `data-agent-state="loading"`   | `aria-busy="true"`                        |
+| `data-agent-intent="checkout"` | `<form aria-label="Checkout">`            |
 
 ## Getting Help
 
 - **Documentation**: [BiModal Design v3.0 Whitepaper](./whitepaper.md)
 - **Compliance**: [Compliance Checklist](./compliance-checklist.md)
-- **GitHub Issues**: [Report bugs](https://github.com/jgoldfoot/BiModalDesign/issues)
-- **Discussions**: [Community forum](https://github.com/jgoldfoot/BiModalDesign/discussions)
+- **GitHub Issues**:
+  [Report bugs](https://github.com/jgoldfoot/BiModalDesign/issues)
+- **Discussions**:
+  [Community forum](https://github.com/jgoldfoot/BiModalDesign/discussions)

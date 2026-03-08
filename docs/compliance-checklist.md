@@ -20,8 +20,8 @@ curl -s https://yoursite.com | grep -E '<(main|nav|h1|article)'
 
 **Agent Coverage:** Level 0 (HTTP Retrievers), Level 1 (LLM Browsers)
 
-**Fail = Stop here. Fix rendering strategy first.**
-**Pass = Continue with Layer 2 below.**
+**Fail = Stop here. Fix rendering strategy first.** **Pass = Continue with Layer
+2 below.**
 
 ---
 
@@ -64,8 +64,8 @@ curl -s https://yoursite.com | grep -E '<(main|nav|h1|article)'
 - [ ] Semantic HTML elements as primary selectors
 - [ ] `data-testid` attributes for testing hooks
 
-**Agent Coverage:** Level 1 (LLM Browsers), Level 2 (Browser Automation),
-Level 3 (Vision Agents)
+**Agent Coverage:** Level 1 (LLM Browsers), Level 2 (Browser Automation), Level
+3 (Vision Agents)
 
 ---
 
@@ -206,13 +206,13 @@ Level 3 (Vision Agents)
 
 ### Maturity Levels
 
-| Level | Name                  | Layers  | Agent Coverage | Target |
-| ----- | --------------------- | ------- | -------------- | ------ |
-| 0     | Infrastructure Ready  | Layer 1 | Level 0-1      | 40-65% |
-| 1     | Semantically Accessible | Layers 1-2 | Level 0-2  | 55-75% |
-| 2     | Data-Rich             | Layers 1-3 | Level 0-3   | 65-85% |
-| 3     | API-Enabled           | Layers 1-4 | Level 0-4   | 80-92% |
-| 4     | Agent-Native          | Layers 1-5 | All levels  | 90-98% |
+| Level | Name                    | Layers     | Agent Coverage | Target |
+| ----- | ----------------------- | ---------- | -------------- | ------ |
+| 0     | Infrastructure Ready    | Layer 1    | Level 0-1      | 40-65% |
+| 1     | Semantically Accessible | Layers 1-2 | Level 0-2      | 55-75% |
+| 2     | Data-Rich               | Layers 1-3 | Level 0-3      | 65-85% |
+| 3     | API-Enabled             | Layers 1-4 | Level 0-4      | 80-92% |
+| 4     | Agent-Native            | Layers 1-5 | All levels     | 90-98% |
 
 ### Minimum Requirements by Maturity Level
 
@@ -228,14 +228,14 @@ Level 3 (Vision Agents)
 
 If upgrading from BiModal Design v2.x, replace custom attributes with standards:
 
-| v2.x Attribute                    | v3.0 Replacement                              |
-| --------------------------------- | --------------------------------------------- |
-| `data-agent-context="product"`    | `itemscope itemtype="schema.org/Product"`      |
-| `data-agent-action="buy"`         | `aria-label="Add to cart"`                     |
-| `data-agent-field="price"`        | `itemprop="price"`                             |
-| `data-agent-component="nav"`      | `<nav aria-label="Main navigation">`           |
-| `data-agent-intent="checkout"`    | `<form aria-label="Checkout" method="POST">`   |
-| `data-agent-state="loading"`      | `aria-busy="true"`                             |
+| v2.x Attribute                 | v3.0 Replacement                             |
+| ------------------------------ | -------------------------------------------- |
+| `data-agent-context="product"` | `itemscope itemtype="schema.org/Product"`    |
+| `data-agent-action="buy"`      | `aria-label="Add to cart"`                   |
+| `data-agent-field="price"`     | `itemprop="price"`                           |
+| `data-agent-component="nav"`   | `<nav aria-label="Main navigation">`         |
+| `data-agent-intent="checkout"` | `<form aria-label="Checkout" method="POST">` |
+| `data-agent-state="loading"`   | `aria-busy="true"`                           |
 
 ---
 

@@ -19,8 +19,8 @@ served.
 
 - **Agent Capability Spectrum**: Six levels of agent capability (Level 0: HTTP
   Retrievers → Level 5: Protocol-Native Agents)
-- **Defense in Depth**: Five layers (Content Accessibility → Semantic Structure →
-  Structured Data → API Surface → Agent Protocols)
+- **Defense in Depth**: Five layers (Content Accessibility → Semantic Structure
+  → Structured Data → API Surface → Agent Protocols)
 - **FR-1 (Initial Payload Accessibility)**: Content must exist in the server's
   initial HTML response — this is Layer 1, the foundation
 
