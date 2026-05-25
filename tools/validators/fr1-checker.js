@@ -507,21 +507,31 @@ class FR1Checker {
    */
   async checkMultiple(urls) {
     const results = [];
+    const concurrencyLimit = this.options.concurrency || 10;
     
-    for (const url of urls) {
-      if (this.options.verbose) {
-        console.log(`\nChecking: ${url}`);
-      }
+    // Process URLs in chunks to avoid overwhelming the network
+    for (let i = 0; i < urls.length; i += concurrencyLimit) {
+      const chunk = urls.slice(i, i + concurrencyLimit);
       
-      const result = await this.checkURL(url);
-      results.push(result);
+      const chunkPromises = chunk.map(async (url) => {
+        if (this.options.verbose) {
+          console.log(`\nChecking: ${url}`);
+        }
+
+        const result = await this.checkURL(url);
+
+        // Brief output for multiple URLs
+        if (!this.options.verbose) {
+          const status = result.passed ? '✅ PASS' : '❌ FAIL';
+          const score = ((result.score || 0) * 100).toFixed(1);
+          console.log(`${status} (${score}%) ${url}`);
+        }
+
+        return result;
+      });
       
-      // Brief output for multiple URLs
-      if (!this.options.verbose) {
-        const status = result.passed ? '✅ PASS' : '❌ FAIL';
-        const score = ((result.score || 0) * 100).toFixed(1);
-        console.log(`${status} (${score}%) ${url}`);
-      }
+      const chunkResults = await Promise.all(chunkPromises);
+      results.push(...chunkResults);
     }
     
     return results;
