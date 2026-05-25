@@ -1,4 +1,4 @@
-jest.mock('puppeteer', () => ({}));
+jest.mock('puppeteer', () => ({}), { virtual: true });
 
 const AgentSimulator = require('../tools/agent-simulator.js');
 
