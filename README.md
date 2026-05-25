@@ -5,7 +5,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Status: Research Framework](https://img.shields.io/badge/Status-Research%20Framework-yellow.svg)]()
-[![Node.js](https://img.shields.io/badge/node-%3E%3D20.11.0-brightgreen.svg)]()
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)]()
 [![Version: 3.0](https://img.shields.io/badge/version-3.0-blue.svg)]()
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
