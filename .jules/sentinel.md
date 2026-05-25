@@ -1,10 +1,4 @@
-## 2024-05-24 - Cross-Site Scripting (XSS) in HTML Reports
-
-**Vulnerability:** Found unescaped user-controlled inputs (derived from parsed
-web pages) injected directly into HTML reports across multiple tool scripts
-(`tools/bimodal-design-cli.js`, `tools/agent-simulator.js`,
-`accessibility/compliance-audit.js`). **Learning:** Even internal tooling
-generating HTML reports needs strict output sanitization because it interacts
-with untrusted external sources (the internet). **Prevention:** Always use HTML
-entity escaping routines before injecting potentially malicious data into
-generated HTML structures.
+## 2026-05-25 - Dependency Compatibility Breaking CI
+**Vulnerability:** Jest 30.x and ESLint 9+ drop support for Node 16.x, causing CI test failures on `node-version: 16.x` environments.
+**Learning:** Tools upgrading their major versions often drop support for older Node runtimes.
+**Prevention:** In `package.json`, carefully align devDependencies with the lowest supported Node.js version stated in the `engines` field (`>=16.0.0`). Always set bounds (e.g., `^29.x` instead of `^30.x`) when upgrading tooling in libraries maintaining backwards compatibility.
