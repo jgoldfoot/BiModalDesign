@@ -65,7 +65,7 @@
     "prettier": "^3.0.0"
   },
   "optionalDependencies": {
-    "puppeteer": "^24.0.0"
+    "puppeteer": "^25.0.4"
   },
   "files": [
     "tools/",
