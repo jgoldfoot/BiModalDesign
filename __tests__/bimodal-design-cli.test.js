@@ -139,5 +139,55 @@ describe('BiModalDesignCLI', () => {
       expect(result.performance).toBe(0);
       expect(result.usability).toBe(0);
     });
+
+    it('should handle null for both auditResult and simResult', () => {
+      const result = cli.calculateComprehensiveScore(null, null);
+
+      expect(result).toEqual({
+        overall: 0,
+        compliance: 0,
+        usability: 0,
+        performance: 0,
+      });
+    });
+
+    it('should handle undefined for both auditResult and simResult', () => {
+      const result = cli.calculateComprehensiveScore(undefined, undefined);
+
+      expect(result).toEqual({
+        overall: 0,
+        compliance: 0,
+        usability: 0,
+        performance: 0,
+      });
+    });
+
+    it('should correctly round scores up and down', () => {
+      // Scenario 1: Rounding up
+      // compliance: 33 * 0.5 = 16.5
+      // usability: 33 * 0.3 = 9.9
+      // performance: 33 * 0.2 = 6.6
+      // overall: 16.5 + 9.9 + 6.6 = 33 (exact integer)
+      // Wait, let's create a rounding scenario:
+      // compliance: 33 * 0.5 = 16.5
+      // usability: 0 * 0.3 = 0
+      // performance: 0 * 0.2 = 0
+      // overall = 16.5 -> round(16.5) = 17
+      let result = cli.calculateComprehensiveScore({ overallScore: 33 }, null);
+      expect(result.overall).toBe(17);
+
+      // Scenario 2: Rounding down
+      // compliance: 31 * 0.5 = 15.5
+      // usability: 0 * 0.3 = 0
+      // performance: 1 * 0.2 = 0.2
+      // overall = 15.5 + 0.2 = 15.7 -> round(15.7) = 16
+      // Let's do: compliance 32, performance 1
+      // compliance: 32 * 0.5 = 16
+      // usability: 0
+      // performance: 2 * 0.2 = 0.4
+      // overall = 16.4 -> round(16.4) = 16
+      result = cli.calculateComprehensiveScore({ overallScore: 32, requirements: { FR7: { score: 2 } } }, null);
+      expect(result.overall).toBe(16);
+    });
   });
 });
