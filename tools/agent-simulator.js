@@ -156,7 +156,8 @@ class AgentSimulator {
         }
 
         const browser = await puppeteer.launch({
-            headless: this.options.headless
+            headless: this.options.headless,
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
 
         try {
