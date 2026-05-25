@@ -61,9 +61,10 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Check if PR body exists
+      env:
+        PR_BODY: ${{ github.event.pull_request.body }}
       run: |
-        pr_body="${{ github.event.pull_request.body }}"
-        if [ -z "$pr_body" ]; then
+        if [ -z "$PR_BODY" ]; then
           echo "❌ PR description is empty. Please fill out the PR template."
           exit 1
         else
