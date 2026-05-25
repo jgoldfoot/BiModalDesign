@@ -212,6 +212,26 @@ curl -s https://your-app.com/ | grep -E '<(h1|h2|p|article|section)'
 <h3>T-Shirts</h3>
 ```
 
+#### Step 2.4: Optimize for OS-Level Computer-Use Agents (AOM)
+
+Computer-Use agents rely heavily on the Accessibility Object Model (AOM). Add
+explicit `aria-keyshortcuts` and `aria-roledescription` to enhance OS-level
+interaction.
+
+```html
+<!-- Explicit keyshortcuts tell the agent it can press "C" instead of searching for the button -->
+<button aria-label="Add to cart" aria-keyshortcuts="c" onclick="addToCart()">
+  Add to Cart (C)
+</button>
+
+<!-- Describe custom widgets clearly -->
+<div
+  role="group"
+  aria-roledescription="product carousel"
+  aria-label="Featured items"
+></div>
+```
+
 **Deliverable:** Semantic HTML audit report, ARIA labels on all interactive
 elements
 
@@ -406,6 +426,23 @@ Serve content at multiple levels simultaneously:
 
 <!-- Layer 4: API link for programmatic access -->
 <link rel="api" href="/api/openapi.json" />
+```
+
+### Pattern 5: Focus Management for Keyboard Agents
+
+Computer-Use agents often navigate via keyboard. Manage focus explicitly when
+dynamic content loads:
+
+```javascript
+function showModal() {
+  const modal = document.getElementById('checkout-modal');
+  modal.removeAttribute('hidden');
+  modal.setAttribute('aria-modal', 'true');
+
+  // Explicitly move focus for keyboard-navigating agents
+  const firstInput = modal.querySelector('input');
+  if (firstInput) firstInput.focus();
+}
 ```
 
 ## Testing and Validation
