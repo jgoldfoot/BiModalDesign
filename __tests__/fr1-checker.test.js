@@ -1,5 +1,5 @@
 jest.mock('jsdom', () => ({
-  JSDOM: class {}
+  JSDOM: class {},
 }));
 
 const { FR1Checker } = require('../tools/validators/fr1-checker');
@@ -17,7 +17,7 @@ describe('FR1Checker - generateRecommendations', () => {
         averageScore: 0.65,
         commonIssues: [],
         failed: 0,
-        total: 10
+        total: 10,
       };
 
       const recommendations = checker.generateRecommendations([], summary);
@@ -26,7 +26,7 @@ describe('FR1Checker - generateRecommendations', () => {
         expect.objectContaining({
           priority: 'high',
           title: 'Improve overall FR-1 compliance',
-          description: 'Average score is 65.0%. Focus on addressing common issues.'
+          description: 'Average score is 65.0%. Focus on addressing common issues.',
         })
       );
     });
@@ -36,12 +36,14 @@ describe('FR1Checker - generateRecommendations', () => {
         averageScore: 0.75,
         commonIssues: [],
         failed: 0,
-        total: 10
+        total: 10,
       };
 
       const recommendations = checker.generateRecommendations([], summary);
 
-      expect(recommendations.some(r => r.title === 'Improve overall FR-1 compliance')).toBe(false);
+      expect(recommendations.some((r) => r.title === 'Improve overall FR-1 compliance')).toBe(
+        false
+      );
     });
 
     it('should return recommendation for the top issue if commonIssues exist', () => {
@@ -49,10 +51,10 @@ describe('FR1Checker - generateRecommendations', () => {
         averageScore: 0.9,
         commonIssues: [
           { issue: 'Missing alt text', percentage: '45.0' },
-          { issue: 'Insufficient contrast', percentage: '20.0' }
+          { issue: 'Insufficient contrast', percentage: '20.0' },
         ],
         failed: 0,
-        total: 10
+        total: 10,
       };
 
       const recommendations = checker.generateRecommendations([], summary);
@@ -61,7 +63,7 @@ describe('FR1Checker - generateRecommendations', () => {
         expect.objectContaining({
           priority: 'high',
           title: 'Address most common issue',
-          description: '"Missing alt text" affects 45.0% of pages'
+          description: '"Missing alt text" affects 45.0% of pages',
         })
       );
     });
@@ -71,7 +73,7 @@ describe('FR1Checker - generateRecommendations', () => {
         averageScore: 0.8,
         commonIssues: [],
         failed: 3,
-        total: 10
+        total: 10,
       };
 
       const recommendations = checker.generateRecommendations([], summary);
@@ -80,7 +82,7 @@ describe('FR1Checker - generateRecommendations', () => {
         expect.objectContaining({
           priority: 'medium',
           title: 'Fix failing pages',
-          description: '3 out of 10 pages are failing FR-1 compliance'
+          description: '3 out of 10 pages are failing FR-1 compliance',
         })
       );
     });
@@ -90,7 +92,7 @@ describe('FR1Checker - generateRecommendations', () => {
         averageScore: 0.5,
         commonIssues: [{ issue: 'Missing alt text', percentage: '45.0' }],
         failed: 5,
-        total: 10
+        total: 10,
       };
 
       const recommendations = checker.generateRecommendations([], summary);
@@ -106,7 +108,7 @@ describe('FR1Checker - generateRecommendations', () => {
         averageScore: 1.0,
         commonIssues: [],
         failed: 0,
-        total: 10
+        total: 10,
       };
 
       const recommendations = checker.generateRecommendations([], summary);
@@ -119,7 +121,7 @@ describe('FR1Checker - generateRecommendations', () => {
     it('should calculate summary from results and generate score recommendation', () => {
       const results = [
         { score: 0.4, passed: false, issues: ['A'] },
-        { score: 0.8, passed: true, issues: [] }
+        { score: 0.8, passed: true, issues: [] },
       ];
       // averageScore = 0.6, failed = 1, total = 2
       // commonIssues = [{issue: 'A', count: 1, percentage: '50.0'}]
@@ -132,7 +134,7 @@ describe('FR1Checker - generateRecommendations', () => {
         expect.objectContaining({
           priority: 'high',
           title: 'Improve overall FR-1 compliance',
-          description: 'Average score is 60.0%. Focus on addressing common issues.'
+          description: 'Average score is 60.0%. Focus on addressing common issues.',
         })
       );
 
@@ -140,7 +142,7 @@ describe('FR1Checker - generateRecommendations', () => {
         expect.objectContaining({
           priority: 'high',
           title: 'Address most common issue',
-          description: '"A" affects 50.0% of pages'
+          description: '"A" affects 50.0% of pages',
         })
       );
 
@@ -148,7 +150,7 @@ describe('FR1Checker - generateRecommendations', () => {
         expect.objectContaining({
           priority: 'medium',
           title: 'Fix failing pages',
-          description: '1 out of 2 pages are failing FR-1 compliance'
+          description: '1 out of 2 pages are failing FR-1 compliance',
         })
       );
     });
@@ -156,7 +158,7 @@ describe('FR1Checker - generateRecommendations', () => {
     it('should handle results without score property gracefully', () => {
       const results = [
         { passed: true, issues: [] },
-        { passed: true, issues: [] }
+        { passed: true, issues: [] },
       ];
       // averageScore = 0.0, failed = 0, total = 2
 
@@ -166,7 +168,7 @@ describe('FR1Checker - generateRecommendations', () => {
         expect.objectContaining({
           priority: 'high',
           title: 'Improve overall FR-1 compliance',
-          description: 'Average score is 0.0%. Focus on addressing common issues.'
+          description: 'Average score is 0.0%. Focus on addressing common issues.',
         })
       );
     });

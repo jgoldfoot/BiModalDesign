@@ -186,7 +186,10 @@ describe('BiModalDesignCLI', () => {
       // usability: 0
       // performance: 2 * 0.2 = 0.4
       // overall = 16.4 -> round(16.4) = 16
-      result = cli.calculateComprehensiveScore({ overallScore: 32, requirements: { FR7: { score: 2 } } }, null);
+      result = cli.calculateComprehensiveScore(
+        { overallScore: 32, requirements: { FR7: { score: 2 } } },
+        null
+      );
       expect(result.overall).toBe(16);
     });
   });
