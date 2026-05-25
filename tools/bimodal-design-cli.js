@@ -786,11 +786,11 @@ Documentation: https://bimodal-design.design/docs
   }
 
   calculateComprehensiveScore(auditResult, simResult) {
-    const complianceScore = auditResult.overallScore || 0;
+    const complianceScore = auditResult?.overallScore || 0;
 
     // Calculate usability score from simulation
     let usabilityScore = 0;
-    if (simResult.comparison && simResult.comparison.accessibilityScores) {
+    if (simResult?.comparison?.accessibilityScores) {
       const scores = Object.values(simResult.comparison.accessibilityScores);
       if (scores.length > 0) {
         usabilityScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
@@ -798,7 +798,7 @@ Documentation: https://bimodal-design.design/docs
     }
 
     // Calculate performance score
-    const performanceScore = auditResult.requirements?.FR7?.score || 0;
+    const performanceScore = auditResult?.requirements?.FR7?.score || 0;
 
     // Weighted overall score
     const overall = Math.round(
