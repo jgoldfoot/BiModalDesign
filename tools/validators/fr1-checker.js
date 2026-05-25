@@ -540,9 +540,9 @@ class FR1Checker {
       averageScore: results.reduce((sum, r) => sum + (r.score || 0), 0) / results.length,
       totalIssues: results.reduce((sum, r) => sum + (r.issues?.length || 0), 0),
       totalWarnings: results.reduce((sum, r) => sum + (r.warnings?.length || 0), 0),
-      commonIssues: this.findCommonIssues(results),
-      recommendations: this.generateRecommendations(results)
+      commonIssues: this.findCommonIssues(results)
     };
+    summary.recommendations = this.generateRecommendations(results, summary);
     
     return summary;
   }
@@ -570,9 +570,16 @@ class FR1Checker {
   /**
    * Generate recommendations based on results
    */
-  generateRecommendations(results) {
+  generateRecommendations(results, summary) {
     const recommendations = [];
-    const summary = this.generateSummary(results);
+    if (!summary) {
+      summary = {
+        averageScore: results.reduce((sum, r) => sum + (r.score || 0), 0) / results.length,
+        commonIssues: this.findCommonIssues(results),
+        failed: results.filter(r => !r.passed).length,
+        total: results.length
+      };
+    }
     
     if (summary.averageScore < 0.7) {
       recommendations.push({
@@ -686,7 +693,7 @@ Examples:
         const jsonOutput = JSON.stringify(output, null, 2);
         
         if (options.output) {
-          require('fs').writeFileSync(options.output, jsonOutput);
+          await require('fs').promises.writeFile(options.output, jsonOutput);
           console.log(`Report saved to ${options.output}`);
         } else {
           console.log(jsonOutput);
