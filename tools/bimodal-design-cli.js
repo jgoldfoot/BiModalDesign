@@ -603,7 +603,7 @@ Repository: https://github.com/jgoldfoot/BiModalDesign
 </head>
 <body>
     <h1>BiModal Design Results</h1>
-    <pre>${this.escapeHtml(JSON.stringify(results, null, 2))}</pre>
+    <pre>${JSON.stringify(results, null, 2).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]))}</pre>
 </body>
 </html>`;
   }
