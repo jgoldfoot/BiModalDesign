@@ -102,8 +102,8 @@ This is a defense-in-depth problem, not a binary compliance check.
 | Protocol-Native Success    | N/A             | N/A                 | 90-95%                          |
 | GEO Discoverability        | Low             | Moderate            | High                            |
 
-_Sources: WebArena, VisualWebArena, ST-WebAgentBench, Microsoft Build 2025,
-internal analysis_
+_Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
+ST-WebAgentBench, Microsoft Build 2025, internal analysis_
 
 ### **Strategic Impact**
 
@@ -169,18 +169,22 @@ capabilities, limitations, and design implications.
   management reduces retry failures
 - **Current prevalence**: Growing rapidly in enterprise automation
 
-#### **Level 3 — Vision Agents**
+#### **Level 3 — Vision & Computer-Use Agents**
 
-- **What they are**: Agents that "see" rendered web pages through screenshots
-  and use vision models to understand layout, read text, and identify
-  interactive elements
+- **What they are**: Agents that interact with rendered interfaces via vision
+  models and the operating system's Accessibility Object Model (AOM). They do
+  not merely parse HTML; they navigate OS-level trees and fall back to visual
+  processing (screenshots) when semantic data is missing.
 - **Examples**: Claude Computer Use, GPT-4V browse mode, Anthropic's agentic
-  tools
+  tools.
 - **Capabilities**: Can interact with any visible UI element, understand visual
-  hierarchy, read rendered text — even in CSR applications
-- **Design implication**: Visual clarity, consistent layout, clear affordances,
-  and readable typography matter. These agents can work with CSR but benefit
-  from semantic structure for reliability
+  hierarchy, read rendered text, and explicitly query OS-level accessibility
+  trees (AOM) to ensure exact interaction targets.
+- **Design implication**: Visual clarity and semantic precision are equally
+  vital. While they can fall back to pure vision for CSR applications,
+  benchmarks like WebArena-Verified prove this is brittle. A well-populated
+  AOM—driven by Layer 2 semantic HTML and ARIA—is critical for reliable
+  interaction.
 - **Current prevalence**: Emerging; expected to grow significantly
 
 #### **Level 4 — Tool-Use Agents**
@@ -269,7 +273,7 @@ failure rates for all agent types.
 semantics.
 
 **Serves**: Level 1 (LLM Browsers), Level 2 (Browser Automation), Level 3
-(Vision Agents)
+(Vision & Computer-Use Agents)
 
 **Requirements**:
 
@@ -281,9 +285,11 @@ semantics.
 - Meaningful link text (not "click here")
 
 **Why it matters**: Semantic structure is the universal language of web content.
-Every agent type benefits from it — LLMs understand context better, browser
-automation agents find elements reliably, and even vision agents use underlying
-semantics as a fallback.
+Critically, this layer is responsible for populating the Accessibility Object
+Model (AOM). When OS-level Computer-Use agents (Level 3) navigate an interface,
+they query the AOM for exact interaction coordinates and component state, only
+falling back to pure computer vision when the AOM fails. Proper semantics ensure
+high-fidelity interactions rather than brittle heuristic guesses.
 
 ### **3.4 Layer 3 — Structured Data**
 
@@ -475,7 +481,8 @@ capability level:
 | Level 4 (Tool-Use via API)   | N/A                 | N/A                    | 88-95%                  |
 | Level 5 (Protocol-Native)    | N/A                 | N/A                    | 92-98%                  |
 
-_Sources: WebArena, VisualWebArena, ST-WebAgentBench, internal analysis_
+_Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
+ST-WebAgentBench, internal analysis_
 
 The data reveals a clear pattern: **each additional BiModal Design layer
 improves success rates**, and the **highest reliability comes from API and

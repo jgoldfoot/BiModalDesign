@@ -156,8 +156,7 @@ class AgentSimulator {
         }
 
         const browser = await puppeteer.launch({
-            headless: this.options.headless,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            headless: this.options.headless
         });
 
         try {
@@ -199,9 +198,11 @@ class AgentSimulator {
             result.performance.navigationTime = Date.now() - startTime;
 
             // Run tasks
-            for (const taskName of tasks) {
-                result.tasks[taskName] = await this.executeTask(page, taskName, profile);
-            }
+            await Promise.all(
+                tasks.map(async (taskName) => {
+                    result.tasks[taskName] = await this.executeTask(page, taskName, profile);
+                })
+            );
 
             // Test BiModal Design compliance
             result.accessibility = await this.testAgentAccessibility(page, profile);

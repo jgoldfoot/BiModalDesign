@@ -37,8 +37,7 @@ class BiModalDesignComplianceAuditor {
 
     async auditPage(url, config = {}) {
         const browser = await puppeteer.launch({ 
-            headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            headless: true
         });
         
         try {
@@ -1018,30 +1017,36 @@ https://another-site.com
         
         let results;
         
+        // Helper function to process URLs in concurrent chunks
+        const processInChunks = async (urls, auditorInstance, concurrency = 5) => {
+            const results = [];
+            for (let i = 0; i < urls.length; i += concurrency) {
+                const chunk = urls.slice(i, i + concurrency);
+                const chunkPromises = chunk.map(async (url) => {
+                    const cleanUrl = url.trim();
+                    console.log(`Auditing: ${cleanUrl}`);
+                    const result = await auditorInstance.auditPage(cleanUrl);
+                    console.log(`  Score for ${cleanUrl}: ${result.overallScore}% ${result.passed ? '✅' : '❌'}`);
+                    return result;
+                });
+                const chunkResults = await Promise.all(chunkPromises);
+                results.push(...chunkResults);
+            }
+            return results;
+        };
+
         if (options.config) {
             // Load configuration file
             const configData = JSON.parse(await fs.readFile(options.config, 'utf8'));
             const configuredAuditor = new BiModalDesignComplianceAuditor(configData.options || {});
             
-            results = [];
-            for (const url of configData.urls) {
-                console.log(`Auditing: ${url}`);
-                const result = await configuredAuditor.auditPage(url);
-                results.push(result);
-                console.log(`  Score: ${result.overallScore}% ${result.passed ? '✅' : '❌'}`);
-            }
+            results = await processInChunks(configData.urls, configuredAuditor);
         } else if (options.batch) {
             // Batch process URLs from file
             const urlsData = await fs.readFile(options.batch, 'utf8');
             const urls = urlsData.split('\n').filter(url => url.trim() && url.startsWith('http'));
             
-            results = [];
-            for (const url of urls) {
-                console.log(`Auditing: ${url}`);
-                const result = await auditor.auditPage(url.trim());
-                results.push(result);
-                console.log(`  Score: ${result.overallScore}% ${result.passed ? '✅' : '❌'}`);
-            }
+            results = await processInChunks(urls, auditor);
         } else if (options.url) {
             // Single URL audit
             console.log(`Auditing: ${options.url}`);

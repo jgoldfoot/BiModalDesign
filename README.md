@@ -54,14 +54,14 @@ there.
 
 Interfaces today face a spectrum of AI consumers, not a single one:
 
-| Agent Level                  | Example                    | What They See      |
-| ---------------------------- | -------------------------- | ------------------ |
-| Level 0 — HTTP Retrievers    | curl, web scrapers         | Raw HTML only      |
-| Level 1 — LLM Browsers       | ChatGPT Browse, Perplexity | Parsed HTML, no JS |
-| Level 2 — Browser Automation | Playwright agents          | Full rendered DOM  |
-| Level 3 — Vision Agents      | Claude Computer Use        | Screenshots        |
-| Level 4 — Tool-Use Agents    | OpenAI function calling    | API responses      |
-| Level 5 — Protocol-Native    | MCP-connected agents       | Protocol data      |
+| Agent Level                            | Example                    | What They See      |
+| -------------------------------------- | -------------------------- | ------------------ |
+| Level 0 — HTTP Retrievers              | curl, web scrapers         | Raw HTML only      |
+| Level 1 — LLM Browsers                 | ChatGPT Browse, Perplexity | Parsed HTML, no JS |
+| Level 2 — Browser Automation           | Playwright agents          | Full rendered DOM  |
+| Level 3 — Vision & Computer-Use Agents | Claude Computer Use        | Screenshots & AOM  |
+| Level 4 — Tool-Use Agents              | OpenAI function calling    | API responses      |
+| Level 5 — Protocol-Native              | MCP-connected agents       | Protocol data      |
 
 A CSR-only app with `<div id="root"></div>` is invisible to Levels 0-1, fragile
 for Levels 2-3, and unreachable for Levels 4-5 without an API. Most interfaces
@@ -78,13 +78,13 @@ spectrum:
 Level 0: HTTP Retrievers      → See only raw HTML (FR-1 critical)
 Level 1: LLM Browsers         → Parse HTML, understand semantics
 Level 2: Browser Automation   → Execute JS, interact with DOM
-Level 3: Vision Agents        → See rendered pages, click UI elements
+Level 3: Vision & Computer-Use Agents → See rendered pages, query OS AOM, click UI elements
 Level 4: Tool-Use Agents      → Call APIs directly via function calling
 Level 5: Protocol-Native      → MCP, A2A, NLWeb — rich agent protocols
 ```
 
 A single product page might be crawled by an HTTP retriever (Level 0), read by
-Perplexity (Level 1), automated by Playwright (Level 2), viewed by Claude
+Perplexity (Level 1), automated by Playwright (Level 2), navigated by Claude
 Computer Use (Level 3), queried via API (Level 4), and accessed through MCP
 (Level 5) — all simultaneously.
 
@@ -270,6 +270,9 @@ npm test
 
 - **WebAgents Survey 2025** — "A Survey of WebAgents: Towards Next-Generation AI
   Agents for Web Automation" (arXiv:2503.23350v1)
+- **WebArena-Verified** — Rigorous re-evaluation of autonomous web agents
+- **OSWorld** — Benchmarking Multimodal Agents for Open-Ended Tasks in Real
+  Computer Environments
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness
   in Web Agents" (arXiv:2410.06703v2)
 - **MCP** — Model Context Protocol (modelcontextprotocol.io)
