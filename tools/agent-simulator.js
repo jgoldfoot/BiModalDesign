@@ -21,6 +21,7 @@ class AgentSimulator {
             timeout: 30000,
             viewport: { width: 1200, height: 800 },
             headless: true,
+            noSandbox: false,
             ...options
         };
         
@@ -155,9 +156,15 @@ class AgentSimulator {
             throw new Error(`Unknown agent type: ${agentType}. Available: ${Object.keys(this.agentProfiles).join(', ')}`);
         }
 
+        const launchArgs = [];
+        if (this.options.noSandbox) {
+            console.warn('⚠️ WARNING: Running Puppeteer with --no-sandbox. This is a security risk if navigating to untrusted sites.');
+            launchArgs.push('--no-sandbox', '--disable-setuid-sandbox');
+        }
+
         const browser = await puppeteer.launch({
             headless: this.options.headless,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            args: launchArgs
         });
 
         try {
@@ -733,6 +740,7 @@ Options:
   --format, -f          Output format (json, markdown, html) [default: json]
   --headless           Run in headless mode [default: true]
   --timeout            Timeout in milliseconds [default: 30000]
+  --no-sandbox         Disable Chrome sandbox (WARNING: Security risk) [default: false]
   --help, -h           Show this help message
 
 Available Tasks:
@@ -774,7 +782,8 @@ Examples:
             output: null,
             format: 'json',
             headless: true,
-            timeout: 30000
+            timeout: 30000,
+            noSandbox: false
         };
 
         for (let i = 0; i < args.length; i++) {
@@ -794,12 +803,15 @@ Examples:
                 options.headless = args[++i] !== 'false';
             } else if (arg === '--timeout') {
                 options.timeout = parseInt(args[++i]);
+            } else if (arg === '--no-sandbox') {
+                options.noSandbox = true;
             }
         }
 
         // Configure simulator
         simulator.options.headless = options.headless;
         simulator.options.timeout = options.timeout;
+        simulator.options.noSandbox = options.noSandbox;
 
         // Run simulation
         let results;
