@@ -98,7 +98,8 @@
       padding: 15px;
       transition: transform 0.2s;
     }
-    .product-card:hover {
+    .product-card:hover,
+    .product-card:focus-within {
       transform: translateY(-4px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
@@ -112,6 +113,25 @@
     .product-title { font-weight: 600; margin: 10px 0 5px 0; font-size: 1.1em; }
     .product-price { color: #0066cc; font-size: 1.3em; font-weight: bold; }
     .product-description { color: #666; font-size: 0.9em; margin: 8px 0; }
+    .add-to-cart-btn {
+      display: block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      background: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      transition: background-color 0.2s, outline-color 0.2s;
+    }
+    .add-to-cart-btn:hover {
+      background: #0052a3;
+    }
+    .add-to-cart-btn:focus-visible {
+      outline-color: #0066cc;
+    }
   </style>
 </head>
 <body>
@@ -217,7 +237,7 @@
         const button = document.createElement('button');
         button.textContent = 'Add to Cart';
         button.setAttribute('aria-label', `Add ${name} to cart`);
-        button.style.cssText = 'display: block; margin-top: 10px; padding: 8px 16px; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;';
+        button.className = 'add-to-cart-btn';
         button.addEventListener('click', (e) => {
           e.stopPropagation();
           alert(`Added ${name} to cart!`);
