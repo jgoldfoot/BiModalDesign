@@ -55,17 +55,14 @@
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jest": "^29.15.2",
     "jest": "^30.4.2",
+    "jsdom": "29.1.1",
     "prettier": "^3.0.0"
-  },
-  "optionalDependencies": {
-    "puppeteer": "^25.0.4"
   },
   "files": [
     "tools/",
@@ -80,5 +77,8 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "optionalDependencies": {
+    "puppeteer": "25.0.4"
   }
 }

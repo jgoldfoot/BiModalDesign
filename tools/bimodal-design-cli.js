@@ -792,7 +792,9 @@ Documentation: https://bimodal-design.design/docs
     let usabilityScore = 0;
     if (simResult.comparison && simResult.comparison.accessibilityScores) {
       const scores = Object.values(simResult.comparison.accessibilityScores);
-      usabilityScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+      if (scores.length > 0) {
+        usabilityScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+      }
     }
 
     // Calculate performance score
