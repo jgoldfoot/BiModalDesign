@@ -725,6 +725,17 @@ class BiModalDesignComplianceAuditor {
         }
     }
 
+    escapeHtml(unsafe) {
+        if (unsafe == null) return '';
+        return unsafe
+            .toString()
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
     generateHTMLReport(results) {
         const isArray = Array.isArray(results);
         const pages = isArray ? results : [results];
@@ -778,7 +789,7 @@ class BiModalDesignComplianceAuditor {
         <div class="page-result">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                 <div>
-                    <h2 style="margin: 0;">${result.url}</h2>
+                    <h2 style="margin: 0;">${this.escapeHtml(result.url)}</h2>
                     <p style="color: #64748b; margin: 4px 0 0 0;">Tested on ${new Date(result.timestamp).toLocaleString()}</p>
                 </div>
                 <div style="text-align: center;">
@@ -791,7 +802,7 @@ class BiModalDesignComplianceAuditor {
 
             if (result.error) {
                 html += `<div style="background: #fee2e2; color: #dc2626; padding: 16px; border-radius: 6px;">
-                    <strong>Error:</strong> ${result.error}
+                    <strong>Error:</strong> ${this.escapeHtml(result.error)}
                 </div>`;
             } else {
                 html += `<div class="requirements-grid">`;
@@ -800,7 +811,7 @@ class BiModalDesignComplianceAuditor {
                     html += `
                     <div class="requirement">
                         <div class="requirement-header">
-                            <span class="requirement-name">${req.name}</span>
+                            <span class="requirement-name">${this.escapeHtml(req.name)}</span>
                             <div>
                                 ${getStatusBadge(req.passed)}
                                 <span class="requirement-score" style="color: ${getScoreColor(req.score)}; margin-left: 8px;">${req.score}%</span>
@@ -809,14 +820,14 @@ class BiModalDesignComplianceAuditor {
                     
                     if (req.details && req.details.length > 0) {
                         html += `<div class="details">
-                            ${req.details.map(detail => `• ${detail}`).join('<br>')}
+                            ${req.details.map(detail => `• ${this.escapeHtml(detail)}`).join('<br>')}
                         </div>`;
                     }
                     
                     if (req.issues && req.issues.length > 0) {
                         html += `<div class="issues">
                             <strong>Issues:</strong><br>
-                            ${req.issues.map(issue => `• ${issue}`).join('<br>')}
+                            ${req.issues.map(issue => `• ${this.escapeHtml(issue)}`).join('<br>')}
                         </div>`;
                     }
                     
@@ -833,7 +844,7 @@ class BiModalDesignComplianceAuditor {
                     result.recommendations.forEach(rec => {
                         html += `
                         <div class="recommendation ${rec.priority === 'high' ? 'high-priority' : ''}">
-                            <strong>${rec.category}:</strong> ${rec.issue}
+                            <strong>${this.escapeHtml(rec.category)}:</strong> ${this.escapeHtml(rec.issue)}
                         </div>`;
                     });
                     
