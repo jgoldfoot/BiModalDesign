@@ -239,21 +239,14 @@ class AgentSimulator {
             await page.setJavaScriptEnabled(false);
         }
         
-        if (!profile.capabilities.images) {
+        if (!profile.capabilities.images || !profile.capabilities.css) {
             await page.setRequestInterception(true);
             page.on('request', (req) => {
-                if (req.resourceType() === 'image') {
+                if (req.isInterceptResolutionHandled()) return;
+
+                if (!profile.capabilities.images && req.resourceType() === 'image') {
                     req.abort();
-                } else {
-                    req.continue();
-                }
-            });
-        }
-        
-        if (!profile.capabilities.css) {
-            await page.setRequestInterception(true);
-            page.on('request', (req) => {
-                if (req.resourceType() === 'stylesheet') {
+                } else if (!profile.capabilities.css && req.resourceType() === 'stylesheet') {
                     req.abort();
                 } else {
                     req.continue();
@@ -685,6 +678,17 @@ class AgentSimulator {
         return markdown;
     }
 
+    escapeHtml(unsafe) {
+        if (unsafe == null) return '';
+        return unsafe
+            .toString()
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
     generateHTMLReport(results) {
         // HTML report implementation would go here
         // For brevity, returning a basic HTML structure
@@ -702,7 +706,7 @@ class AgentSimulator {
 </head>
 <body>
     <h1>Agent Simulation Report</h1>
-    <pre>${JSON.stringify(results, null, 2)}</pre>
+    <pre>${this.escapeHtml(JSON.stringify(results, null, 2))}</pre>
 </body>
 </html>`;
     }

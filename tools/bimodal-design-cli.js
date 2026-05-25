@@ -579,6 +579,17 @@ Repository: https://github.com/jgoldfoot/BiModalDesign
     return `# BiModal Design Results\n\n${JSON.stringify(results, null, 2)}`;
   }
 
+  escapeHtml(unsafe) {
+    if (unsafe == null) return '';
+    return unsafe
+      .toString()
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   generateHTMLOutput(results) {
     return `
 <!DOCTYPE html>
@@ -592,7 +603,7 @@ Repository: https://github.com/jgoldfoot/BiModalDesign
 </head>
 <body>
     <h1>BiModal Design Results</h1>
-    <pre>${JSON.stringify(results, null, 2)}</pre>
+    <pre>${this.escapeHtml(JSON.stringify(results, null, 2))}</pre>
 </body>
 </html>`;
   }
