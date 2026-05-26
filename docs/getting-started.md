@@ -90,14 +90,14 @@ npx nuxi@latest init my-bimodal-app
 
 Understanding which agents consume your interface helps prioritize layers:
 
-| Level | Agent Type         | What They See      | Critical Layer |
-| ----- | ------------------ | ------------------ | -------------- |
-| 0     | HTTP Retrievers    | Raw HTML only      | Layer 1        |
-| 1     | LLM Browsers       | Parsed HTML, no JS | Layer 1-2      |
-| 2     | Browser Automation | Full rendered DOM  | Layer 2-3      |
-| 3     | Vision Agents      | Screenshots        | Layer 2-3      |
-| 4     | Tool-Use Agents    | API responses      | Layer 4        |
-| 5     | Protocol-Native    | Protocol data      | Layer 5        |
+| Level | Agent Type                   | What They See      | Critical Layer |
+| ----- | ---------------------------- | ------------------ | -------------- |
+| 0     | HTTP Retrievers              | Raw HTML only      | Layer 1        |
+| 1     | LLM Browsers                 | Parsed HTML, no JS | Layer 1-2      |
+| 2     | Browser Automation           | Full rendered DOM  | Layer 2-3      |
+| 3     | Vision & Computer-Use Agents | Screenshots & AOM  | Layer 2-3      |
+| 4     | Tool-Use Agents              | API responses      | Layer 4        |
+| 5     | Protocol-Native              | Protocol data      | Layer 5        |
 
 ## Testing Agent Accessibility
 

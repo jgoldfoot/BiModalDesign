@@ -216,7 +216,8 @@ curl -s https://your-app.com/ | grep -E '<(h1|h2|p|article|section)'
 
 Computer-Use agents rely heavily on the Accessibility Object Model (AOM). Add
 explicit `aria-keyshortcuts` and `aria-roledescription` to enhance OS-level
-interaction.
+interaction, and implement explicit Focus Management (see Pattern 5) to support
+keyboard-navigating agents.
 
 ```html
 <!-- Explicit keyshortcuts tell the agent it can press "C" instead of searching for the button -->

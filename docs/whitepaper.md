@@ -49,7 +49,7 @@ and as the landscape continues to evolve.
 6. [Rendering Strategy for Agent Accessibility](#6-rendering-strategy-for-agent-accessibility)
 7. [BiModal Design Principles & Validated Patterns](#7-bimodal-design-principles--validated-patterns)
 8. [Beyond the Browser: Agent Protocols & APIs](#8-beyond-the-browser-agent-protocols--apis)
-9. [Vision Agents & Browser Automation](#9-vision-agents--browser-automation)
+9. [Vision & Computer-Use Agents & Browser Automation](#9-vision--computer-use-agents--browser-automation)
 10. [Generative Engine Optimization (GEO)](#10-generative-engine-optimization-geo)
 11. [Security, Ethics & Governance](#11-security-ethics--governance)
 12. [Compliance Methodology & Metrics](#12-compliance-methodology--metrics)
@@ -288,8 +288,10 @@ semantics.
 Critically, this layer is responsible for populating the Accessibility Object
 Model (AOM). When OS-level Computer-Use agents (Level 3) navigate an interface,
 they query the AOM for exact interaction coordinates and component state, only
-falling back to pure computer vision when the AOM fails. Proper semantics ensure
-high-fidelity interactions rather than brittle heuristic guesses.
+falling back to pure computer vision when the AOM fails. This reinforces the
+"Defense in Depth" philosophy: well-structured ARIA provides high-fidelity,
+reliable interaction targets for OS agents, bypassing the unreliability of pure
+vision models exposed by WebArena-Verified.
 
 ### **3.4 Layer 3 — Structured Data**
 
@@ -472,14 +474,14 @@ it's measurable:
 Recent benchmarks reveal that performance gaps vary significantly by agent
 capability level:
 
-| **Agent Level**              | **Conventional UI** | **Semantic Structure** | **Full BiModal Design** |
-| ---------------------------- | ------------------- | ---------------------- | ----------------------- |
-| Level 0 (HTTP Retrievers)    | 12-20%              | 42-65%                 | 60-75%                  |
-| Level 1 (LLM Browsers)       | 25-35%              | 50-70%                 | 70-85%                  |
-| Level 2 (Browser Automation) | 35-50%              | 55-72%                 | 75-88%                  |
-| Level 3 (Vision Agents)      | 40-55%              | 55-70%                 | 70-85%                  |
-| Level 4 (Tool-Use via API)   | N/A                 | N/A                    | 88-95%                  |
-| Level 5 (Protocol-Native)    | N/A                 | N/A                    | 92-98%                  |
+| **Agent Level**                        | **Conventional UI** | **Semantic Structure** | **Full BiModal Design** |
+| -------------------------------------- | ------------------- | ---------------------- | ----------------------- |
+| Level 0 (HTTP Retrievers)              | 12-20%              | 42-65%                 | 60-75%                  |
+| Level 1 (LLM Browsers)                 | 25-35%              | 50-70%                 | 70-85%                  |
+| Level 2 (Browser Automation)           | 35-50%              | 55-72%                 | 75-88%                  |
+| Level 3 (Vision & Computer-Use Agents) | 40-55%              | 55-70%                 | 70-85%                  |
+| Level 4 (Tool-Use via API)             | N/A                 | N/A                    | 88-95%                  |
+| Level 5 (Protocol-Native)              | N/A                 | N/A                    | 92-98%                  |
 
 _Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
 ST-WebAgentBench, internal analysis_
@@ -1048,13 +1050,13 @@ paths:
 
 ---
 
-## **9. Vision Agents & Browser Automation**
+## **9. Vision & Computer-Use Agents & Browser Automation**
 
 Vision agents and browser automation fundamentally change one of BiModal Design
 v2.x's core assumptions: that agents can't execute JavaScript or see rendered
 content. This section addresses what this means for the framework.
 
-### **9.1 What Vision Agents Change**
+### **9.1 What Vision & Computer-Use Agents Change**
 
 Vision agents (Level 3) interact with web pages the way humans do — they see the
 rendered page, identify UI elements visually, and click, type, and scroll. This
@@ -1120,7 +1122,7 @@ Design considerations:
 - Time-based animations that block interaction
 - CAPTCHA and bot-detection that blocks legitimate agent access without fallback
 
-### **9.4 Designing for Vision Agents**
+### **9.4 Designing for Vision & Computer-Use Agents**
 
 Vision agents read screenshots. Design considerations:
 
