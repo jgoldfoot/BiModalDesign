@@ -65,7 +65,7 @@ curl -s https://yoursite.com | grep -E '<(main|nav|h1|article)'
 - [ ] `data-testid` attributes for testing hooks
 
 **Agent Coverage:** Level 1 (LLM Browsers), Level 2 (Browser Automation), Level
-3 (Vision Agents)
+3 (Vision & Computer-Use Agents)
 
 ---
 
@@ -102,7 +102,8 @@ curl -s https://yoursite.com | grep -E '<(main|nav|h1|article)'
 </article>
 ```
 
-**Agent Coverage:** Level 1-3 (LLM Browsers, Browser Automation, Vision Agents)
+**Agent Coverage:** Level 1-3 (LLM Browsers, Browser Automation, Vision &
+Computer-Use Agents)
 
 ---
 
