@@ -295,7 +295,7 @@ Licensed under the Apache License 2.0. See [LICENSE](LICENSE) for full details.
 
 [joel@goldfoot.com](mailto:joel@goldfoot.com)
 [linkedin.com/in/joelgoldfoot](https://linkedin.com/in/joelgoldfoot)
-[ai-plus.design](https://ai-plus.design)
+[bimodal.design](https://bimodal.design)
 
 ---
 

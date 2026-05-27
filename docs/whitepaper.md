@@ -1474,9 +1474,9 @@ established knowledge from:
 - Web accessibility research (WCAG guidelines, semantic web principles)
 - Human-computer interaction studies on information architecture
 - Emerging observations about AI agent behavior across capability levels
-- Real-world implementation experience on ai-plus.design
+- Real-world implementation experience on bimodal.design
 
-### **14.2 Documented Implementation: ai-plus.design**
+### **14.2 Documented Implementation: bimodal.design**
 
 The first documented BiModal Design implementation is the framework creator's
 own website. This serves as a living proof-of-concept that evolves with the
@@ -2015,7 +2015,7 @@ ecosystem of AI agents.
 
 **Contact:** [joel@goldfoot.com](mailto:joel@goldfoot.com) **LinkedIn:**
 [linkedin.com/in/joelgoldfoot](https://linkedin.com/in/joelgoldfoot)
-**Website:** [ai-plus.design](https://ai-plus.design)
+**Website:** [bimodal.design](https://bimodal.design)
 
 ---
 

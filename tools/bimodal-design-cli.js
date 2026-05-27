@@ -183,12 +183,12 @@ EXAMPLES
 
 Get started:
   bimodal-design init                    # Initialize BiModal Design in current directory
-  bimodal-design doctor https://ai-plus.design  # Test with reference implementation
+  bimodal-design doctor https://bimodal.design  # Test with reference implementation
 
 For detailed help on a specific command:
   bimodal-design <command> --help
 
-Documentation: https://bimodal-design.design/docs
+Documentation: https://bimodal.design/docs
 Repository: https://github.com/jgoldfoot/BiModalDesign
         `);
   }
@@ -696,7 +696,7 @@ BiModal Design-compliant ${framework} project created with ${template} template.
 - \`bimodal-design simulate <url>\` - Test agent interactions
 - \`bimodal-design doctor <url>\` - Diagnose issues
 
-Documentation: https://bimodal-design.design/docs
+Documentation: https://bimodal.design/docs
 `;
 
       await fs.writeFile(path.join(projectPath, 'README.md'), readme);
