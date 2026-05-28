@@ -1341,6 +1341,21 @@ explicit content policies:
 - **WCAG 2.2**: BiModal Design's Layer 2 directly builds on and extends WCAG
   compliance
 
+### **11.6 Human-in-the-Loop (HITL) for Tool-Agent-User Interaction (τ-bench)**
+
+The **τ-bench** benchmark highlights a critical reality: autonomous agents
+frequently operate in environments where taking action requires explicit user
+confirmation or disambiguation. While protocols allow agents to execute tools,
+taking destructive or financial actions without a "human-in-the-loop" is a
+severe security failure.
+
+Interfaces must semantically support this multi-turn interaction. When an agent
+attempts a critical action, the UI should use semantic HTML (like
+`<dialog aria-modal="true">`) and structured data (`schema.org/ConfirmAction`)
+to pause agent execution and prompt the human for final approval. This ensures
+the agent understands that the task is blocked pending human intervention,
+rather than assuming the action failed.
+
 ---
 
 ## **12. Compliance Methodology & Metrics**

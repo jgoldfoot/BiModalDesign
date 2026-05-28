@@ -53,11 +53,7 @@ Provide meaningful HTML structure before JavaScript loads:
 
 ```html
 <!DOCTYPE html>
-<html
-  lang="en"
-  data-framework="react-csr"
-  data-mitigation="skeleton"
->
+<html lang="en" data-framework="react-csr" data-mitigation="skeleton">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -86,11 +82,7 @@ Provide meaningful HTML structure before JavaScript loads:
   </head>
   <body>
     <!-- Skip link for agents -->
-    <a
-      href="#main-content"
-      class="skip-link"
-      data-action="skip-to-content"
-    >
+    <a href="#main-content" class="skip-link" data-action="skip-to-content">
       Skip to main content
     </a>
 
@@ -125,19 +117,14 @@ Provide meaningful HTML structure before JavaScript loads:
         <!-- Skeleton content for agents/no-JS users -->
         <div class="content-skeleton" data-content="fallback-content">
           <section class="hero-skeleton" data-component="hero-banner">
-            <h1 data-content="page-title">
-              BiModal Design Store - Loading...
-            </h1>
+            <h1 data-content="page-title">BiModal Design Store - Loading...</h1>
             <p data-content="page-description">
               Our products are designed for optimal agent and human experience.
               Please enable JavaScript for the full interactive experience.
             </p>
           </section>
 
-          <section
-            class="products-skeleton"
-            data-component="product-list"
-          >
+          <section class="products-skeleton" data-component="product-list">
             <h2 data-content="section-title">Featured Products</h2>
 
             <!-- Static product cards for agents -->
@@ -147,9 +134,7 @@ Provide meaningful HTML structure before JavaScript loads:
                 data-component="product-card"
                 role="listitem"
               >
-                <h3 data-content="product-name">
-                  Smart Agent-Friendly Widget
-                </h3>
+                <h3 data-content="product-name">Smart Agent-Friendly Widget</h3>
                 <p data-content="product-description">
                   Designed for optimal agent interaction with clear semantic
                   structure.
@@ -165,9 +150,7 @@ Provide meaningful HTML structure before JavaScript loads:
                 data-component="product-card"
                 role="listitem"
               >
-                <h3 data-content="product-name">
-                  Accessible Data Processor
-                </h3>
+                <h3 data-content="product-name">Accessible Data Processor</h3>
                 <p data-content="product-description">
                   Processes data with both human and agent-readable outputs.
                 </p>
@@ -182,9 +165,7 @@ Provide meaningful HTML structure before JavaScript loads:
                 data-component="product-card"
                 role="listitem"
               >
-                <h3 data-content="product-name">
-                  Universal Interface Kit
-                </h3>
+                <h3 data-content="product-name">Universal Interface Kit</h3>
                 <p data-content="product-description">
                   Interface components that work seamlessly with AI agents.
                 </p>
@@ -201,10 +182,7 @@ Provide meaningful HTML structure before JavaScript loads:
             <h2 data-content="section-title">Contact Information</h2>
             <p data-content="contact-email">
               Email:
-              <a
-                href="mailto:support@example.com"
-                data-action="send-email"
-              >
+              <a href="mailto:support@example.com" data-action="send-email">
                 support@example.com
               </a>
             </p>
@@ -227,9 +205,7 @@ Provide meaningful HTML structure before JavaScript loads:
       <nav aria-label="Footer navigation">
         <ul role="list">
           <li>
-            <a href="/privacy" data-action="view-privacy"
-              >Privacy Policy</a
-            >
+            <a href="/privacy" data-action="view-privacy">Privacy Policy</a>
           </li>
           <li>
             <a href="/terms" data-action="view-terms">Terms of Service</a>
@@ -366,11 +342,7 @@ function App() {
 
   if (error) {
     return (
-      <div
-        className="error-state"
-        data-component="error-message"
-        role="alert"
-      >
+      <div className="error-state" data-component="error-message" role="alert">
         <h2 data-content="error-title">Unable to Load Content</h2>
         <p data-content="error-description">{error}</p>
         <button onClick={loadProducts} data-action="retry-loading">
@@ -392,9 +364,7 @@ function App() {
 
       <div className="content-container" data-component="main-app">
         <section className="hero" data-component="hero-banner">
-          <h1 data-content="page-title">
-            Welcome to BiModal Design Store
-          </h1>
+          <h1 data-content="page-title">Welcome to BiModal Design Store</h1>
           <p data-content="page-description">
             Discover products designed for both humans and AI agents
           </p>
@@ -454,9 +424,7 @@ const AgentDetector = ({ onAgentDetected }) => {
 
     const enhanceForAgents = () => {
       // Add more semantic information
-      const buttons = document.querySelectorAll(
-        'button:not([data-action])'
-      );
+      const buttons = document.querySelectorAll('button:not([data-action])');
       buttons.forEach((button) => {
         if (button.textContent.toLowerCase().includes('buy')) {
           button.setAttribute('data-action', 'purchase-product');
@@ -534,11 +502,7 @@ const ProductList = ({ products, isAgent }) => {
       </div>
 
       {products.length === 0 && (
-        <div
-          className="empty-state"
-          data-component="empty-state"
-          role="status"
-        >
+        <div className="empty-state" data-component="empty-state" role="status">
           <p data-content="empty-message">
             No products available at this time.
           </p>

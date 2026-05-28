@@ -477,6 +477,39 @@ proactively guide agent tool use:
 </form>
 ```
 
+### Pattern 7: Human-in-the-Loop Confirmation (τ-bench)
+
+When an agent attempts a critical action, use `<dialog aria-modal="true">` and
+`schema.org/ConfirmAction` to pause execution and prompt the human. This
+satisfies multi-turn interaction requirements highlighted by **τ-bench**.
+
+```html
+<!-- The dialog blocks the rest of the UI, explicitly pausing the agent -->
+<dialog
+  id="confirmation-modal"
+  aria-modal="true"
+  aria-labelledby="confirm-title"
+  itemscope
+  itemtype="https://schema.org/ConfirmAction"
+>
+  <h2 id="confirm-title" itemprop="name">Confirm Transfer</h2>
+  <p itemprop="description">
+    Are you sure you want to transfer $5,000 to Account 1234567890?
+  </p>
+
+  <form method="dialog">
+    <!-- The human or agent must interact with these explicit controls -->
+    <button value="cancel" aria-label="Cancel transfer">Cancel</button>
+    <button value="confirm" aria-label="Confirm transfer">Confirm</button>
+  </form>
+</dialog>
+
+<script>
+  // Show the modal explicitly to trigger a focus change and pause flow
+  document.getElementById('confirmation-modal').showModal();
+</script>
+```
+
 ## Testing and Validation
 
 ### Testing by Agent Level
