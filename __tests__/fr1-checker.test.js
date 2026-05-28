@@ -1,6 +1,10 @@
-jest.mock('jsdom', () => ({
-  JSDOM: class {},
-}), { virtual: true });
+jest.mock(
+  'jsdom',
+  () => ({
+    JSDOM: class {},
+  }),
+  { virtual: true }
+);
 
 const { FR1Checker } = require('../tools/validators/fr1-checker');
 

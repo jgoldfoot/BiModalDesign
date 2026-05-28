@@ -191,11 +191,7 @@ const Home = ({ navigate, isAgent, agentInfo }) => {
 
   if (loading) {
     return (
-      <div
-        className="loading-state"
-        data-component="loading"
-        role="status"
-      >
+      <div className="loading-state" data-component="loading" role="status">
         <p data-content="loading-message" aria-live="polite">
           Loading featured products...
         </p>
@@ -226,11 +222,7 @@ const Home = ({ navigate, isAgent, agentInfo }) => {
       data-content-type="product-showcase"
     >
       {/* Hero Section */}
-      <section
-        className="hero"
-        data-component="hero-banner"
-        role="banner"
-      >
+      <section className="hero" data-component="hero-banner" role="banner">
         <div className="container">
           <h1 data-content="page-title">
             Welcome to the Future of Agent-Human Interaction
@@ -466,10 +458,7 @@ const AgentFallback = ({ agentInfo }) => {
           </p>
         </header>
 
-        <section
-          className="fallback-content"
-          data-component="fallback-content"
-        >
+        <section className="fallback-content" data-component="fallback-content">
           <h2 data-content="section-title">Available Options</h2>
 
           <div className="fallback-options">
@@ -526,9 +515,7 @@ const AgentFallback = ({ agentInfo }) => {
             <dd data-content="detail-value">{agentInfo.userAgent}</dd>
 
             <dt data-content="detail-label">Agent Type:</dt>
-            <dd data-content="detail-value">
-              {agentInfo.type || 'Unknown'}
-            </dd>
+            <dd data-content="detail-value">{agentInfo.type || 'Unknown'}</dd>
 
             <dt data-content="detail-label">Capabilities:</dt>
             <dd data-content="detail-value">
@@ -1040,10 +1027,7 @@ describe('SPA Agent Compatibility', () => {
       await page.waitForSelector('[data-spa-loaded="true"]');
 
       // Check agent context
-      const agentContext = await page.getAttribute(
-        'html',
-        'data-context'
-      );
+      const agentContext = await page.getAttribute('html', 'data-context');
       expect(agentContext).toBe('detected');
 
       // Verify agent enhancements
@@ -2092,9 +2076,7 @@ function App() {
   if (loading) {
     return (
       <div className="app-loading" data-component="loading-state">
-        <p data-content="loading-message">
-          Loading BiModal Design Store...
-        </p>
+        <p data-content="loading-message">Loading BiModal Design Store...</p>
       </div>
     );
   }
