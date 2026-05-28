@@ -155,7 +155,8 @@ node fr1-checker.js https://your-site.com --verbose
 </script>
 
 <!-- Layer 4: API documented via OpenAPI -->
-<!-- Layer 5: MCP server for protocol-native agents -->
+<!-- Layer 5: MCP server discovery for protocol-native agents -->
+<link rel="alternate" type="application/mcp+json" href="/mcp-server" />
 ```
 
 ---

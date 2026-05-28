@@ -79,14 +79,14 @@ This is a defense-in-depth problem, not a binary compliance check.
 ### **What's New in v3.0**
 
 - **Agent Capability Spectrum**: A six-level taxonomy replacing the binary
-  human/agent model, from HTTP retrievers through vision agents to
-  protocol-native agents
+  human/agent model, from HTTP retrievers through vision and computer-use agents
+  to protocol-native agents
 - **Defense in Depth Layer Model**: Five architectural layers ensuring graceful
   degradation across the entire agent spectrum
 - **Agent Protocol Integration**: Guidance for MCP, A2A, and NLWeb — the
   emerging protocols that let agents bypass the browser entirely
-- **Vision Agent Considerations**: How screen-reading agents change the design
-  calculus
+- **Vision and Computer-Use Agent Considerations**: How screen-reading agents
+  change the design calculus
 - **Expanded GEO Framework**: Deeper treatment of Generative Engine Optimization
   as AI-assisted discovery becomes a primary traffic channel
 - **Standards-Based Approach**: Migration from custom `data-agent-*` attributes
@@ -94,13 +94,13 @@ This is a defense-in-depth problem, not a binary compliance check.
 
 ### **Quantified Impact**
 
-| Metric                     | Conventional UI | BiModal Design v2.1 | BiModal Design v3.0 (Projected) |
-| -------------------------- | --------------- | ------------------- | ------------------------------- |
-| HTTP Retriever Success     | 12%             | 42-70%              | 42-70%                          |
-| Browser Automation Success | 25-40%          | 50-65%              | 70-85%                          |
-| Vision Agent Success       | 30-50%          | 45-60%              | 75-90%                          |
-| Protocol-Native Success    | N/A             | N/A                 | 90-95%                          |
-| GEO Discoverability        | Low             | Moderate            | High                            |
+| Metric                                | Conventional UI | BiModal Design v2.1 | BiModal Design v3.0 (Projected) |
+| ------------------------------------- | --------------- | ------------------- | ------------------------------- |
+| HTTP Retriever Success                | 12%             | 42-70%              | 42-70%                          |
+| Browser Automation Success            | 25-40%          | 50-65%              | 70-85%                          |
+| Vision and Computer-Use Agent Success | 30-50%          | 45-60%              | 75-90%                          |
+| Protocol-Native Success               | N/A             | N/A                 | 90-95%                          |
+| GEO Discoverability                   | Low             | Moderate            | High                            |
 
 _Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
 ST-WebAgentBench, Microsoft Build 2025, internal analysis_
@@ -262,10 +262,10 @@ range of agents can access it.
 - Validates with `curl` — if content is invisible to `curl`, it's invisible to
   ~40% of agents
 
-**Why it still matters**: Even as browser automation and vision agents grow,
-HTTP retrieval remains the most efficient, reliable, and cost-effective way for
-agents to access content. FR-1 compliance reduces latency, compute costs, and
-failure rates for all agent types.
+**Why it still matters**: Even as browser automation and vision and computer-use
+agents grow, HTTP retrieval remains the most efficient, reliable, and
+cost-effective way for agents to access content. FR-1 compliance reduces
+latency, compute costs, and failure rates for all agent types.
 
 ### **3.3 Layer 2 — Semantic Structure**
 
@@ -293,13 +293,17 @@ falling back to pure computer vision when the AOM fails. This reinforces the
 reliable interaction targets for OS agents, bypassing the unreliability of pure
 vision models exposed by WebArena-Verified.
 
+Furthermore, insights from **VisualWebArena** demonstrate that pure visual
+reasoning frequently fails in complex interfaces without strong textual and
+structural grounding. Layer 2 provides this essential grounding.
+
 ### **3.4 Layer 3 — Structured Data**
 
 **Purpose**: Provide machine-readable metadata that explicitly declares content
 types, relationships, and properties.
 
 **Serves**: Level 1 (LLM Browsers), Level 2 (Browser Automation), Level 3
-(Vision Agents)
+(Vision & Computer-Use Agents)
 
 **Requirements**:
 
@@ -357,12 +361,13 @@ significant advantage.
 The power of defense in depth is graceful degradation. If a Level 5 agent can't
 find an MCP server, it falls back to the API (Layer 4). If there's no API, it
 uses structured data and semantic HTML (Layers 2-3). If the page is CSR-only and
-Layers 1-3 are absent, only browser automation and vision agents (Levels 2-3)
-can access it — and unreliably.
+Layers 1-3 are absent, only browser automation and vision and computer-use
+agents (Levels 2-3) can access it — and unreliably.
 
 **The worst case**: A CSR-only application with no semantic structure, no
-structured data, no API, and no agent protocols. Only vision agents can interact
-with it, and they do so slowly, expensively, and with high failure rates.
+structured data, no API, and no agent protocols. Only vision and computer-use
+agents can interact with it, and they do so slowly, expensively, and with high
+failure rates.
 
 **The best case**: An application with server-rendered semantic HTML,
 comprehensive structured data, a documented API, and an MCP server. Every agent
@@ -495,8 +500,9 @@ protocol layers** — reinforcing the defense-in-depth approach.
 #### **1. Agent Diversity is Increasing**
 
 A year ago, most agents were Level 0-1. Today, browser automation (Level 2) and
-vision agents (Level 3) are mainstream, and protocol-native agents (Level 5) are
-emerging. Designing for a single agent type is no longer viable.
+vision and computer-use agents (Level 3) are mainstream, and protocol-native
+agents (Level 5) are emerging. Designing for a single agent type is no longer
+viable.
 
 #### **2. GEO is the New SEO**
 
@@ -955,6 +961,21 @@ interfaces designed specifically for machine consumption.
 
 ### **8.2 Model Context Protocol (MCP)**
 
+**Standardized Web Discovery:** As MCP matures, bridging the web (Layers 1-3)
+with protocols (Layer 5) is critical. Websites should announce their MCP servers
+natively in the DOM using standard HTML tags:
+`<link rel="alternate" type="application/mcp+json" href="https://api.example.com/mcp" />`
+This allows Level 2 and Level 3 agents browsing the site to discover and upgrade
+to a native protocol connection seamlessly.
+
+**Defensive Design & Safety (ST-WebAgentBench Insights):** Benchmarks like
+**ST-WebAgentBench** emphasize the necessity of safety and trustworthiness. When
+exposing actions via Layer 2 or tools via Layer 5, explicit constraints are
+mandatory to prevent destructive actions by autonomous agents. This includes
+leveraging standard HTML5 validation attributes (`required`, `pattern`, `min`,
+`max`) in Layer 2 to proactively constrain agent inputs before they even reach
+Layer 4/5.
+
 MCP, introduced by Anthropic in November 2024, has rapidly become the standard
 for connecting AI agents to external services. An MCP server exposes three
 primitives:
@@ -1052,41 +1073,45 @@ paths:
 
 ## **9. Vision & Computer-Use Agents & Browser Automation**
 
-Vision agents and browser automation fundamentally change one of BiModal Design
-v2.x's core assumptions: that agents can't execute JavaScript or see rendered
-content. This section addresses what this means for the framework.
+Vision and computer-use agents and browser automation fundamentally change one
+of BiModal Design v2.x's core assumptions: that agents can't execute JavaScript
+or see rendered content. This section addresses what this means for the
+framework.
 
 ### **9.1 What Vision & Computer-Use Agents Change**
 
-Vision agents (Level 3) interact with web pages the way humans do — they see the
-rendered page, identify UI elements visually, and click, type, and scroll. This
-means:
+Vision and computer-use agents (Level 3) interact with web pages the way humans
+do — they see the rendered page, identify UI elements visually, and click, type,
+and scroll. This means:
 
-- **CSR applications are accessible** to vision agents (they see the rendered
-  output)
+- **CSR applications are accessible** to vision and computer-use agents (they
+  see the rendered output)
 - **Visual design matters** for agent usability (contrast, spacing, clear
   affordances)
-- **FR-1 is not strictly necessary** for vision agent accessibility
+- **FR-1 is not strictly necessary** for vision and computer-use agent
+  accessibility
 
 ### **9.2 Why FR-1 Still Matters**
 
-Despite vision agents' ability to see CSR content, FR-1 remains critical for
-several reasons:
+Despite vision and computer-use agents' ability to see CSR content, FR-1 remains
+critical for several reasons:
 
-1. **Cost**: Vision agent interactions are 10-100x more expensive than HTTP
-   retrieval (GPU compute for screenshot analysis vs. text parsing)
-2. **Speed**: HTTP retrieval takes milliseconds; vision agent page loads take
-   seconds
-3. **Reliability**: Vision agents face the same failure modes as humans —
-   pop-ups, overlays, animations, loading spinners
+1. **Cost**: Vision and computer-use agent interactions are 10-100x more
+   expensive than HTTP retrieval (GPU compute for screenshot analysis vs. text
+   parsing)
+2. **Speed**: HTTP retrieval takes milliseconds; vision and computer-use agent
+   page loads take seconds
+3. **Reliability**: Vision and computer-use agents face the same failure modes
+   as humans — pop-ups, overlays, animations, loading spinners
 4. **Scale**: Organizations processing thousands of pages per hour cannot afford
-   vision agent overhead for content that could be served in plain HTML
-5. **GEO**: AI-assisted search engines use HTTP retrieval, not vision agents,
-   for content indexing
+   vision and computer-use agent overhead for content that could be served in
+   plain HTML
+5. **GEO**: AI-assisted search engines use HTTP retrieval, not vision and
+   computer-use agents, for content indexing
 
 **The principle**: Use the lightest-weight method that works. FR-1 serves the
-most agents at the lowest cost. Vision agents are the expensive fallback, not
-the primary design target.
+most agents at the lowest cost. Vision and computer-use agents are the expensive
+fallback, not the primary design target.
 
 ### **9.3 Designing for Browser Automation**
 
@@ -1124,12 +1149,12 @@ Design considerations:
 
 ### **9.4 Designing for Vision & Computer-Use Agents**
 
-Vision agents read screenshots. Design considerations:
+Vision and computer-use agents read screenshots. Design considerations:
 
 - **Clear visual hierarchy**: Large, readable headings; distinct sections;
   adequate spacing
-- **Consistent layout**: Vision agents rely on spatial patterns — keep
-  navigation, content, and actions in predictable locations
+- **Consistent layout**: Vision and computer-use agents rely on spatial patterns
+  — keep navigation, content, and actions in predictable locations
 - **Visible affordances**: Buttons should look like buttons; links should be
   distinguishable from text
 - **Readable typography**: Minimum 16px body text; sufficient contrast ratios
