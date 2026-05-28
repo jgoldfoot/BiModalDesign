@@ -427,6 +427,9 @@ Serve content at multiple levels simultaneously:
 
 <!-- Layer 4: API link for programmatic access -->
 <link rel="api" href="/api/openapi.json" />
+
+<!-- Layer 5: MCP Server Discovery -->
+<link rel="alternate" type="application/mcp+json" href="/mcp-server" />
 ```
 
 ### Pattern 5: Focus Management for Keyboard Agents
@@ -444,6 +447,34 @@ function showModal() {
   const firstInput = modal.querySelector('input');
   if (firstInput) firstInput.focus();
 }
+```
+
+### Pattern 6: Defensive Form Constraints (Safety)
+
+Agents evaluated in benchmarks like **ST-WebAgentBench** can make destructive
+mistakes if inputs aren't constrained. Use standard HTML5 validation to
+proactively guide agent tool use:
+
+```html
+<form id="transfer-funds-form">
+  <!-- The pattern and min/max explicitly constrain agent behavior before submission -->
+  <input
+    type="text"
+    name="account"
+    required
+    pattern="[0-9]{10}"
+    aria-label="10-digit Account Number"
+  />
+  <input
+    type="number"
+    name="amount"
+    required
+    min="1"
+    max="5000"
+    aria-label="Transfer Amount (Max 5000)"
+  />
+  <button type="submit" aria-label="Confirm Transfer">Transfer</button>
+</form>
 ```
 
 ## Testing and Validation
