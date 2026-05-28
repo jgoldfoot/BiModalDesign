@@ -98,13 +98,22 @@ Five architectural layers ensure every agent type is served:
 Layer 5: Agent Protocols      (MCP, A2A, NLWeb)           → Level 5
 Layer 4: API Surface           (REST, GraphQL, OpenAPI)    → Level 4-5
 Layer 3: Structured Data       (schema.org, JSON-LD)      → Level 1-3
-Layer 2: Semantic Structure    (HTML5, ARIA, headings)     → Level 1-3
+Layer 2: Semantic Structure    (HTML5, ARIA, headings, WCAG 2.2 AA) → Level 1-3
 Layer 1: Content Accessibility (FR-1: SSR/SSG)             → Level 0-1
 ```
 
 Each layer serves a different segment of the spectrum. Together, they ensure
 graceful degradation — if an agent can't use Layer 5, it falls back to Layer 4,
 then Layer 3, and so on.
+
+---
+
+## Key Research Findings
+
+Research and benchmarks indicate significant improvements when adhering to BiModal Design:
+
+- **12% baseline success** for HTTP Retrievers on conventional CSR sites, improving to **42-70%** with Layer 1 compliance.
+- **72% baseline success** for Browser Automation agents on conventional UI, improving up to **75-88%** with structured data and semantics.
 
 ---
 
@@ -124,7 +133,7 @@ If this returns semantic HTML with content — you pass Layer 1. If it returns
 
 ```bash
 cd tools/validators
-node fr1-checker.js https://your-site.com --verbose
+node fr1-validator.js https://your-site.com
 ```
 
 ### 3. Implement Core Patterns
@@ -165,7 +174,7 @@ node fr1-checker.js https://your-site.com --verbose
 ### FR-1: Initial Payload Accessibility
 
 The foundational requirement: critical content must exist in the initial HTTP
-response. This is Layer 1 of defense in depth — the floor, not the ceiling.
+response. Our validator verifies not only text length, but also checks for semantic structure and the absence of an empty SPA shell (`<div id="root">`). This is Layer 1 of defense in depth — the floor, not the ceiling.
 
 ### Standards Over Custom Attributes
 

@@ -12,10 +12,10 @@
 ---
 
 ```jsx
-<button onClick={() => navigate('/')} data-agent-action="go-home" className="btn
+<button onClick={() => navigate('/')} data-action="go-home" className="btn
 btn-primary" > Go Home </button> </div> ); } };
 
-return ( <div className="router-container" data-agent-component="spa-router">
+return ( <div className="router-container" data-component="spa-router">
 {getRouteComponent()} </div> ); };
 
 export default Router;
@@ -59,7 +59,7 @@ const Navigation = ({ isAgent }) => {
       <a
         href={to}
         onClick={handleClick}
-        data-agent-action={action}
+        data-action={action}
         aria-current={ariaCurrent}
         className={`nav-link ${ariaCurrent === 'page' ? 'active' : ''}`}
       >
@@ -75,8 +75,8 @@ const Navigation = ({ isAgent }) => {
       className="main-navigation"
       role="navigation"
       aria-label="Main navigation"
-      data-agent-component="navigation"
-      data-agent-enhanced={isAgent}
+      data-component="navigation"
+      data-enhanced={isAgent}
     >
       <div className="nav-container">
         <NavLink
@@ -84,7 +84,7 @@ const Navigation = ({ isAgent }) => {
           action="go-home"
           ariaCurrent={currentPath === '/' ? 'page' : undefined}
         >
-          <span className="logo" data-agent-content="site-name">
+          <span className="logo" data-content="site-name">
             BiModal Design Store
           </span>
         </NavLink>
@@ -120,7 +120,7 @@ const Navigation = ({ isAgent }) => {
         </ul>
 
         {isAgent && (
-          <div className="agent-status" data-agent-component="status-indicator">
+          <div className="agent-status" data-component="status-indicator">
             <span role="img" aria-label="Agent detected">🤖</span>
             <span className="sr-only">Agent-optimized interface</span>
           </div>
@@ -193,10 +193,10 @@ const Home = ({ navigate, isAgent, agentInfo }) => {
     return (
       <div
         className="loading-state"
-        data-agent-component="loading"
+        data-component="loading"
         role="status"
       >
-        <p data-agent-content="loading-message" aria-live="polite">
+        <p data-content="loading-message" aria-live="polite">
           Loading featured products...
         </p>
       </div>
@@ -205,12 +205,12 @@ const Home = ({ navigate, isAgent, agentInfo }) => {
 
   if (error) {
     return (
-      <div className="error-state" data-agent-component="error" role="alert">
-        <h2 data-agent-content="error-title">Unable to Load Products</h2>
-        <p data-agent-content="error-message">{error}</p>
+      <div className="error-state" data-component="error" role="alert">
+        <h2 data-content="error-title">Unable to Load Products</h2>
+        <p data-content="error-message">{error}</p>
         <button
           onClick={() => window.location.reload()}
-          data-agent-action="retry-loading"
+          data-action="retry-loading"
           className="btn btn-primary"
         >
           Try Again
@@ -222,20 +222,20 @@ const Home = ({ navigate, isAgent, agentInfo }) => {
   return (
     <div
       className="home-page"
-      data-agent-page="home"
-      data-agent-content-type="product-showcase"
+      data-page="home"
+      data-content-type="product-showcase"
     >
       {/* Hero Section */}
       <section
         className="hero"
-        data-agent-component="hero-banner"
+        data-component="hero-banner"
         role="banner"
       >
         <div className="container">
-          <h1 data-agent-content="page-title">
+          <h1 data-content="page-title">
             Welcome to the Future of Agent-Human Interaction
           </h1>
-          <p data-agent-content="page-description" className="hero-subtitle">
+          <p data-content="page-description" className="hero-subtitle">
             Discover products designed with BiModal Design principles -
             optimized for both AI agents and human users
           </p>
@@ -246,7 +246,7 @@ const Home = ({ navigate, isAgent, agentInfo }) => {
                 navigate('/products');
               }}
               className="btn btn-primary"
-              data-agent-action="view-all-products"
+              data-action="view-all-products"
             >
               Browse All Products
             </button>
@@ -256,7 +256,7 @@ const Home = ({ navigate, isAgent, agentInfo }) => {
                 navigate('/contact');
               }}
               className="btn btn-secondary"
-              data-agent-action="get-consultation"
+              data-action="get-consultation"
             >
               Get Consultation
             </button>
@@ -267,23 +267,23 @@ const Home = ({ navigate, isAgent, agentInfo }) => {
       {/* Featured Products Section */}
       <section
         className="featured-products"
-        data-agent-component="featured-products"
+        data-component="featured-products"
         role="region"
         aria-labelledby="featured-heading"
       >
         <div className="container">
-          <h2 id="featured-heading" data-agent-content="section-title">
+          <h2 id="featured-heading" data-content="section-title">
             Featured Products
           </h2>
-          <p data-agent-content="section-description">
+          <p data-content="section-description">
             Our top-rated products that showcase BiModal Design design
             principles
           </p>
 
           <div
             className="products-grid"
-            data-agent-component="product-list"
-            data-agent-list-type="featured"
+            data-component="product-list"
+            data-list-type="featured"
             role="list"
             aria-label="Featured products"
           >
@@ -302,12 +302,12 @@ const Home = ({ navigate, isAgent, agentInfo }) => {
       {/* Benefits Section */}
       <section
         className="benefits"
-        data-agent-component="benefits-section"
+        data-component="benefits-section"
         role="region"
         aria-labelledby="benefits-heading"
       >
         <div className="container">
-          <h2 id="benefits-heading" data-agent-content="section-title">
+          <h2 id="benefits-heading" data-content="section-title">
             Why Choose BiModal Design Products?
           </h2>
 
@@ -362,8 +362,8 @@ const ProductCard = ({ product, isAgent, onClick }) => {
   return (
     <article
       className="product-card"
-      data-agent-component="product-card"
-      data-agent-product-id={product.id}
+      data-component="product-card"
+      data-product-id={product.id}
       role="listitem"
       itemScope
       itemType="https://schema.org/Product"
@@ -374,7 +374,7 @@ const ProductCard = ({ product, isAgent, onClick }) => {
           alt={`${product.name} - ${product.description}`}
           className="product-image"
           itemProp="image"
-          data-agent-content="product-image"
+          data-content="product-image"
           loading="lazy"
         />
       </div>
@@ -383,7 +383,7 @@ const ProductCard = ({ product, isAgent, onClick }) => {
         <h3
           className="product-name"
           itemProp="name"
-          data-agent-content="product-name"
+          data-content="product-name"
         >
           {product.name}
         </h3>
@@ -391,7 +391,7 @@ const ProductCard = ({ product, isAgent, onClick }) => {
         <p
           className="product-description"
           itemProp="description"
-          data-agent-content="product-description"
+          data-content="product-description"
         >
           {product.description}
         </p>
@@ -402,7 +402,7 @@ const ProductCard = ({ product, isAgent, onClick }) => {
             itemProp="offers"
             itemScope
             itemType="https://schema.org/Offer"
-            data-agent-content="product-price"
+            data-content="product-price"
           >
             <meta itemProp="currency" content="USD" />
             <span itemProp="price" content={product.price.toString()}>
@@ -414,8 +414,8 @@ const ProductCard = ({ product, isAgent, onClick }) => {
         <button
           onClick={onClick}
           className="btn btn-primary"
-          data-agent-action="view-product-details"
-          data-agent-product-id={product.id}
+          data-action="view-product-details"
+          data-product-id={product.id}
           aria-label={`View details for ${product.name}`}
         >
           View Details
@@ -427,12 +427,12 @@ const ProductCard = ({ product, isAgent, onClick }) => {
 
 const BenefitCard = ({ icon, title, description }) => {
   return (
-    <article className="benefit-card" data-agent-component="benefit-item">
+    <article className="benefit-card" data-component="benefit-item">
       <div className="benefit-icon" role="img" aria-label={title}>
         {icon}
       </div>
-      <h3 data-agent-content="benefit-title">{title}</h3>
-      <p data-agent-content="benefit-description">{description}</p>
+      <h3 data-content="benefit-title">{title}</h3>
+      <p data-content="benefit-description">{description}</p>
     </article>
   );
 };
@@ -455,63 +455,63 @@ const AgentFallback = ({ agentInfo }) => {
   return (
     <div
       className="agent-fallback"
-      data-agent-component="fallback-interface"
+      data-component="fallback-interface"
       role="main"
     >
       <div className="container">
         <header className="fallback-header">
-          <h1 data-agent-content="fallback-title">Agent-Optimized Interface</h1>
-          <p data-agent-content="fallback-subtitle">
+          <h1 data-content="fallback-title">Agent-Optimized Interface</h1>
+          <p data-content="fallback-subtitle">
             Welcome, {agentInfo.type || 'AI Agent'}!
           </p>
         </header>
 
         <section
           className="fallback-content"
-          data-agent-component="fallback-content"
+          data-component="fallback-content"
         >
-          <h2 data-agent-content="section-title">Available Options</h2>
+          <h2 data-content="section-title">Available Options</h2>
 
           <div className="fallback-options">
-            <div className="option-card" data-agent-component="option-item">
-              <h3 data-agent-content="option-title">Static Content Access</h3>
-              <p data-agent-content="option-description">
+            <div className="option-card" data-component="option-item">
+              <h3 data-content="option-title">Static Content Access</h3>
+              <p data-content="option-description">
                 Access our content through optimized static pages with full
                 semantic markup.
               </p>
               <a
                 href="/"
                 className="btn btn-primary"
-                data-agent-action="access-static-content"
+                data-action="access-static-content"
               >
                 View Static Site
               </a>
             </div>
 
-            <div className="option-card" data-agent-component="option-item">
-              <h3 data-agent-content="option-title">API Access</h3>
-              <p data-agent-content="option-description">
+            <div className="option-card" data-component="option-item">
+              <h3 data-content="option-title">API Access</h3>
+              <p data-content="option-description">
                 Direct API access for programmatic interaction with our
                 services.
               </p>
               <a
                 href="/api/docs"
                 className="btn btn-secondary"
-                data-agent-action="view-api-docs"
+                data-action="view-api-docs"
               >
                 API Documentation
               </a>
             </div>
 
-            <div className="option-card" data-agent-component="option-item">
-              <h3 data-agent-content="option-title">Contact Support</h3>
-              <p data-agent-content="option-description">
+            <div className="option-card" data-component="option-item">
+              <h3 data-content="option-title">Contact Support</h3>
+              <p data-content="option-description">
                 Get assistance with agent-specific integration needs.
               </p>
               <a
                 href="/contact"
                 className="btn btn-secondary"
-                data-agent-action="get-agent-support"
+                data-action="get-agent-support"
               >
                 Contact Us
               </a>
@@ -519,19 +519,19 @@ const AgentFallback = ({ agentInfo }) => {
           </div>
         </section>
 
-        <section className="agent-info" data-agent-component="agent-details">
-          <h2 data-agent-content="section-title">Detected Agent Information</h2>
+        <section className="agent-info" data-component="agent-details">
+          <h2 data-content="section-title">Detected Agent Information</h2>
           <dl className="agent-details-list">
-            <dt data-agent-content="detail-label">User Agent:</dt>
-            <dd data-agent-content="detail-value">{agentInfo.userAgent}</dd>
+            <dt data-content="detail-label">User Agent:</dt>
+            <dd data-content="detail-value">{agentInfo.userAgent}</dd>
 
-            <dt data-agent-content="detail-label">Agent Type:</dt>
-            <dd data-agent-content="detail-value">
+            <dt data-content="detail-label">Agent Type:</dt>
+            <dd data-content="detail-value">
               {agentInfo.type || 'Unknown'}
             </dd>
 
-            <dt data-agent-content="detail-label">Capabilities:</dt>
-            <dd data-agent-content="detail-value">
+            <dt data-content="detail-label">Capabilities:</dt>
+            <dd data-content="detail-value">
               {agentInfo.capabilities
                 ? Object.entries(agentInfo.capabilities)
                     .filter(([key, value]) => value)
@@ -543,7 +543,7 @@ const AgentFallback = ({ agentInfo }) => {
         </section>
 
         <footer className="fallback-footer">
-          <p data-agent-content="footer-message">{fallbackMessage}</p>
+          <p data-content="footer-message">{fallbackMessage}</p>
         </footer>
       </div>
     </div>
@@ -720,13 +720,13 @@ export const enhanceForAgents = (agentInfo) => {
   if (!agentInfo.isAgent) return;
 
   // Add agent context to document
-  document.documentElement.setAttribute('data-agent-context', 'detected');
+  document.documentElement.setAttribute('data-context', 'detected');
   document.documentElement.setAttribute(
-    'data-agent-type',
+    'data-type',
     agentInfo.type || 'unknown'
   );
   document.documentElement.setAttribute(
-    'data-agent-category',
+    'data-category',
     agentInfo.category || 'unknown'
   );
 
@@ -756,31 +756,31 @@ export const enhanceForAgents = (agentInfo) => {
 
 const enhanceSemanticMarkup = () => {
   // Add missing semantic attributes to buttons
-  const buttons = document.querySelectorAll('button:not([data-agent-action])');
+  const buttons = document.querySelectorAll('button:not([data-action])');
   buttons.forEach((button) => {
     const text = button.textContent.toLowerCase();
     if (text.includes('submit') || text.includes('send')) {
-      button.setAttribute('data-agent-action', 'submit-form');
+      button.setAttribute('data-action', 'submit-form');
     } else if (text.includes('search')) {
-      button.setAttribute('data-agent-action', 'perform-search');
+      button.setAttribute('data-action', 'perform-search');
     } else if (text.includes('buy') || text.includes('purchase')) {
-      button.setAttribute('data-agent-action', 'initiate-purchase');
+      button.setAttribute('data-action', 'initiate-purchase');
     }
   });
 
   // Enhance links
-  const links = document.querySelectorAll('a:not([data-agent-action])');
+  const links = document.querySelectorAll('a:not([data-action])');
   links.forEach((link) => {
     const href = link.getAttribute('href');
     const text = link.textContent.toLowerCase();
 
     if (href) {
       if (href.includes('product')) {
-        link.setAttribute('data-agent-action', 'view-product');
+        link.setAttribute('data-action', 'view-product');
       } else if (href.includes('contact')) {
-        link.setAttribute('data-agent-action', 'get-support');
+        link.setAttribute('data-action', 'get-support');
       } else if (href === '/' || href.includes('home')) {
-        link.setAttribute('data-agent-action', 'go-home');
+        link.setAttribute('data-action', 'go-home');
       }
     }
   });
@@ -789,7 +789,7 @@ const enhanceSemanticMarkup = () => {
 const enhanceNavigation = (agentInfo) => {
   // Add breadcrumbs for better agent navigation context
   const nav = document.querySelector('nav[role="navigation"]');
-  if (nav && !nav.querySelector('[data-agent-breadcrumbs]')) {
+  if (nav && !nav.querySelector('[data-breadcrumbs]')) {
     const breadcrumbs = createBreadcrumbs();
     if (breadcrumbs) {
       nav.appendChild(breadcrumbs);
@@ -810,10 +810,10 @@ const createBreadcrumbs = () => {
 
   const breadcrumbs = document.createElement('nav');
   breadcrumbs.setAttribute('aria-label', 'Breadcrumb');
-  breadcrumbs.setAttribute('data-agent-breadcrumbs', 'true');
+  breadcrumbs.setAttribute('data-breadcrumbs', 'true');
   breadcrumbs.innerHTML = `
     <ol role="list" style="display: flex; gap: 0.5rem; margin: 0; padding: 0.5rem; background: #f8f9fa; font-size: 0.875rem;">
-      <li><a href="/" data-agent-action="go-home">Home</a></li>
+      <li><a href="/" data-action="go-home">Home</a></li>
       ${segments
         .map((segment, index) => {
           const path = '/' + segments.slice(0, index + 1).join('/');
@@ -825,8 +825,8 @@ const createBreadcrumbs = () => {
             <span aria-hidden="true"> › </span>
             ${
               isLast
-                ? `<span aria-current="page" data-agent-content="current-page">${label}</span>`
-                : `<a href="${path}" data-agent-action="navigate-to-${segment}">${label}</a>`
+                ? `<span aria-current="page" data-content="current-page">${label}</span>`
+                : `<a href="${path}" data-action="navigate-to-${segment}">${label}</a>`
             }
           </li>
         `;
@@ -843,7 +843,7 @@ const addSkipLinks = () => {
   skipLink.href = '#main-content';
   skipLink.textContent = 'Skip to main content';
   skipLink.className = 'skip-link';
-  skipLink.setAttribute('data-agent-action', 'skip-to-content');
+  skipLink.setAttribute('data-action', 'skip-to-content');
   skipLink.style.cssText = `
     position: absolute;
     top: -40px;
@@ -870,14 +870,14 @@ const addSkipLinks = () => {
 const enhanceForms = () => {
   const forms = document.querySelectorAll('form');
   forms.forEach((form) => {
-    if (!form.hasAttribute('data-agent-component')) {
-      form.setAttribute('data-agent-component', 'form');
+    if (!form.hasAttribute('data-component')) {
+      form.setAttribute('data-component', 'form');
     }
 
     // Enhance form fields
     const fields = form.querySelectorAll('input, select, textarea');
     fields.forEach((field) => {
-      if (!field.hasAttribute('data-agent-field')) {
+      if (!field.hasAttribute('data-field')) {
         const label = form.querySelector(`label[for="${field.id}"]`);
         if (label) {
           const fieldType = label.textContent
@@ -885,7 +885,7 @@ const enhanceForms = () => {
             .replace(/[^a-z0-9]/g, '-')
             .replace(/-+/g, '-')
             .replace(/^-|-$/g, '');
-          field.setAttribute('data-agent-field', fieldType);
+          field.setAttribute('data-field', fieldType);
         }
       }
     });
@@ -921,7 +921,7 @@ const applyPerformanceOptimizations = (agentInfo) => {
   if (agentInfo.preferences.preferSimpleUI) {
     const style = document.createElement('style');
     style.textContent = `
-      [data-agent-context="detected"] * {
+      [data-context="detected"] * {
         animation-duration: 0.01ms !important;
         animation-delay: -0.01ms !important;
         transition-duration: 0.01ms !important;
@@ -998,11 +998,11 @@ describe('SPA Agent Compatibility', () => {
       expect(response.headers()['x-agent-optimized']).toBe('true');
 
       // Check for agent-specific markup
-      const agentMode = await page.getAttribute('html', 'data-agent-mode');
+      const agentMode = await page.getAttribute('html', 'data-mode');
       expect(agentMode).toBe('ssr-fallback');
 
       // Verify content is immediately available
-      const title = await page.textContent('[data-agent-content="page-title"]');
+      const title = await page.textContent('[data-content="page-title"]');
       expect(title).toContain('BiModal Design Store');
 
       // Check structured data
@@ -1017,14 +1017,14 @@ describe('SPA Agent Compatibility', () => {
       await page.goto('http://localhost:3000/');
 
       // Wait for SPA to load
-      await page.waitForSelector('[data-agent-spa="true"]');
+      await page.waitForSelector('[data-spa="true"]');
 
       // Verify SPA functionality
-      const isSPA = await page.getAttribute('.app', 'data-agent-spa');
+      const isSPA = await page.getAttribute('.app', 'data-spa');
       expect(isSPA).toBe('true');
 
       // Test client-side navigation
-      await page.click('[data-agent-action="view-products"]');
+      await page.click('[data-action="view-products"]');
       await page.waitForURL('**/products');
 
       // Verify URL changed without page reload
@@ -1037,21 +1037,21 @@ describe('SPA Agent Compatibility', () => {
       await page.setUserAgent('TestBot/1.0 (compatible; Agent)');
       await page.goto('http://localhost:3000/');
 
-      await page.waitForSelector('[data-agent-spa-loaded="true"]');
+      await page.waitForSelector('[data-spa-loaded="true"]');
 
       // Check agent context
       const agentContext = await page.getAttribute(
         'html',
-        'data-agent-context'
+        'data-context'
       );
       expect(agentContext).toBe('detected');
 
       // Verify agent enhancements
-      const agentActions = await page.$('[data-agent-action]');
+      const agentActions = await page.$('[data-action]');
       expect(agentActions.length).toBeGreaterThan(0);
 
       // Check skip links
-      const skipLink = await page.$('[data-agent-action="skip-to-content"]');
+      const skipLink = await page.$('[data-action="skip-to-content"]');
       expect(skipLink).toBeTruthy();
     });
 
@@ -1069,10 +1069,10 @@ describe('SPA Agent Compatibility', () => {
 
       await page.setUserAgent('TestBot/1.0');
       await page.goto('http://localhost:3000/');
-      await page.waitForSelector('[data-agent-spa-loaded="true"]');
+      await page.waitForSelector('[data-spa-loaded="true"]');
 
       // Trigger agent interaction
-      await page.click('[data-agent-action="view-products"]');
+      await page.click('[data-action="view-products"]');
 
       // Verify analytics tracking
       expect(analyticsRequests.length).toBeGreaterThan(0);
@@ -1092,7 +1092,7 @@ describe('SPA Agent Compatibility', () => {
       await page.goto('http://localhost:3000/');
 
       // Measure time to content
-      await page.waitForSelector('[data-agent-content="page-title"]');
+      await page.waitForSelector('[data-content="page-title"]');
       const loadTime = Date.now() - startTime;
 
       // Agent pages should load quickly
@@ -1114,7 +1114,7 @@ describe('SPA Agent Compatibility', () => {
   describe('Accessibility Compliance', () => {
     test('Maintains accessibility standards', async () => {
       await page.goto('http://localhost:3000/');
-      await page.waitForSelector('[data-agent-spa-loaded="true"]');
+      await page.waitForSelector('[data-spa-loaded="true"]');
 
       // Check semantic structure
       const main = await page.$('main[role="main"]');
@@ -1161,7 +1161,7 @@ describe('SPA Agent Compatibility', () => {
         expect(title.length).toBeGreaterThan(0);
 
         // Check for agent-specific attributes
-        const agentComponents = await page.$('[data-agent-component]');
+        const agentComponents = await page.$('[data-component]');
         expect(agentComponents.length).toBeGreaterThan(0);
       });
     });
@@ -1252,7 +1252,7 @@ class SPAPerformanceMonitor {
       mutations.forEach((mutation) => {
         if (
           mutation.type === 'attributes' &&
-          mutation.attributeName === 'data-agent-spa-loaded'
+          mutation.attributeName === 'data-spa-loaded'
         ) {
           this.metrics.spaReady = performance.now();
           observer.disconnect();
@@ -1263,7 +1263,7 @@ class SPAPerformanceMonitor {
 
     observer.observe(document.body, {
       attributes: true,
-      attributeFilter: ['data-agent-spa-loaded'],
+      attributeFilter: ['data-spa-loaded'],
     });
   }
 
@@ -1285,11 +1285,11 @@ class SPAPerformanceMonitor {
 
   trackAgentInteractions() {
     document.addEventListener('click', (event) => {
-      const target = event.target.closest('[data-agent-action]');
+      const target = event.target.closest('[data-action]');
       if (target) {
         this.metrics.agentInteractions.push({
-          action: target.getAttribute('data-agent-action'),
-          component: target.getAttribute('data-agent-component'),
+          action: target.getAttribute('data-action'),
+          component: target.getAttribute('data-component'),
           timestamp: Date.now(),
           element: target.tagName.toLowerCase(),
           text: target.textContent.trim().substring(0, 50),
@@ -1705,7 +1705,7 @@ const serveAgentHome = async (req, res) => {
 
     const html = `
 <!DOCTYPE html>
-<html lang="en" data-agent-framework="react-spa" data-agent-mode="ssr-fallback">
+<html lang="en" data-framework="react-spa" data-mode="ssr-fallback">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1748,47 +1748,47 @@ const serveAgentHome = async (req, res) => {
 </head>
 <body data-agent-rendered="ssr">
   <header role="banner">
-    <nav class="nav" role="navigation" aria-label="Main navigation" data-agent-component="navigation">
+    <nav class="nav" role="navigation" aria-label="Main navigation" data-component="navigation">
       <div class="container">
         <ul role="list">
-          <li><a href="/" data-agent-action="go-home" aria-current="page">Home</a></li>
-          <li><a href="/products" data-agent-action="view-products">Products</a></li>
-          <li><a href="/contact" data-agent-action="get-support">Contact</a></li>
+          <li><a href="/" data-action="go-home" aria-current="page">Home</a></li>
+          <li><a href="/products" data-action="view-products">Products</a></li>
+          <li><a href="/contact" data-action="get-support">Contact</a></li>
         </ul>
       </div>
     </nav>
   </header>
 
-  <main role="main" id="main-content" data-agent-component="main-content">
-    <section class="hero" data-agent-component="hero-banner">
+  <main role="main" id="main-content" data-component="main-content">
+    <section class="hero" data-component="hero-banner">
       <div class="container">
-        <h1 data-agent-content="page-title">Welcome to BiModal Design Store</h1>
-        <p data-agent-content="page-description">
+        <h1 data-content="page-title">Welcome to BiModal Design Store</h1>
+        <p data-content="page-description">
           Discover products designed for both humans and AI agents
         </p>
-        <a href="/products" class="btn" data-agent-action="view-all-products">
+        <a href="/products" class="btn" data-action="view-all-products">
           Browse All Products
         </a>
       </div>
     </section>
 
-    <section class="container" data-agent-component="featured-products">
-      <h2 data-agent-content="section-title">Featured Products</h2>
+    <section class="container" data-component="featured-products">
+      <h2 data-content="section-title">Featured Products</h2>
       <div class="products-grid" role="list">
         ${products.map(product => `
-          <article class="product-card" data-agent-component="product-card"
-                   data-agent-product-id="${product.id}" role="listitem"
+          <article class="product-card" data-component="product-card"
+                   data-product-id="${product.id}" role="listitem"
                    itemscope itemtype="https://schema.org/Product">
-            <h3 data-agent-content="product-name" itemprop="name">${product.name}</h3>
-            <p data-agent-content="product-description" itemprop="description">${product.description}</p>
-            <div class="product-price" data-agent-content="product-price"
+            <h3 data-content="product-name" itemprop="name">${product.name}</h3>
+            <p data-content="product-description" itemprop="description">${product.description}</p>
+            <div class="product-price" data-content="product-price"
                  itemprop="offers" itemscope itemtype="https://schema.org/Offer">
               <span itemprop="price" content="${product.price}">$${product.price}</span>
               <meta itemprop="priceCurrency" content="USD">
             </div>
             <a href="/products/${product.id}" class="btn"
-               data-agent-action="view-product-details"
-               data-agent-product-id="${product.id}">
+               data-action="view-product-details"
+               data-product-id="${product.id}">
               View Details
             </a>
           </article>
@@ -1797,14 +1797,14 @@ const serveAgentHome = async (req, res) => {
     </section>
   </main>
 
-  <footer role="contentinfo" data-agent-component="site-footer">
+  <footer role="contentinfo" data-component="site-footer">
     <div class="container">
       <p>&copy; 2025 BiModal Design Store. Designed for humans and AI agents.</p>
       <nav aria-label="Footer navigation">
         <ul role="list" style="display: flex; gap: 1rem; list-style: none; padding: 0;">
-          <li><a href="/privacy" data-agent-action="view-privacy">Privacy</a></li>
-          <li><a href="/terms" data-agent-action="view-terms">Terms</a></li>
-          <li><a href="/sitemap.xml" data-agent-action="view-sitemap">Sitemap</a></li>
+          <li><a href="/privacy" data-action="view-privacy">Privacy</a></li>
+          <li><a href="/terms" data-action="view-terms">Terms</a></li>
+          <li><a href="/sitemap.xml" data-action="view-sitemap">Sitemap</a></li>
         </ul>
       </nav>
     </div>
@@ -1840,7 +1840,7 @@ const serveAgentProducts = async (req, res) => {
 
     const html = `
 <!DOCTYPE html>
-<html lang="en" data-agent-framework="react-spa" data-agent-mode="ssr-fallback">
+<html lang="en" data-framework="react-spa" data-mode="ssr-fallback">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1889,50 +1889,50 @@ const serveAgentProducts = async (req, res) => {
 </head>
 <body data-agent-rendered="ssr">
   <header role="banner">
-    <nav class="nav" role="navigation" aria-label="Main navigation" data-agent-component="navigation">
+    <nav class="nav" role="navigation" aria-label="Main navigation" data-component="navigation">
       <div class="container">
         <ul role="list">
-          <li><a href="/" data-agent-action="go-home">Home</a></li>
-          <li><a href="/products" data-agent-action="view-products" aria-current="page">Products</a></li>
-          <li><a href="/contact" data-agent-action="get-support">Contact</a></li>
+          <li><a href="/" data-action="go-home">Home</a></li>
+          <li><a href="/products" data-action="view-products" aria-current="page">Products</a></li>
+          <li><a href="/contact" data-action="get-support">Contact</a></li>
         </ul>
       </div>
     </nav>
   </header>
 
-  <main role="main" id="main-content" data-agent-component="main-content">
+  <main role="main" id="main-content" data-component="main-content">
     <div class="container">
-      <h1 data-agent-content="page-title">Product Catalog</h1>
+      <h1 data-content="page-title">Product Catalog</h1>
 
       <!-- Search form for agents -->
       <form class="search-form" role="search" method="GET" action="/products"
-            data-agent-component="product-search">
+            data-component="product-search">
         <label for="search" class="sr-only">Search products</label>
         <input type="search" id="search" name="q" value="${query}"
-               placeholder="Search products..." data-agent-field="search-query">
-        <button type="submit" data-agent-action="search-products">Search</button>
+               placeholder="Search products..." data-field="search-query">
+        <button type="submit" data-action="search-products">Search</button>
       </form>
 
-      ${query ? `<p data-agent-content="search-results">Showing results for: "${query}" (${products.length} products found)</p>` : ''}
+      ${query ? `<p data-content="search-results">Showing results for: "${query}" (${products.length} products found)</p>` : ''}
 
-      <div class="products-grid" role="list" data-agent-component="product-list"
-           data-agent-count="${products.length}">
+      <div class="products-grid" role="list" data-component="product-list"
+           data-count="${products.length}">
         ${products.map(product => `
-          <article class="product-card" data-agent-component="product-card"
-                   data-agent-product-id="${product.id}" role="listitem"
+          <article class="product-card" data-component="product-card"
+                   data-product-id="${product.id}" role="listitem"
                    itemscope itemtype="https://schema.org/Product">
-            <h3 data-agent-content="product-name" itemprop="name">${product.name}</h3>
-            <p data-agent-content="product-description" itemprop="description">${product.description}</p>
-            <p data-agent-content="product-category">Category: ${product.category}</p>
-            <div class="product-price" data-agent-content="product-price"
+            <h3 data-content="product-name" itemprop="name">${product.name}</h3>
+            <p data-content="product-description" itemprop="description">${product.description}</p>
+            <p data-content="product-category">Category: ${product.category}</p>
+            <div class="product-price" data-content="product-price"
                  itemprop="offers" itemscope itemtype="https://schema.org/Offer">
               <span itemprop="price" content="${product.price}">$${product.price}</span>
               <meta itemprop="priceCurrency" content="USD">
               <meta itemprop="availability" content="https://schema.org/InStock">
             </div>
             <a href="/products/${product.id}" class="btn"
-               data-agent-action="view-product-details"
-               data-agent-product-id="${product.id}">
+               data-action="view-product-details"
+               data-product-id="${product.id}">
               View Details
             </a>
           </article>
@@ -1940,18 +1940,18 @@ const serveAgentProducts = async (req, res) => {
       </div>
 
       ${products.length === 0 ? `
-        <div data-agent-component="empty-state" role="status">
+        <div data-component="empty-state" role="status">
           <h2>No products found</h2>
-          <p data-agent-content="empty-message">
+          <p data-content="empty-message">
             ${query ? `No products match your search for "${query}".` : 'No products are currently available.'}
           </p>
-          ${query ? '<a href="/products" class="btn" data-agent-action="clear-search">View All Products</a>' : ''}
+          ${query ? '<a href="/products" class="btn" data-action="clear-search">View All Products</a>' : ''}
         </div>
       ` : ''}
     </div>
   </main>
 
-  <footer role="contentinfo" data-agent-component="site-footer">
+  <footer role="contentinfo" data-component="site-footer">
     <div class="container">
       <p>&copy; 2025 BiModal Design Store. ${products.length} products available.</p>
     </div>
@@ -2077,7 +2077,7 @@ function App() {
       }
 
       // Mark app as loaded for agent analytics
-      document.body.setAttribute('data-agent-spa-loaded', 'true');
+      document.body.setAttribute('data-spa-loaded', 'true');
       setLoading(false);
     };
 
@@ -2091,8 +2091,8 @@ function App() {
 
   if (loading) {
     return (
-      <div className="app-loading" data-agent-component="loading-state">
-        <p data-agent-content="loading-message">
+      <div className="app-loading" data-component="loading-state">
+        <p data-content="loading-message">
           Loading BiModal Design Store...
         </p>
       </div>
@@ -2100,9 +2100,9 @@ function App() {
   }
 
   return (
-    <div className="app" data-agent-spa="true" data-agent-detected={isAgent}>
+    <div className="app" data-spa="true" data-agent-detected={isAgent}>
       {isAgent && (
-        <div className="agent-indicator" data-agent-component="agent-notice">
+        <div className="agent-indicator" data-component="agent-notice">
           🤖 Agent-optimized interface active
         </div>
       )}
@@ -2111,22 +2111,22 @@ function App() {
         <Navigation isAgent={isAgent} />
       </header>
 
-      <main role="main" id="main-content" data-agent-component="spa-content">
+      <main role="main" id="main-content" data-component="spa-content">
         <Router isAgent={isAgent} agentInfo={agentInfo} />
       </main>
 
-      <footer role="contentinfo" data-agent-component="site-footer">
+      <footer role="contentinfo" data-component="site-footer">
         <div className="container">
           <p>&copy; 2025 BiModal Design Store. SPA optimized for agents.</p>
           <nav aria-label="Footer navigation">
             <ul role="list">
               <li>
-                <a href="/privacy" data-agent-action="view-privacy">
+                <a href="/privacy" data-action="view-privacy">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="/terms" data-agent-action="view-terms">
+                <a href="/terms" data-action="view-terms">
                   Terms of Service
                 </a>
               </li>
@@ -2237,8 +2237,8 @@ const Router = ({ isAgent, agentInfo }) => {
     }
 
     // Update agent-specific meta
-    document.documentElement.setAttribute('data-agent-page', route.agentPage);
-    document.documentElement.setAttribute('data-agent-intent', route.agentIntent);
+    document.documentElement.setAttribute('data-page', route.agentPage);
+    document.documentElement.setAttribute('data-intent', route.agentIntent);
   };
 
   // Route component mapping
@@ -2261,14 +2261,14 @@ const Router = ({ isAgent, agentInfo }) => {
       return <Contact {...routeProps} />;
     } else {
       return (
-        <div className="not-found" data-agent-component="not-found" role="main">
-          <h1 data-agent-content="error-title">Page Not Found</h1>
-          <p data-agent-content="error-message">
+        <div className="not-found" data-component="not-found" role="main">
+          <h1 data-content="error-title">Page Not Found</h1>
+          <p data-content="error-message">
             The page you're looking for doesn't exist.
           </p>
           <button
             onClick={() => navigate('/')}
-            data-agent-action="go-home"
+            data-action="go-home"
             className="btn btn-primary"
           >
             Go Home
