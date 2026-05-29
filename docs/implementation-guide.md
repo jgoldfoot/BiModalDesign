@@ -510,6 +510,30 @@ satisfies multi-turn interaction requirements highlighted by **τ-bench**.
 </script>
 ```
 
+### Pattern 8: Bypass Live DOM with Structured Data (WebVoyager)
+
+WebVoyager highlights that dynamic, multi-step UI navigation on live pages is a
+major failure point for agents. Avoid forcing agents to navigate dynamic DOM
+components (like custom dropdowns or modals) by exposing direct, parameterized
+routing via schema.org `potentialAction`.
+
+```html
+<head>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://www.example.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.example.com/search?q={search_term}",
+        "query-input": "required name=search_term"
+      }
+    }
+  </script>
+</head>
+```
+
 ## Testing and Validation
 
 ### Testing by Agent Level

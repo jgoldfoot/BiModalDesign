@@ -473,6 +473,8 @@ it's measurable:
   Studio for agent automation
 - **Academic Research**: 200+ papers published on web agent architectures and
   benchmarks in 2024-2025
+- **WebVoyager Benchmark**: Highlighted the specific challenges of end-to-end
+  agent navigation on live, stateful, and dynamic web applications.
 
 ### **5.2 Performance Gaps by Agent Type**
 
@@ -1881,11 +1883,13 @@ resilient, semantic, structured, and protocol-aware.
    in Web Agents" — arXiv:2410.06703v2
 3. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
    Domains" — arXiv:2406.12045
-4. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
+4. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
+   Websites"
+5. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
    web"
-5. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+6. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
    benefits
-6. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+7. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
    March 2025
 
 ### **Agent Protocols**

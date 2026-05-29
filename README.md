@@ -295,6 +295,8 @@ npm test
 - **NLWeb** — Natural Language Web Protocol (Microsoft, 2025)
 - **τ-bench** — "A Benchmark for Tool-Agent-User Interaction in Real-World
   Domains" (arXiv:2406.12045)
+- **WebVoyager** — Benchmarking end-to-end browser agents on live real-world
+  websites
 
 ---
 
