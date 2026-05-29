@@ -53,11 +53,7 @@ Provide meaningful HTML structure before JavaScript loads:
 
 ```html
 <!DOCTYPE html>
-<html
-  lang="en"
-  data-agent-framework="react-csr"
-  data-agent-mitigation="skeleton"
->
+<html lang="en" data-framework="react-csr" data-mitigation="skeleton">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -86,11 +82,7 @@ Provide meaningful HTML structure before JavaScript loads:
   </head>
   <body>
     <!-- Skip link for agents -->
-    <a
-      href="#main-content"
-      class="skip-link"
-      data-agent-action="skip-to-content"
-    >
+    <a href="#main-content" class="skip-link" data-action="skip-to-content">
       Skip to main content
     </a>
 
@@ -99,19 +91,19 @@ Provide meaningful HTML structure before JavaScript loads:
       <nav
         role="navigation"
         aria-label="Main navigation"
-        data-agent-component="navigation"
+        data-component="navigation"
       >
         <div class="nav-container">
-          <a href="/" class="logo" data-agent-action="go-home"
+          <a href="/" class="logo" data-action="go-home"
             >BiModal Design Store</a
           >
           <ul role="list" class="nav-links">
-            <li><a href="/" data-agent-action="browse-home">Home</a></li>
+            <li><a href="/" data-action="browse-home">Home</a></li>
             <li>
-              <a href="/products" data-agent-action="view-products">Products</a>
+              <a href="/products" data-action="view-products">Products</a>
             </li>
             <li>
-              <a href="/contact" data-agent-action="get-support">Contact</a>
+              <a href="/contact" data-action="get-support">Contact</a>
             </li>
           </ul>
         </div>
@@ -119,77 +111,66 @@ Provide meaningful HTML structure before JavaScript loads:
     </header>
 
     <!-- Main content with meaningful fallbacks -->
-    <main role="main" id="main-content" data-agent-component="main-content">
+    <main role="main" id="main-content" data-component="main-content">
       <!-- React app will mount here, but provide fallback content -->
       <div id="react-root">
         <!-- Skeleton content for agents/no-JS users -->
-        <div class="content-skeleton" data-agent-content="fallback-content">
-          <section class="hero-skeleton" data-agent-component="hero-banner">
-            <h1 data-agent-content="page-title">
-              BiModal Design Store - Loading...
-            </h1>
-            <p data-agent-content="page-description">
+        <div class="content-skeleton" data-content="fallback-content">
+          <section class="hero-skeleton" data-component="hero-banner">
+            <h1 data-content="page-title">BiModal Design Store - Loading...</h1>
+            <p data-content="page-description">
               Our products are designed for optimal agent and human experience.
               Please enable JavaScript for the full interactive experience.
             </p>
           </section>
 
-          <section
-            class="products-skeleton"
-            data-agent-component="product-list"
-          >
-            <h2 data-agent-content="section-title">Featured Products</h2>
+          <section class="products-skeleton" data-component="product-list">
+            <h2 data-content="section-title">Featured Products</h2>
 
             <!-- Static product cards for agents -->
             <div class="products-grid" role="list">
               <article
                 class="product-card-skeleton"
-                data-agent-component="product-card"
+                data-component="product-card"
                 role="listitem"
               >
-                <h3 data-agent-content="product-name">
-                  Smart Agent-Friendly Widget
-                </h3>
-                <p data-agent-content="product-description">
+                <h3 data-content="product-name">Smart Agent-Friendly Widget</h3>
+                <p data-content="product-description">
                   Designed for optimal agent interaction with clear semantic
                   structure.
                 </p>
-                <p data-agent-content="product-price">$29.99</p>
-                <a href="/products/1" data-agent-action="view-product-details"
+                <p data-content="product-price">$29.99</p>
+                <a href="/products/1" data-action="view-product-details"
                   >View Details</a
                 >
               </article>
 
               <article
                 class="product-card-skeleton"
-                data-agent-component="product-card"
+                data-component="product-card"
                 role="listitem"
               >
-                <h3 data-agent-content="product-name">
-                  Accessible Data Processor
-                </h3>
-                <p data-agent-content="product-description">
+                <h3 data-content="product-name">Accessible Data Processor</h3>
+                <p data-content="product-description">
                   Processes data with both human and agent-readable outputs.
                 </p>
-                <p data-agent-content="product-price">$49.99</p>
-                <a href="/products/2" data-agent-action="view-product-details"
+                <p data-content="product-price">$49.99</p>
+                <a href="/products/2" data-action="view-product-details"
                   >View Details</a
                 >
               </article>
 
               <article
                 class="product-card-skeleton"
-                data-agent-component="product-card"
+                data-component="product-card"
                 role="listitem"
               >
-                <h3 data-agent-content="product-name">
-                  Universal Interface Kit
-                </h3>
-                <p data-agent-content="product-description">
+                <h3 data-content="product-name">Universal Interface Kit</h3>
+                <p data-content="product-description">
                   Interface components that work seamlessly with AI agents.
                 </p>
-                <p data-agent-content="product-price">$39.99</p>
-                <a href="/products/3" data-agent-action="view-product-details"
+                <p data-content="product-price">$39.99</p>
+                <a href="/products/3" data-action="view-product-details"
                   >View Details</a
                 >
               </article>
@@ -197,20 +178,17 @@ Provide meaningful HTML structure before JavaScript loads:
           </section>
 
           <!-- Contact information for agents -->
-          <section class="contact-skeleton" data-agent-component="contact-info">
-            <h2 data-agent-content="section-title">Contact Information</h2>
-            <p data-agent-content="contact-email">
+          <section class="contact-skeleton" data-component="contact-info">
+            <h2 data-content="section-title">Contact Information</h2>
+            <p data-content="contact-email">
               Email:
-              <a
-                href="mailto:support@example.com"
-                data-agent-action="send-email"
-              >
+              <a href="mailto:support@example.com" data-action="send-email">
                 support@example.com
               </a>
             </p>
-            <p data-agent-content="contact-phone">
+            <p data-content="contact-phone">
               Phone:
-              <a href="tel:+15550123" data-agent-action="call-support"
+              <a href="tel:+15550123" data-action="call-support"
                 >+1 (555) 012-3456</a
               >
             </p>
@@ -220,22 +198,20 @@ Provide meaningful HTML structure before JavaScript loads:
     </main>
 
     <!-- Footer with static content -->
-    <footer role="contentinfo" data-agent-component="site-footer">
+    <footer role="contentinfo" data-component="site-footer">
       <p>
         &copy; 2025 BiModal Design Store. Designed for humans and AI agents.
       </p>
       <nav aria-label="Footer navigation">
         <ul role="list">
           <li>
-            <a href="/privacy" data-agent-action="view-privacy"
-              >Privacy Policy</a
-            >
+            <a href="/privacy" data-action="view-privacy">Privacy Policy</a>
           </li>
           <li>
-            <a href="/terms" data-agent-action="view-terms">Terms of Service</a>
+            <a href="/terms" data-action="view-terms">Terms of Service</a>
           </li>
           <li>
-            <a href="/sitemap.xml" data-agent-action="view-sitemap">Sitemap</a>
+            <a href="/sitemap.xml" data-action="view-sitemap">Sitemap</a>
           </li>
         </ul>
       </nav>
@@ -243,7 +219,7 @@ Provide meaningful HTML structure before JavaScript loads:
 
     <!-- NoScript fallback -->
     <noscript>
-      <div class="noscript-notice" data-agent-content="javascript-disabled">
+      <div class="noscript-notice" data-content="javascript-disabled">
         <h2>JavaScript Required</h2>
         <p>
           This application requires JavaScript for full functionality. However,
@@ -336,7 +312,7 @@ function App() {
     }
 
     // Add agent-ready indicator
-    document.body.setAttribute('data-agent-react-loaded', 'true');
+    document.body.setAttribute('data-react-loaded', 'true');
 
     // Load products
     loadProducts();
@@ -357,8 +333,8 @@ function App() {
 
   if (loading) {
     return (
-      <div className="loading-state" data-agent-component="loading-indicator">
-        <p data-agent-content="loading-message">Loading products...</p>
+      <div className="loading-state" data-component="loading-indicator">
+        <p data-content="loading-message">Loading products...</p>
         {/* Keep skeleton content visible while loading */}
       </div>
     );
@@ -366,14 +342,10 @@ function App() {
 
   if (error) {
     return (
-      <div
-        className="error-state"
-        data-agent-component="error-message"
-        role="alert"
-      >
-        <h2 data-agent-content="error-title">Unable to Load Content</h2>
-        <p data-agent-content="error-description">{error}</p>
-        <button onClick={loadProducts} data-agent-action="retry-loading">
+      <div className="error-state" data-component="error-message" role="alert">
+        <h2 data-content="error-title">Unable to Load Content</h2>
+        <p data-content="error-description">{error}</p>
+        <button onClick={loadProducts} data-action="retry-loading">
           Try Again
         </button>
       </div>
@@ -381,21 +353,19 @@ function App() {
   }
 
   return (
-    <div className="app" data-agent-app="loaded">
+    <div className="app" data-app="loaded">
       <AgentDetector onAgentDetected={setIsAgent} />
 
       {isAgent && (
-        <div className="agent-notice" data-agent-content="agent-detected">
+        <div className="agent-notice" data-content="agent-detected">
           🤖 Agent interface optimized
         </div>
       )}
 
-      <div className="content-container" data-agent-component="main-app">
-        <section className="hero" data-agent-component="hero-banner">
-          <h1 data-agent-content="page-title">
-            Welcome to BiModal Design Store
-          </h1>
-          <p data-agent-content="page-description">
+      <div className="content-container" data-component="main-app">
+        <section className="hero" data-component="hero-banner">
+          <h1 data-content="page-title">Welcome to BiModal Design Store</h1>
+          <p data-content="page-description">
             Discover products designed for both humans and AI agents
           </p>
         </section>
@@ -403,7 +373,7 @@ function App() {
         <ProductList
           products={products}
           isAgent={isAgent}
-          data-agent-component="product-list"
+          data-component="product-list"
         />
       </div>
     </div>
@@ -439,9 +409,9 @@ const AgentDetector = ({ onAgentDetected }) => {
 
       if (isAgent) {
         // Apply agent-specific enhancements
-        document.documentElement.setAttribute('data-agent-context', 'detected');
+        document.documentElement.setAttribute('data-context', 'detected');
         document.documentElement.setAttribute(
-          'data-agent-type',
+          'data-type',
           userAgent.split(' ')[0]
         );
 
@@ -454,23 +424,21 @@ const AgentDetector = ({ onAgentDetected }) => {
 
     const enhanceForAgents = () => {
       // Add more semantic information
-      const buttons = document.querySelectorAll(
-        'button:not([data-agent-action])'
-      );
+      const buttons = document.querySelectorAll('button:not([data-action])');
       buttons.forEach((button) => {
         if (button.textContent.toLowerCase().includes('buy')) {
-          button.setAttribute('data-agent-action', 'purchase-product');
+          button.setAttribute('data-action', 'purchase-product');
         } else if (button.textContent.toLowerCase().includes('add')) {
-          button.setAttribute('data-agent-action', 'add-to-cart');
+          button.setAttribute('data-action', 'add-to-cart');
         }
       });
 
       // Enhance navigation
-      const links = document.querySelectorAll('a:not([data-agent-action])');
+      const links = document.querySelectorAll('a:not([data-action])');
       links.forEach((link) => {
         const href = link.getAttribute('href');
         if (href && href.includes('product')) {
-          link.setAttribute('data-agent-action', 'view-product-details');
+          link.setAttribute('data-action', 'view-product-details');
         }
       });
     };
@@ -512,12 +480,12 @@ const ProductList = ({ products, isAgent }) => {
   return (
     <section
       className="product-list"
-      data-agent-component="product-list"
-      data-agent-count={products.length}
+      data-component="product-list"
+      data-count={products.length}
       role="region"
       aria-labelledby="products-heading"
     >
-      <h2 id="products-heading" data-agent-content="section-title">
+      <h2 id="products-heading" data-content="section-title">
         Featured Products ({products.length} items)
       </h2>
 
@@ -534,12 +502,8 @@ const ProductList = ({ products, isAgent }) => {
       </div>
 
       {products.length === 0 && (
-        <div
-          className="empty-state"
-          data-agent-component="empty-state"
-          role="status"
-        >
-          <p data-agent-content="empty-message">
+        <div className="empty-state" data-component="empty-state" role="status">
+          <p data-content="empty-message">
             No products available at this time.
           </p>
         </div>
@@ -603,17 +567,17 @@ const ContactForm = () => {
     return (
       <div
         className="form-success"
-        data-agent-component="success-message"
+        data-component="success-message"
         role="status"
         aria-live="polite"
       >
-        <h3 data-agent-content="success-title">Message Sent Successfully</h3>
-        <p data-agent-content="success-description">
+        <h3 data-content="success-title">Message Sent Successfully</h3>
+        <p data-content="success-description">
           Thank you for your inquiry. We'll respond within 24-48 hours.
         </p>
         <button
           onClick={() => setSubmitted(false)}
-          data-agent-action="send-another-message"
+          data-action="send-another-message"
         >
           Send Another Message
         </button>
@@ -625,19 +589,19 @@ const ContactForm = () => {
     <form
       onSubmit={handleSubmit}
       className="contact-form"
-      data-agent-component="contact-form"
+      data-component="contact-form"
       role="form"
       aria-labelledby="form-heading"
     >
-      <h2 id="form-heading" data-agent-content="form-title">
+      <h2 id="form-heading" data-content="form-title">
         Contact Us
       </h2>
 
       <fieldset>
-        <legend data-agent-content="fieldset-label">Contact Information</legend>
+        <legend data-content="fieldset-label">Contact Information</legend>
 
         <div className="form-group">
-          <label htmlFor="name" data-agent-content="field-label">
+          <label htmlFor="name" data-content="field-label">
             Name *
           </label>
           <input
@@ -646,16 +610,16 @@ const ContactForm = () => {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
-            data-agent-field="customer-name"
+            data-field="customer-name"
             aria-describedby="name-help"
           />
-          <small id="name-help" data-agent-content="field-help">
+          <small id="name-help" data-content="field-help">
             Your full name for our records
           </small>
         </div>
 
         <div className="form-group">
-          <label htmlFor="email" data-agent-content="field-label">
+          <label htmlFor="email" data-content="field-label">
             Email *
           </label>
           <input
@@ -666,16 +630,16 @@ const ContactForm = () => {
               setFormData({ ...formData, email: e.target.value })
             }
             required
-            data-agent-field="customer-email"
+            data-field="customer-email"
             aria-describedby="email-help"
           />
-          <small id="email-help" data-agent-content="field-help">
+          <small id="email-help" data-content="field-help">
             We'll use this to respond to your inquiry
           </small>
         </div>
 
         <div className="form-group">
-          <label htmlFor="subject" data-agent-content="field-label">
+          <label htmlFor="subject" data-content="field-label">
             Subject *
           </label>
           <select
@@ -685,7 +649,7 @@ const ContactForm = () => {
               setFormData({ ...formData, subject: e.target.value })
             }
             required
-            data-agent-field="inquiry-type"
+            data-field="inquiry-type"
           >
             <option value="">Select a topic</option>
             <option value="product-question">Product Questions</option>
@@ -696,7 +660,7 @@ const ContactForm = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="message" data-agent-content="field-label">
+          <label htmlFor="message" data-content="field-label">
             Message *
           </label>
           <textarea
@@ -707,10 +671,10 @@ const ContactForm = () => {
             }
             required
             rows="5"
-            data-agent-field="customer-message"
+            data-field="customer-message"
             aria-describedby="message-help"
           />
-          <small id="message-help" data-agent-content="field-help">
+          <small id="message-help" data-content="field-help">
             Please provide details about your inquiry
           </small>
         </div>
@@ -718,7 +682,7 @@ const ContactForm = () => {
         <button
           type="submit"
           disabled={submitting}
-          data-agent-action="submit-contact-form"
+          data-action="submit-contact-form"
           className="submit-button"
         >
           {submitting ? 'Sending...' : 'Send Message'}
@@ -763,7 +727,7 @@ async function prerenderPages() {
       });
 
       // Wait for React to load and render
-      await browserPage.waitForSelector('[data-agent-app="loaded"]', {
+      await browserPage.waitForSelector('[data-app="loaded"]', {
         timeout: 10000,
       });
 
@@ -918,12 +882,12 @@ describe('CSR Agent Compatibility', () => {
 
     // Verify essential information is present
     const title = await page.$eval(
-      '[data-agent-content="page-title"]',
+      '[data-content="page-title"]',
       (el) => el.textContent
     );
     expect(title).toContain('BiModal Design Store');
 
-    const productCards = await page.$$('[data-agent-component="product-card"]');
+    const productCards = await page.$$('[data-component="product-card"]');
     expect(productCards.length).toBeGreaterThan(0);
   });
 
@@ -933,18 +897,18 @@ describe('CSR Agent Compatibility', () => {
     await page.goto('http://localhost:3000');
 
     // Wait for React to load
-    await page.waitForSelector('[data-agent-app="loaded"]');
+    await page.waitForSelector('[data-app="loaded"]');
 
     // Check if agent context is detected
     const agentContext = await page.$eval('html', (el) =>
-      el.getAttribute('data-agent-context')
+      el.getAttribute('data-context')
     );
     expect(agentContext).toBe('detected');
   });
 
   test('Structured data is present', async () => {
     await page.goto('http://localhost:3000');
-    await page.waitForSelector('[data-agent-app="loaded"]');
+    await page.waitForSelector('[data-app="loaded"]');
 
     const structuredData = await page.$eval(
       'script[type="application/ld+json"]',
@@ -957,16 +921,16 @@ describe('CSR Agent Compatibility', () => {
 
   test('Form accessibility with agents', async () => {
     await page.goto('http://localhost:3000/contact');
-    await page.waitForSelector('[data-agent-component="contact-form"]');
+    await page.waitForSelector('[data-component="contact-form"]');
 
     // Test form structure
     const fieldsets = await page.$$('fieldset');
     expect(fieldsets.length).toBeGreaterThan(0);
 
-    const labels = await page.$$('label[data-agent-content="field-label"]');
+    const labels = await page.$$('label[data-content="field-label"]');
     expect(labels.length).toBeGreaterThan(0);
 
-    const agentFields = await page.$$('[data-agent-field]');
+    const agentFields = await page.$$('[data-field]');
     expect(agentFields.length).toBeGreaterThan(0);
   });
 });
@@ -1029,8 +993,8 @@ class AgentAnalytics {
       mutations.forEach((mutation) => {
         if (
           mutation.type === 'attributes' &&
-          mutation.attributeName === 'data-agent-app' &&
-          mutation.target.getAttribute('data-agent-app') === 'loaded'
+          mutation.attributeName === 'data-app' &&
+          mutation.target.getAttribute('data-app') === 'loaded'
         ) {
           this.metrics.contentReadyTime = performance.now();
           observer.disconnect();
@@ -1041,7 +1005,7 @@ class AgentAnalytics {
 
     observer.observe(document.body, {
       attributes: true,
-      attributeFilter: ['data-agent-app'],
+      attributeFilter: ['data-app'],
     });
   }
 
@@ -1052,8 +1016,8 @@ class AgentAnalytics {
     this.sendInteractionMetric({
       action,
       element: element.tagName,
-      agentComponent: element.getAttribute('data-agent-component'),
-      agentAction: element.getAttribute('data-agent-action'),
+      agentComponent: element.getAttribute('data-component'),
+      agentAction: element.getAttribute('data-action'),
       timestamp: Date.now(),
     });
   }

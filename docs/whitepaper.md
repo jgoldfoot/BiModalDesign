@@ -49,7 +49,7 @@ and as the landscape continues to evolve.
 6. [Rendering Strategy for Agent Accessibility](#6-rendering-strategy-for-agent-accessibility)
 7. [BiModal Design Principles & Validated Patterns](#7-bimodal-design-principles--validated-patterns)
 8. [Beyond the Browser: Agent Protocols & APIs](#8-beyond-the-browser-agent-protocols--apis)
-9. [Vision Agents & Browser Automation](#9-vision-agents--browser-automation)
+9. [Vision & Computer-Use Agents & Browser Automation](#9-vision--computer-use-agents--browser-automation)
 10. [Generative Engine Optimization (GEO)](#10-generative-engine-optimization-geo)
 11. [Security, Ethics & Governance](#11-security-ethics--governance)
 12. [Compliance Methodology & Metrics](#12-compliance-methodology--metrics)
@@ -79,14 +79,14 @@ This is a defense-in-depth problem, not a binary compliance check.
 ### **What's New in v3.0**
 
 - **Agent Capability Spectrum**: A six-level taxonomy replacing the binary
-  human/agent model, from HTTP retrievers through vision agents to
-  protocol-native agents
+  human/agent model, from HTTP retrievers through vision and computer-use agents
+  to protocol-native agents
 - **Defense in Depth Layer Model**: Five architectural layers ensuring graceful
   degradation across the entire agent spectrum
 - **Agent Protocol Integration**: Guidance for MCP, A2A, and NLWeb — the
   emerging protocols that let agents bypass the browser entirely
-- **Vision Agent Considerations**: How screen-reading agents change the design
-  calculus
+- **Vision and Computer-Use Agent Considerations**: How screen-reading agents
+  change the design calculus
 - **Expanded GEO Framework**: Deeper treatment of Generative Engine Optimization
   as AI-assisted discovery becomes a primary traffic channel
 - **Standards-Based Approach**: Migration from custom `data-agent-*` attributes
@@ -94,13 +94,13 @@ This is a defense-in-depth problem, not a binary compliance check.
 
 ### **Quantified Impact**
 
-| Metric                     | Conventional UI | BiModal Design v2.1 | BiModal Design v3.0 (Projected) |
-| -------------------------- | --------------- | ------------------- | ------------------------------- |
-| HTTP Retriever Success     | 12%             | 42-70%              | 42-70%                          |
-| Browser Automation Success | 25-40%          | 50-65%              | 70-85%                          |
-| Vision Agent Success       | 30-50%          | 45-60%              | 75-90%                          |
-| Protocol-Native Success    | N/A             | N/A                 | 90-95%                          |
-| GEO Discoverability        | Low             | Moderate            | High                            |
+| Metric                                | Conventional UI | BiModal Design v2.1 | BiModal Design v3.0 (Projected) |
+| ------------------------------------- | --------------- | ------------------- | ------------------------------- |
+| HTTP Retriever Success                | 12%             | 42-70%              | 42-70%                          |
+| Browser Automation Success            | 25-40%          | 50-65%              | 70-85%                          |
+| Vision and Computer-Use Agent Success | 30-50%          | 45-60%              | 75-90%                          |
+| Protocol-Native Success               | N/A             | N/A                 | 90-95%                          |
+| GEO Discoverability                   | Low             | Moderate            | High                            |
 
 _Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
 ST-WebAgentBench, Microsoft Build 2025, internal analysis_
@@ -262,10 +262,10 @@ range of agents can access it.
 - Validates with `curl` — if content is invisible to `curl`, it's invisible to
   ~40% of agents
 
-**Why it still matters**: Even as browser automation and vision agents grow,
-HTTP retrieval remains the most efficient, reliable, and cost-effective way for
-agents to access content. FR-1 compliance reduces latency, compute costs, and
-failure rates for all agent types.
+**Why it still matters**: Even as browser automation and vision and computer-use
+agents grow, HTTP retrieval remains the most efficient, reliable, and
+cost-effective way for agents to access content. FR-1 compliance reduces
+latency, compute costs, and failure rates for all agent types.
 
 ### **3.3 Layer 2 — Semantic Structure**
 
@@ -288,8 +288,14 @@ semantics.
 Critically, this layer is responsible for populating the Accessibility Object
 Model (AOM). When OS-level Computer-Use agents (Level 3) navigate an interface,
 they query the AOM for exact interaction coordinates and component state, only
-falling back to pure computer vision when the AOM fails. Proper semantics ensure
-high-fidelity interactions rather than brittle heuristic guesses.
+falling back to pure computer vision when the AOM fails. This reinforces the
+"Defense in Depth" philosophy: well-structured ARIA provides high-fidelity,
+reliable interaction targets for OS agents, bypassing the unreliability of pure
+vision models exposed by WebArena-Verified.
+
+Furthermore, insights from **VisualWebArena** demonstrate that pure visual
+reasoning frequently fails in complex interfaces without strong textual and
+structural grounding. Layer 2 provides this essential grounding.
 
 ### **3.4 Layer 3 — Structured Data**
 
@@ -297,7 +303,7 @@ high-fidelity interactions rather than brittle heuristic guesses.
 types, relationships, and properties.
 
 **Serves**: Level 1 (LLM Browsers), Level 2 (Browser Automation), Level 3
-(Vision Agents)
+(Vision & Computer-Use Agents)
 
 **Requirements**:
 
@@ -355,12 +361,13 @@ significant advantage.
 The power of defense in depth is graceful degradation. If a Level 5 agent can't
 find an MCP server, it falls back to the API (Layer 4). If there's no API, it
 uses structured data and semantic HTML (Layers 2-3). If the page is CSR-only and
-Layers 1-3 are absent, only browser automation and vision agents (Levels 2-3)
-can access it — and unreliably.
+Layers 1-3 are absent, only browser automation and vision and computer-use
+agents (Levels 2-3) can access it — and unreliably.
 
 **The worst case**: A CSR-only application with no semantic structure, no
-structured data, no API, and no agent protocols. Only vision agents can interact
-with it, and they do so slowly, expensively, and with high failure rates.
+structured data, no API, and no agent protocols. Only vision and computer-use
+agents can interact with it, and they do so slowly, expensively, and with high
+failure rates.
 
 **The best case**: An application with server-rendered semantic HTML,
 comprehensive structured data, a documented API, and an MCP server. Every agent
@@ -466,20 +473,22 @@ it's measurable:
   Studio for agent automation
 - **Academic Research**: 200+ papers published on web agent architectures and
   benchmarks in 2024-2025
+- **WebVoyager Benchmark**: Highlighted the specific challenges of end-to-end
+  agent navigation on live, stateful, and dynamic web applications.
 
 ### **5.2 Performance Gaps by Agent Type**
 
 Recent benchmarks reveal that performance gaps vary significantly by agent
 capability level:
 
-| **Agent Level**              | **Conventional UI** | **Semantic Structure** | **Full BiModal Design** |
-| ---------------------------- | ------------------- | ---------------------- | ----------------------- |
-| Level 0 (HTTP Retrievers)    | 12-20%              | 42-65%                 | 60-75%                  |
-| Level 1 (LLM Browsers)       | 25-35%              | 50-70%                 | 70-85%                  |
-| Level 2 (Browser Automation) | 35-50%              | 55-72%                 | 75-88%                  |
-| Level 3 (Vision Agents)      | 40-55%              | 55-70%                 | 70-85%                  |
-| Level 4 (Tool-Use via API)   | N/A                 | N/A                    | 88-95%                  |
-| Level 5 (Protocol-Native)    | N/A                 | N/A                    | 92-98%                  |
+| **Agent Level**                        | **Conventional UI** | **Semantic Structure** | **Full BiModal Design** |
+| -------------------------------------- | ------------------- | ---------------------- | ----------------------- |
+| Level 0 (HTTP Retrievers)              | 12-20%              | 42-65%                 | 60-75%                  |
+| Level 1 (LLM Browsers)                 | 25-35%              | 50-70%                 | 70-85%                  |
+| Level 2 (Browser Automation)           | 35-50%              | 55-72%                 | 75-88%                  |
+| Level 3 (Vision & Computer-Use Agents) | 40-55%              | 55-70%                 | 70-85%                  |
+| Level 4 (Tool-Use via API)             | N/A                 | N/A                    | 88-95%                  |
+| Level 5 (Protocol-Native)              | N/A                 | N/A                    | 92-98%                  |
 
 _Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
 ST-WebAgentBench, internal analysis_
@@ -493,8 +502,9 @@ protocol layers** — reinforcing the defense-in-depth approach.
 #### **1. Agent Diversity is Increasing**
 
 A year ago, most agents were Level 0-1. Today, browser automation (Level 2) and
-vision agents (Level 3) are mainstream, and protocol-native agents (Level 5) are
-emerging. Designing for a single agent type is no longer viable.
+vision and computer-use agents (Level 3) are mainstream, and protocol-native
+agents (Level 5) are emerging. Designing for a single agent type is no longer
+viable.
 
 #### **2. GEO is the New SEO**
 
@@ -953,6 +963,21 @@ interfaces designed specifically for machine consumption.
 
 ### **8.2 Model Context Protocol (MCP)**
 
+**Standardized Web Discovery:** As MCP matures, bridging the web (Layers 1-3)
+with protocols (Layer 5) is critical. Websites should announce their MCP servers
+natively in the DOM using standard HTML tags:
+`<link rel="alternate" type="application/mcp+json" href="https://api.example.com/mcp" />`
+This allows Level 2 and Level 3 agents browsing the site to discover and upgrade
+to a native protocol connection seamlessly.
+
+**Defensive Design & Safety (ST-WebAgentBench Insights):** Benchmarks like
+**ST-WebAgentBench** emphasize the necessity of safety and trustworthiness. When
+exposing actions via Layer 2 or tools via Layer 5, explicit constraints are
+mandatory to prevent destructive actions by autonomous agents. This includes
+leveraging standard HTML5 validation attributes (`required`, `pattern`, `min`,
+`max`) in Layer 2 to proactively constrain agent inputs before they even reach
+Layer 4/5.
+
 MCP, introduced by Anthropic in November 2024, has rapidly become the standard
 for connecting AI agents to external services. An MCP server exposes three
 primitives:
@@ -1048,43 +1073,47 @@ paths:
 
 ---
 
-## **9. Vision Agents & Browser Automation**
+## **9. Vision & Computer-Use Agents & Browser Automation**
 
-Vision agents and browser automation fundamentally change one of BiModal Design
-v2.x's core assumptions: that agents can't execute JavaScript or see rendered
-content. This section addresses what this means for the framework.
+Vision and computer-use agents and browser automation fundamentally change one
+of BiModal Design v2.x's core assumptions: that agents can't execute JavaScript
+or see rendered content. This section addresses what this means for the
+framework.
 
-### **9.1 What Vision Agents Change**
+### **9.1 What Vision & Computer-Use Agents Change**
 
-Vision agents (Level 3) interact with web pages the way humans do — they see the
-rendered page, identify UI elements visually, and click, type, and scroll. This
-means:
+Vision and computer-use agents (Level 3) interact with web pages the way humans
+do — they see the rendered page, identify UI elements visually, and click, type,
+and scroll. This means:
 
-- **CSR applications are accessible** to vision agents (they see the rendered
-  output)
+- **CSR applications are accessible** to vision and computer-use agents (they
+  see the rendered output)
 - **Visual design matters** for agent usability (contrast, spacing, clear
   affordances)
-- **FR-1 is not strictly necessary** for vision agent accessibility
+- **FR-1 is not strictly necessary** for vision and computer-use agent
+  accessibility
 
 ### **9.2 Why FR-1 Still Matters**
 
-Despite vision agents' ability to see CSR content, FR-1 remains critical for
-several reasons:
+Despite vision and computer-use agents' ability to see CSR content, FR-1 remains
+critical for several reasons:
 
-1. **Cost**: Vision agent interactions are 10-100x more expensive than HTTP
-   retrieval (GPU compute for screenshot analysis vs. text parsing)
-2. **Speed**: HTTP retrieval takes milliseconds; vision agent page loads take
-   seconds
-3. **Reliability**: Vision agents face the same failure modes as humans —
-   pop-ups, overlays, animations, loading spinners
+1. **Cost**: Vision and computer-use agent interactions are 10-100x more
+   expensive than HTTP retrieval (GPU compute for screenshot analysis vs. text
+   parsing)
+2. **Speed**: HTTP retrieval takes milliseconds; vision and computer-use agent
+   page loads take seconds
+3. **Reliability**: Vision and computer-use agents face the same failure modes
+   as humans — pop-ups, overlays, animations, loading spinners
 4. **Scale**: Organizations processing thousands of pages per hour cannot afford
-   vision agent overhead for content that could be served in plain HTML
-5. **GEO**: AI-assisted search engines use HTTP retrieval, not vision agents,
-   for content indexing
+   vision and computer-use agent overhead for content that could be served in
+   plain HTML
+5. **GEO**: AI-assisted search engines use HTTP retrieval, not vision and
+   computer-use agents, for content indexing
 
 **The principle**: Use the lightest-weight method that works. FR-1 serves the
-most agents at the lowest cost. Vision agents are the expensive fallback, not
-the primary design target.
+most agents at the lowest cost. Vision and computer-use agents are the expensive
+fallback, not the primary design target.
 
 ### **9.3 Designing for Browser Automation**
 
@@ -1120,14 +1149,14 @@ Design considerations:
 - Time-based animations that block interaction
 - CAPTCHA and bot-detection that blocks legitimate agent access without fallback
 
-### **9.4 Designing for Vision Agents**
+### **9.4 Designing for Vision & Computer-Use Agents**
 
-Vision agents read screenshots. Design considerations:
+Vision and computer-use agents read screenshots. Design considerations:
 
 - **Clear visual hierarchy**: Large, readable headings; distinct sections;
   adequate spacing
-- **Consistent layout**: Vision agents rely on spatial patterns — keep
-  navigation, content, and actions in predictable locations
+- **Consistent layout**: Vision and computer-use agents rely on spatial patterns
+  — keep navigation, content, and actions in predictable locations
 - **Visible affordances**: Buttons should look like buttons; links should be
   distinguishable from text
 - **Readable typography**: Minimum 16px body text; sufficient contrast ratios
@@ -1314,6 +1343,21 @@ explicit content policies:
 - **WCAG 2.2**: BiModal Design's Layer 2 directly builds on and extends WCAG
   compliance
 
+### **11.6 Human-in-the-Loop (HITL) for Tool-Agent-User Interaction (τ-bench)**
+
+The **τ-bench** benchmark highlights a critical reality: autonomous agents
+frequently operate in environments where taking action requires explicit user
+confirmation or disambiguation. While protocols allow agents to execute tools,
+taking destructive or financial actions without a "human-in-the-loop" is a
+severe security failure.
+
+Interfaces must semantically support this multi-turn interaction. When an agent
+attempts a critical action, the UI should use semantic HTML (like
+`<dialog aria-modal="true">`) and structured data (`schema.org/ConfirmAction`)
+to pause agent execution and prompt the human for final approval. This ensures
+the agent understands that the task is blocked pending human intervention,
+rather than assuming the action failed.
+
 ---
 
 ## **12. Compliance Methodology & Metrics**
@@ -1472,9 +1516,9 @@ established knowledge from:
 - Web accessibility research (WCAG guidelines, semantic web principles)
 - Human-computer interaction studies on information architecture
 - Emerging observations about AI agent behavior across capability levels
-- Real-world implementation experience on ai-plus.design
+- Real-world implementation experience on bimodal.design
 
-### **14.2 Documented Implementations**
+### **14.2 Documented Implementation: bimodal.design**
 
 The BiModal Design framework is documented through two implementations by the
 framework creator: the original portfolio site (ai-plus.design) and the
@@ -1919,11 +1963,13 @@ resilient, semantic, structured, and protocol-aware.
    in Web Agents" — arXiv:2410.06703v2
 3. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
    Domains" — arXiv:2406.12045
-4. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
+4. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
+   Websites"
+5. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
    web"
-5. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+6. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
    benefits
-6. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+7. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
    March 2025
 
 ### **Agent Protocols**
@@ -2093,7 +2139,7 @@ ecosystem of AI agents.
 
 **Contact:** [joel@goldfoot.com](mailto:joel@goldfoot.com) **LinkedIn:**
 [linkedin.com/in/joelgoldfoot](https://linkedin.com/in/joelgoldfoot)
-**Website:** [ai-plus.design](https://ai-plus.design)
+**Website:** [bimodal.design](https://bimodal.design)
 
 ---
 

@@ -216,7 +216,8 @@ curl -s https://your-app.com/ | grep -E '<(h1|h2|p|article|section)'
 
 Computer-Use agents rely heavily on the Accessibility Object Model (AOM). Add
 explicit `aria-keyshortcuts` and `aria-roledescription` to enhance OS-level
-interaction.
+interaction, and implement explicit Focus Management (see Pattern 5) to support
+keyboard-navigating agents.
 
 ```html
 <!-- Explicit keyshortcuts tell the agent it can press "C" instead of searching for the button -->
@@ -426,6 +427,9 @@ Serve content at multiple levels simultaneously:
 
 <!-- Layer 4: API link for programmatic access -->
 <link rel="api" href="/api/openapi.json" />
+
+<!-- Layer 5: MCP Server Discovery -->
+<link rel="alternate" type="application/mcp+json" href="/mcp-server" />
 ```
 
 ### Pattern 5: Focus Management for Keyboard Agents
@@ -443,6 +447,91 @@ function showModal() {
   const firstInput = modal.querySelector('input');
   if (firstInput) firstInput.focus();
 }
+```
+
+### Pattern 6: Defensive Form Constraints (Safety)
+
+Agents evaluated in benchmarks like **ST-WebAgentBench** can make destructive
+mistakes if inputs aren't constrained. Use standard HTML5 validation to
+proactively guide agent tool use:
+
+```html
+<form id="transfer-funds-form">
+  <!-- The pattern and min/max explicitly constrain agent behavior before submission -->
+  <input
+    type="text"
+    name="account"
+    required
+    pattern="[0-9]{10}"
+    aria-label="10-digit Account Number"
+  />
+  <input
+    type="number"
+    name="amount"
+    required
+    min="1"
+    max="5000"
+    aria-label="Transfer Amount (Max 5000)"
+  />
+  <button type="submit" aria-label="Confirm Transfer">Transfer</button>
+</form>
+```
+
+### Pattern 7: Human-in-the-Loop Confirmation (τ-bench)
+
+When an agent attempts a critical action, use `<dialog aria-modal="true">` and
+`schema.org/ConfirmAction` to pause execution and prompt the human. This
+satisfies multi-turn interaction requirements highlighted by **τ-bench**.
+
+```html
+<!-- The dialog blocks the rest of the UI, explicitly pausing the agent -->
+<dialog
+  id="confirmation-modal"
+  aria-modal="true"
+  aria-labelledby="confirm-title"
+  itemscope
+  itemtype="https://schema.org/ConfirmAction"
+>
+  <h2 id="confirm-title" itemprop="name">Confirm Transfer</h2>
+  <p itemprop="description">
+    Are you sure you want to transfer $5,000 to Account 1234567890?
+  </p>
+
+  <form method="dialog">
+    <!-- The human or agent must interact with these explicit controls -->
+    <button value="cancel" aria-label="Cancel transfer">Cancel</button>
+    <button value="confirm" aria-label="Confirm transfer">Confirm</button>
+  </form>
+</dialog>
+
+<script>
+  // Show the modal explicitly to trigger a focus change and pause flow
+  document.getElementById('confirmation-modal').showModal();
+</script>
+```
+
+### Pattern 8: Bypass Live DOM with Structured Data (WebVoyager)
+
+WebVoyager highlights that dynamic, multi-step UI navigation on live pages is a
+major failure point for agents. Avoid forcing agents to navigate dynamic DOM
+components (like custom dropdowns or modals) by exposing direct, parameterized
+routing via schema.org `potentialAction`.
+
+```html
+<head>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://www.example.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.example.com/search?q={search_term}",
+        "query-input": "required name=search_term"
+      }
+    }
+  </script>
+</head>
 ```
 
 ## Testing and Validation
