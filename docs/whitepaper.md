@@ -1520,11 +1520,80 @@ established knowledge from:
 
 ### **14.2 Documented Implementation: bimodal.design**
 
-The first documented BiModal Design implementation is the framework creator's
-own website. This serves as a living proof-of-concept that evolves with the
-framework.
+The BiModal Design framework is documented through two implementations by the
+framework creator: the original portfolio site (ai-plus.design) and the
+framework's dedicated documentation site (bimodal.design). Both serve as living
+proof-of-concepts that evolve with the framework.
 
-**Current Implementation Status:**
+#### **14.2.1 bimodal.design — Framework Documentation Site**
+
+Built with Next.js (App Router with server components), bimodal.design is the
+primary documentation and guide site for the framework. Audited May 2026.
+
+**Layer 1: Content Accessibility (FR-1) — PASS**
+
+- Built on Next.js with server-side rendering — content is present in the
+  initial HTTP response (~39KB HTML payload, ~23KB of text content)
+- Semantic HTML5 landmarks present: `<header>`, `<nav>`, `<main>`, `<footer>`,
+  `<section>` (×3)
+- Proper heading hierarchy: single `<h1>`, `<h2>`, and `<h3>` elements in
+  logical order
+- All page content accessible via `curl` — no empty `<div id="root">` pattern
+- `lang="en"` attribute on `<html>` element
+
+**Layer 2: Semantic Structure — PARTIAL**
+
+- HTML5 landmarks present and correctly used
+- Heading hierarchy maintained across pages
+- Images have descriptive `alt` text (e.g., "BiModal Design Logo")
+- ARIA attributes present but minimal: 4 `aria-label` instances and 1
+  `aria-expanded` on the homepage
+- Missing: `aria-current="page"` on active navigation links
+- Missing: `aria-describedby` on interactive elements
+- Missing: `role` attributes on landmark elements
+- Missing: skip-to-content link for keyboard navigation
+- No forms on the homepage to evaluate
+
+**Layer 3: Structured Data — NOT IMPLEMENTED**
+
+- No JSON-LD (`<script type="application/ld+json">`) on any page
+- No schema.org microdata (`itemscope`, `itemtype`, `itemprop`)
+- No OpenGraph meta tags for social sharing
+- Only meta tags present: `charset`, `viewport`, and `description`
+- This is a notable gap for a site that teaches structured data implementation
+
+**Layer 4: API Surface — NOT IMPLEMENTED**
+
+- No OpenAPI specification (`/openapi.json` returns 404)
+- No API documentation endpoint (`/api-docs` returns 404)
+- No `robots.txt` or `sitemap.xml`
+
+**Layer 5: Agent Protocols — NOT IMPLEMENTED**
+
+- No MCP server
+- No Agent Card (`/.well-known/agent.json` returns 404)
+- No NLWeb endpoint
+
+**Estimated Compliance Score**: Maturity Level 1 — "Semantically Accessible"
+(Layers 1-2 partially implemented, Layers 3-5 not yet addressed)
+
+**What the site does well:** The most important layer — FR-1 — is fully met.
+The Next.js SSR architecture ensures all content is in the initial HTML
+response, which is exactly what the framework prescribes as the foundation.
+Semantic HTML structure is solid. The site is a strong demonstration of Layers
+1-2.
+
+**What needs work:** The site teaches structured data, OpenGraph tags, and agent
+protocols but does not yet implement them itself. Adding JSON-LD (WebSite,
+Organization schemas), OpenGraph meta tags, a sitemap.xml, and richer ARIA
+attributes would bring the site to Maturity Level 2-3 and better demonstrate the
+framework's own recommendations.
+
+#### **14.2.2 ai-plus.design — Original Portfolio Site**
+
+The first documented BiModal Design implementation is the framework creator's
+portfolio site. This site predates the v3.0 framework and uses client-side
+rendering.
 
 **Fully Implemented:**
 
@@ -1550,6 +1619,17 @@ framework.
 - Multi-level agent testing validation
 
 **Estimated Compliance Score**: 34/46 (74%) — "BiModal Design Foundational"
+
+#### **14.2.3 Comparative Insight**
+
+The two sites illustrate complementary strengths and a common pattern in
+real-world adoption: bimodal.design excels at Layer 1 (SSR, content in initial
+payload) but lacks Layers 3-5, while ai-plus.design has strong Layer 2-3
+implementation (ARIA, JSON-LD) but weaker Layer 1 (CSR). Neither site has yet
+implemented Layers 4-5 (API surface, agent protocols). This reflects the
+framework's own observation that most implementations start strong at one end of
+the Defense in Depth stack and work toward the other — full-spectrum compliance
+is a journey, not a starting point.
 
 ### **14.3 Key Discovery: The DOM Accessibility Blind Spot**
 
