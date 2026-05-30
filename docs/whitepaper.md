@@ -74,7 +74,11 @@ assumed agents were primarily HTTP retrievers. The updated framework asks a
 fundamentally different question: _"Does your interface degrade gracefully
 across every type of agent that might interact with it?"_
 
-This is a defense-in-depth problem, not a binary compliance check.
+This is a defense-in-depth problem, not a binary compliance check. As we observe
+the massive surge in agent-driven traffic in 2026—fueled by the rise of
+**Agentic Browsers** (like Perplexity Comet and agentic features in major
+browsers)—interfaces must cater to tools that wrap foundation models natively
+around browsing sessions.
 
 ### **What's New in v3.0**
 
@@ -102,8 +106,9 @@ This is a defense-in-depth problem, not a binary compliance check.
 | Protocol-Native Success               | N/A             | N/A                 | 90-95%                          |
 | GEO Discoverability                   | Low             | Moderate            | High                            |
 
-_Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
-ST-WebAgentBench, Microsoft Build 2025, internal analysis_
+_Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld, BrowseComp,
+ST-WebAgentBench, Microsoft Build 2025, 2026 AI Agent Benchmarks, internal
+analysis_
 
 ### **Strategic Impact**
 
@@ -143,12 +148,13 @@ capabilities, limitations, and design implications.
 - **Current prevalence**: Declining as a percentage but still significant for
   indexing and data extraction
 
-#### **Level 1 — LLM Browsers**
+#### **Level 1 — LLM Browsers & Basic Agentic Browsers**
 
 - **What they are**: AI systems that fetch web content and use language models
-  to parse, understand, and reason about it
-- **Examples**: ChatGPT Browse, Perplexity, Claude web_fetch, Google AI
-  Overviews
+  to parse, understand, and reason about it, including early agentic browsers
+  that navigate on a human's behalf.
+- **Examples**: ChatGPT Browse, Perplexity Comet, Claude web_fetch, Google AI
+  Overviews, Samsung Browser with Perplexity AI
 - **Capabilities**: Parse HTML structure, understand semantic meaning, extract
   information, follow links — but typically do not execute JavaScript
 - **Design implication**: Semantic HTML and structured data (schema.org,
@@ -158,16 +164,17 @@ capabilities, limitations, and design implications.
 #### **Level 2 — Browser Automation Agents**
 
 - **What they are**: Agents that control headless browsers to interact with web
-  pages programmatically
+  pages programmatically, including advanced Agentic Commerce workflows.
 - **Examples**: Playwright-based agents, Puppeteer automation, Selenium bots,
-  Claude MCP browser tools
+  Claude MCP browser tools, OpenAI Operator
 - **Capabilities**: Full JavaScript execution, DOM interaction, form filling,
   navigation — but rely on CSS selectors, ARIA labels, and DOM structure for
-  element identification
+  element identification.
 - **Design implication**: Semantic HTML, stable selectors, and clear ARIA
   labeling matter more than FR-1 for these agents. Deterministic state
-  management reduces retry failures
-- **Current prevalence**: Growing rapidly in enterprise automation
+  management reduces retry failures.
+- **Current prevalence**: Growing rapidly in enterprise automation and agentic
+  commerce.
 
 #### **Level 3 — Vision & Computer-Use Agents**
 
@@ -466,15 +473,19 @@ where AI systems are active participants. The shift is no longer theoretical —
 it's measurable:
 
 - **Microsoft Build 2025**: Introduced "agentic web" with NLWeb protocol for
-  AI-native interactions
+  AI-native interactions.
 - **Anthropic MCP**: Model Context Protocol adoption exceeds 10,000 public MCP
-  servers since its November 2024 launch
+  servers since its November 2024 launch, now evolving into **WebMCP** natively
+  in browsers.
 - **Enterprise Adoption**: 230,000+ organizations using platforms like Copilot
-  Studio for agent automation
+  Studio for agent automation.
 - **Academic Research**: 200+ papers published on web agent architectures and
-  benchmarks in 2024-2025
+  benchmarks in 2024-2025.
 - **WebVoyager Benchmark**: Highlighted the specific challenges of end-to-end
   agent navigation on live, stateful, and dynamic web applications.
+- **BrowseComp Benchmark (2026)**: Defined the gold standard for evaluating
+  Agentic Browsers, demonstrating the critical need for properly structured web
+  applications to ensure high success rates.
 
 ### **5.2 Performance Gaps by Agent Type**
 
@@ -1577,11 +1588,10 @@ primary documentation and guide site for the framework. Audited May 2026.
 **Estimated Compliance Score**: Maturity Level 1 — "Semantically Accessible"
 (Layers 1-2 partially implemented, Layers 3-5 not yet addressed)
 
-**What the site does well:** The most important layer — FR-1 — is fully met.
-The Next.js SSR architecture ensures all content is in the initial HTML
-response, which is exactly what the framework prescribes as the foundation.
-Semantic HTML structure is solid. The site is a strong demonstration of Layers
-1-2.
+**What the site does well:** The most important layer — FR-1 — is fully met. The
+Next.js SSR architecture ensures all content is in the initial HTML response,
+which is exactly what the framework prescribes as the foundation. Semantic HTML
+structure is solid. The site is a strong demonstration of Layers 1-2.
 
 **What needs work:** The site teaches structured data, OpenGraph tags, and agent
 protocols but does not yet implement them itself. Adding JSON-LD (WebSite,
