@@ -534,6 +534,25 @@ routing via schema.org `potentialAction`.
 </head>
 ```
 
+### Pattern 9: WebMCP Discovery for Agentic Browsers
+
+As Agentic Browsers natively wrap foundation models around the browsing session,
+providing a clear path to upgrade from standard DOM traversal to structured tool
+use is critical. Use standard `<link>` tags to declare WebMCP discovery. For a
+complete example, see
+[Agentic Browser WebMCP Integration](../examples/agentic-browser-web-mcp.md).
+
+```html
+<head>
+  <!-- Standardized WebMCP Discovery -->
+  <link
+    rel="alternate"
+    type="application/mcp+json"
+    href="https://api.example.com/mcp"
+  />
+</head>
+```
+
 ## Testing and Validation
 
 ### Testing by Agent Level
