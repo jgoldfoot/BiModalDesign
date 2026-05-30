@@ -1577,11 +1577,10 @@ primary documentation and guide site for the framework. Audited May 2026.
 **Estimated Compliance Score**: Maturity Level 1 — "Semantically Accessible"
 (Layers 1-2 partially implemented, Layers 3-5 not yet addressed)
 
-**What the site does well:** The most important layer — FR-1 — is fully met.
-The Next.js SSR architecture ensures all content is in the initial HTML
-response, which is exactly what the framework prescribes as the foundation.
-Semantic HTML structure is solid. The site is a strong demonstration of Layers
-1-2.
+**What the site does well:** The most important layer — FR-1 — is fully met. The
+Next.js SSR architecture ensures all content is in the initial HTML response,
+which is exactly what the framework prescribes as the foundation. Semantic HTML
+structure is solid. The site is a strong demonstration of Layers 1-2.
 
 **What needs work:** The site teaches structured data, OpenGraph tags, and agent
 protocols but does not yet implement them itself. Adding JSON-LD (WebSite,
