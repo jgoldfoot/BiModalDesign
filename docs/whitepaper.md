@@ -1968,9 +1968,9 @@ resilient, semantic, structured, and protocol-aware.
 ### **Primary Research**
 
 1. **WebAgents Survey 2025**: "A Survey of WebAgents: Towards Next-Generation AI
-   Agents for Web Automation with Large Foundation Models" — arXiv:2503.23350v1
+   Agents for Web Automation with Large Foundation Models" — arXiv:2503.23350v4
 2. **ST-WebAgentBench**: "A Benchmark for Evaluating Safety and Trustworthiness
-   in Web Agents" — arXiv:2410.06703v2
+   in Web Agents" — arXiv:2410.06703v6
 3. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
    Domains" — arXiv:2406.12045
 4. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World

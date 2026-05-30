@@ -98,7 +98,7 @@ Five architectural layers ensure every agent type is served:
 Layer 5: Agent Protocols      (MCP, A2A, NLWeb)           → Level 5
 Layer 4: API Surface           (REST, GraphQL, OpenAPI)    → Level 4-5
 Layer 3: Structured Data       (schema.org, JSON-LD)      → Level 1-3
-Layer 2: Semantic Structure    (HTML5, ARIA, headings, WCAG 2.2 AA) → Level 1-3
+Layer 2: Semantic Structure    (HTML5, ARIA, headings)     → Level 1-3
 Layer 1: Content Accessibility (FR-1: SSR/SSG)             → Level 0-1
 ```
 
@@ -113,10 +113,12 @@ then Layer 3, and so on.
 Research and benchmarks indicate significant improvements when adhering to
 BiModal Design:
 
-- **12% baseline success** for HTTP Retrievers on conventional CSR sites,
-  improving to **42-70%** with Layer 1 compliance.
-- **72% baseline success** for Browser Automation agents on conventional UI,
-  improving up to **75-88%** with structured data and semantics.
+- **12-20% baseline success** for HTTP Retrievers on conventional CSR sites,
+  improving to **42-65%** with Layer 1 compliance and **60-75%** with full
+  Layer 1-3 implementation.
+- **35-50% baseline success** for Browser Automation agents on conventional UI,
+  improving to **55-72%** with semantic structure and up to **75-88%** with
+  structured data.
 
 ---
 
@@ -284,12 +286,12 @@ npm test
 ## Research & Citations
 
 - **WebAgents Survey 2025** — "A Survey of WebAgents: Towards Next-Generation AI
-  Agents for Web Automation" (arXiv:2503.23350v1)
+  Agents for Web Automation" (arXiv:2503.23350v4)
 - **WebArena-Verified** — Rigorous re-evaluation of autonomous web agents
 - **OSWorld** — Benchmarking Multimodal Agents for Open-Ended Tasks in Real
   Computer Environments
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness
-  in Web Agents" (arXiv:2410.06703v2)
+  in Web Agents" (arXiv:2410.06703v6)
 - **MCP** — Model Context Protocol (modelcontextprotocol.io)
 - **A2A** — Agent-to-Agent Protocol (Google, 2025)
 - **NLWeb** — Natural Language Web Protocol (Microsoft, 2025)
