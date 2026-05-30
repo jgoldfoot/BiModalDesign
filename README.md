@@ -137,8 +137,11 @@ If this returns semantic HTML with content — you pass Layer 1. If it returns
 ### 2. Run BiModal Design Validation
 
 ```bash
-cd tools/validators
-node fr1-validator.js https://your-site.com
+# Quick pass/fail FR-1 check
+node tools/validators/fr1-validator.js https://your-site.com
+
+# Comprehensive audit (structure, semantics, navigation, forms, agent features)
+node tools/validators/fr1-checker.js https://your-site.com --verbose
 ```
 
 ### 3. Implement Core Patterns
@@ -180,19 +183,34 @@ node fr1-validator.js https://your-site.com
 ### FR-1: Initial Payload Accessibility
 
 The foundational requirement: critical content must exist in the initial HTTP
-response. Our validator verifies not only text length, but also checks for
-semantic structure and the absence of an empty SPA shell (`<div id="root">`).
-This is Layer 1 of defense in depth — the floor, not the ceiling.
+response. This is Layer 1 of defense in depth — the floor, not the ceiling.
 
-### Standards Over Custom Attributes
+Two validation tools are included:
 
-v3.0 migrates from custom `data-agent-*` attributes to established standards:
+- **`fr1-validator.js`** — lightweight pass/fail check for FR-1 compliance
+  (text content, semantic structure, SPA shell detection). Ideal for CI gates
+  and quick checks.
+- **`fr1-checker.js`** — comprehensive audit covering semantic content,
+  navigation accessibility, form labels, heading hierarchy, ARIA landmarks,
+  image alt text, and agent-specific features. Use `--verbose` for detailed
+  scoring across six categories.
 
-| v2.x                           | v3.0                                      |
-| ------------------------------ | ----------------------------------------- |
-| `data-agent-context="product"` | `itemscope itemtype="schema.org/Product"` |
-| `data-agent-action="buy"`      | `aria-label="Add to cart"`                |
-| `data-agent-field="price"`     | `itemprop="price"`                        |
+### Standards-First with Agent Attributes
+
+v3.0 uses established standards as the **primary** semantic layer, with
+`data-agent-*` attributes as a **supplementary** layer for intent and action
+metadata that standards don't cover:
+
+| Layer          | Purpose                          | Example                               |
+| -------------- | -------------------------------- | ------------------------------------- |
+| Schema.org     | Content identity and structure   | `itemscope itemtype="schema.org/Product"` |
+| WAI-ARIA       | Accessibility and interaction    | `aria-label="Add to cart"`            |
+| `data-agent-*` | Agent intent, actions, and hints | `data-agent-action="add-to-cart"`     |
+
+Standards (schema.org, ARIA) describe **what content is**. Agent attributes
+describe **what agents can do with it** — actions, intents, component roles,
+and navigation priorities. See the [API Reference](docs/api-reference.md) for
+the full `data-agent-*` attribute specification.
 
 ### Agent Protocols
 
@@ -226,7 +244,11 @@ AI-assisted discoverability.
 
 ### Validation Tools
 
-- **FR-1 Checker** — test server payload accessibility (Layer 1)
+- **FR-1 Validator** (`fr1-validator.js`) — quick pass/fail FR-1 compliance
+  check (Layer 1)
+- **FR-1 Checker** (`fr1-checker.js`) — comprehensive Layer 1-2 audit with
+  detailed scoring across structure, semantics, navigation, forms, content
+  meaning, and agent features
 - **Compliance Auditor** — full BiModal Design compliance suite (Layers 1-3)
 
 ### Implementation Examples
