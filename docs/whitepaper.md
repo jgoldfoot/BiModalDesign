@@ -998,9 +998,8 @@ primitives:
 
 - **Tools**: Actions the agent can take (e.g., search products, add to cart,
   check order status)
-- **Tasks (experimental, added 2025-11-25)**: Asynchronous, long-running
-  operations a client launches and then polls for results (e.g., bulk data
-  processing, complex research)
+- **Tasks (New in Nov 2025)**: Asynchronous, long-running operations the agent
+  can launch and monitor (e.g., bulk data processing, complex research)
 - **Resources**: Data the agent can read (e.g., product catalog, user profile,
   order history)
 - **Prompts**: Pre-built interaction patterns (e.g., "help me find a product")
