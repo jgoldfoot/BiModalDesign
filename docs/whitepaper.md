@@ -481,6 +481,9 @@ it's measurable:
   Studio for agent automation.
 - **Academic Research**: 200+ papers published on web agent architectures and
   benchmarks in 2024-2025.
+- **OSWorld-Human Benchmark (2025)**: Revealed that computer-use agents suffer
+  from extreme latency, taking up to 2.7x more steps than humans due to planning
+  overhead, emphasizing the need for temporal efficiency and "macro actions".
 - **WebVoyager Benchmark**: Highlighted the specific challenges of end-to-end
   agent navigation on live, stateful, and dynamic web applications.
 - **BrowseComp Benchmark (2026)**: Defined the gold standard for evaluating
@@ -995,6 +998,8 @@ primitives:
 
 - **Tools**: Actions the agent can take (e.g., search products, add to cart,
   check order status)
+- **Tasks (New in Nov 2025)**: Asynchronous, long-running operations the agent
+  can launch and monitor (e.g., bulk data processing, complex research)
 - **Resources**: Data the agent can read (e.g., product catalog, user profile,
   order history)
 - **Prompts**: Pre-built interaction patterns (e.g., "help me find a product")

@@ -553,6 +553,43 @@ complete example, see
 </head>
 ```
 
+### Pattern 10: MCP Async Tasks for Temporal Efficiency (OSWorld-Human)
+
+OSWorld-Human benchmarks show that forcing agents to perform numerous granular
+synchronous actions causes extreme latency. The November 2025 MCP specification
+introduced `Tasks` to solve this. Instead of a synchronous tool call that blocks
+the agent, expose a long-running Task.
+
+```javascript
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
+
+const server = new McpServer({
+  name: 'enterprise-agent-workflows',
+  version: '1.0.0',
+});
+
+// Define an asynchronous Task for a long-running process
+server.task(
+  'generate_monthly_report',
+  { department: z.string() },
+  async ({ department }, { progress }) => {
+    progress.report(0, 'Starting data aggregation...');
+    const data = await gatherData(department);
+
+    progress.report(50, 'Analyzing trends...');
+    const report = await analyzeData(data);
+
+    progress.report(100, 'Complete');
+    return {
+      status: 'complete',
+      content: [{ type: 'text', text: report.summary }],
+      downloadUrl: report.url,
+    };
+  }
+);
+```
+
 ## Testing and Validation
 
 ### Testing by Agent Level
