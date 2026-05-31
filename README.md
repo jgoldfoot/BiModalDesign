@@ -114,8 +114,8 @@ Research and benchmarks indicate significant improvements when adhering to
 BiModal Design:
 
 - **12-20% baseline success** for HTTP Retrievers on conventional CSR sites,
-  improving to **42-65%** with Layer 1 compliance and **60-75%** with full
-  Layer 1-3 implementation.
+  improving to **42-65%** with Layer 1 compliance and **60-75%** with full Layer
+  1-3 implementation.
 - **35-50% baseline success** for Browser Automation agents on conventional UI,
   improving to **55-72%** with semantic structure and up to **75-88%** with
   structured data.
@@ -187,9 +187,9 @@ response. This is Layer 1 of defense in depth — the floor, not the ceiling.
 
 Two validation tools are included:
 
-- **`fr1-validator.js`** — lightweight pass/fail check for FR-1 compliance
-  (text content, semantic structure, SPA shell detection). Ideal for CI gates
-  and quick checks.
+- **`fr1-validator.js`** — lightweight pass/fail check for FR-1 compliance (text
+  content, semantic structure, SPA shell detection). Ideal for CI gates and
+  quick checks.
 - **`fr1-checker.js`** — comprehensive audit covering semantic content,
   navigation accessibility, form labels, heading hierarchy, ARIA landmarks,
   image alt text, and agent-specific features. Use `--verbose` for detailed
@@ -201,16 +201,16 @@ v3.0 uses established standards as the **primary** semantic layer, with
 `data-agent-*` attributes as a **supplementary** layer for intent and action
 metadata that standards don't cover:
 
-| Layer          | Purpose                          | Example                               |
-| -------------- | -------------------------------- | ------------------------------------- |
+| Layer          | Purpose                          | Example                                   |
+| -------------- | -------------------------------- | ----------------------------------------- |
 | Schema.org     | Content identity and structure   | `itemscope itemtype="schema.org/Product"` |
-| WAI-ARIA       | Accessibility and interaction    | `aria-label="Add to cart"`            |
-| `data-agent-*` | Agent intent, actions, and hints | `data-agent-action="add-to-cart"`     |
+| WAI-ARIA       | Accessibility and interaction    | `aria-label="Add to cart"`                |
+| `data-agent-*` | Agent intent, actions, and hints | `data-agent-action="add-to-cart"`         |
 
 Standards (schema.org, ARIA) describe **what content is**. Agent attributes
-describe **what agents can do with it** — actions, intents, component roles,
-and navigation priorities. See the [API Reference](docs/api-reference.md) for
-the full `data-agent-*` attribute specification.
+describe **what agents can do with it** — actions, intents, component roles, and
+navigation priorities. See the [API Reference](docs/api-reference.md) for the
+full `data-agent-*` attribute specification.
 
 ### Agent Protocols
 
