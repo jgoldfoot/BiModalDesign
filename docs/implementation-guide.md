@@ -553,6 +553,149 @@ complete example, see
 </head>
 ```
 
+### Pattern 10: MCP Async Tasks for Long-Running Operations
+
+Benchmarks like OSWorld-Human (arXiv:2506.16042) show computer-use agents lose
+most of their time to end-to-end latency, with even top performers taking
+1.4-2.7x more steps than a human reference trajectory. Forcing an agent through
+a long synchronous tool call makes this worse and risks the transport timing out
+before the work completes.
+
+The MCP `Tasks` primitive (introduced in the 2025-11-25 spec, SEP-1686,
+currently experimental) addresses this with a "call-now, fetch-later" flow.
+Tasks are an augmentation of an existing `tools/call`, not a separate kind of
+tool you register: the client augments the call with a task, the server returns
+a task handle immediately, and the client polls `tasks/get` for status
+(`working` -> `completed`/`failed`/`cancelled`) then retrieves the
+`CallToolResult` via `tasks/result`.
+
+> **The Tasks API is experimental and may change.** Pin to the 2025-11-25 spec
+> version.
+
+A server opts in by declaring the `tasks` capability and marking a tool
+task-augmentable via its `execution` field. Task state is persisted through a
+`TaskStore` (`InMemoryTaskStore` ships for reference; use a durable store in
+production).
+
+```typescript
+import {
+  InMemoryTaskStore,
+  isTerminal,
+  Server,
+} from '@modelcontextprotocol/server';
+import type {
+  CallToolResult,
+  CreateTaskOptions,
+  CreateTaskResult,
+  GetTaskPayloadResult,
+  GetTaskResult,
+  Tool,
+} from '@modelcontextprotocol/server';
+
+const taskStore = new InMemoryTaskStore();
+
+const server = new Server(
+  { name: 'enterprise-reporting-agent', version: '2.1.0' },
+  {
+    capabilities: {
+      tools: {},
+      tasks: { requests: { tools: { call: {} } } }, // declare task support
+    },
+  }
+);
+
+server.setRequestHandler(
+  'tools/list',
+  async (): Promise<{ tools: Tool[] }> => ({
+    tools: [
+      {
+        name: 'generate_comprehensive_audit',
+        description:
+          'Runs a long audit across departments and returns a report',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            startDate: { type: 'string' },
+            endDate: { type: 'string' },
+            departments: { type: 'array', items: { type: 'string' } },
+          },
+          required: ['startDate', 'endDate', 'departments'],
+        },
+        execution: { taskSupport: 'required' }, // 'optional' also allows sync calls
+      },
+    ],
+  })
+);
+
+// Create the task, return the handle immediately, run the work in the background.
+server.setRequestHandler(
+  'tools/call',
+  async (request, ctx): Promise<CallToolResult | CreateTaskResult> => {
+    const { name, arguments: args } = request.params;
+    const taskParams = (request.params._meta?.task ?? request.params.task) as
+      | { ttl?: number; pollInterval?: number }
+      | undefined;
+    if (!taskParams) throw new Error(`Tool ${name} requires task mode`);
+
+    const options: CreateTaskOptions = {
+      ttl: taskParams.ttl,
+      pollInterval: taskParams.pollInterval ?? 2000,
+    };
+    const task = await taskStore.createTask(
+      options,
+      ctx.mcpReq.id,
+      request,
+      ctx.sessionId
+    );
+
+    void (async () => {
+      try {
+        await taskStore.updateTaskStatus(task.taskId, 'working', 'Working...');
+        const report = await runAudit(args); // your long-running work
+        await taskStore.storeTaskResult(task.taskId, 'completed', {
+          content: [{ type: 'text', text: report.summary }],
+        });
+      } catch (error) {
+        await taskStore.storeTaskResult(task.taskId, 'failed', {
+          content: [{ type: 'text', text: `Audit failed: ${String(error)}` }],
+          isError: true,
+        });
+      }
+    })();
+
+    return { task }; // the handle, not the result
+  }
+);
+
+server.setRequestHandler(
+  'tasks/get',
+  async (request): Promise<GetTaskResult> => {
+    const task = await taskStore.getTask(request.params.taskId);
+    if (!task) throw new Error(`Task ${request.params.taskId} not found`);
+    return task;
+  }
+);
+
+server.setRequestHandler(
+  'tasks/result',
+  async (request): Promise<GetTaskPayloadResult> => {
+    const task = await taskStore.getTask(request.params.taskId);
+    if (!task) throw new Error(`Task ${request.params.taskId} not found`);
+    if (!isTerminal(task.status)) {
+      throw new Error(
+        `Task ${request.params.taskId} not finished; keep polling`
+      );
+    }
+    return taskStore.getTaskResult(request.params.taskId);
+  }
+);
+```
+
+Transport and session wiring use standard Streamable HTTP; see the full runnable
+version in `examples/mcp-async-tasks.md`. The SDK also exposes a higher-level
+helper, `server.experimental.tasks.registerToolTask(...)`, documented in the MCP
+TypeScript SDK server guide (also experimental).
+
 ## Testing and Validation
 
 ### Testing by Agent Level
