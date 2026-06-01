@@ -222,7 +222,9 @@ describe('BiModalDesignCLI', () => {
     });
 
     it('should ignore lines that do not start with http', async () => {
-      fs.promises.readFile.mockResolvedValueOnce('http://a.com\nftp://b.com\nexample.com\nhttps://c.com');
+      fs.promises.readFile.mockResolvedValueOnce(
+        'http://a.com\nftp://b.com\nexample.com\nhttps://c.com'
+      );
       const urls = await cli.loadUrlsFromFile('dummy.txt');
       expect(urls).toEqual(['http://a.com', 'https://c.com']);
     });
