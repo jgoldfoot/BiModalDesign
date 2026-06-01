@@ -193,14 +193,14 @@ describe('fetchInitialPayload', () => {
         process.nextTick(() => {
           callback(mockRes);
           // Simulate data events
-          const dataCallback = mockRes.on.mock.calls.find(call => call[0] === 'data')?.[1];
+          const dataCallback = mockRes.on.mock.calls.find((call) => call[0] === 'data')?.[1];
           if (dataCallback) {
             dataCallback('<html><body>');
             dataCallback('Test Content');
             dataCallback('</body></html>');
           }
           // Simulate end event
-          const endCallback = mockRes.on.mock.calls.find(call => call[0] === 'end')?.[1];
+          const endCallback = mockRes.on.mock.calls.find((call) => call[0] === 'end')?.[1];
           if (endCallback) endCallback();
         });
         return mockReq;
@@ -259,7 +259,7 @@ describe('fetchInitialPayload', () => {
 
     https.get.mockImplementation((_url, _options, _callback) => {
       process.nextTick(() => {
-        const errorCallback = mockReq.on.mock.calls.find(call => call[0] === 'error')?.[1];
+        const errorCallback = mockReq.on.mock.calls.find((call) => call[0] === 'error')?.[1];
         if (errorCallback) errorCallback(mockError);
       });
       return mockReq;
