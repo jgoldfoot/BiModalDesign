@@ -244,3 +244,37 @@ describe('AgentSimulator - compareAgentResults', () => {
     expect(Object.keys(comparison.accessibilityScores)).toEqual(['basic']);
   });
 });
+
+describe('AgentSimulator - simulateAgent', () => {
+  let simulator;
+  const puppeteer = require('puppeteer');
+
+  beforeEach(() => {
+    simulator = new AgentSimulator();
+    // Use jest's fake timers to mock Date output
+    jest.useFakeTimers().setSystemTime(new Date('2023-10-27T10:00:00.000Z'));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+    jest.restoreAllMocks();
+  });
+
+  it('should return error object when browser.newPage throws an error', async () => {
+    // Mock puppeteer.launch to return a mock browser with newPage throwing
+    puppeteer.launch = jest.fn().mockResolvedValue({
+      newPage: jest.fn().mockRejectedValue(new Error('Simulated page error')),
+      close: jest.fn().mockResolvedValue(),
+    });
+
+    const result = await simulator.simulateAgent('https://example.com', 'basic');
+
+    expect(result).toEqual({
+      url: 'https://example.com',
+      agentType: 'basic',
+      timestamp: '2023-10-27T10:00:00.000Z',
+      error: 'Simulated page error',
+      success: false,
+    });
+  });
+});
