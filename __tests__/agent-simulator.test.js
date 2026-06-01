@@ -245,7 +245,6 @@ describe('AgentSimulator - compareAgentResults', () => {
   });
 });
 
-
 describe('AgentSimulator - executeTask', () => {
   let simulator;
   let mockPage;
@@ -257,7 +256,7 @@ describe('AgentSimulator - executeTask', () => {
     mockPage = {
       $$: jest.fn(),
       $$eval: jest.fn(),
-      evaluate: jest.fn()
+      evaluate: jest.fn(),
     };
 
     // Mock task specific analysis to isolate tests
@@ -271,23 +270,23 @@ describe('AgentSimulator - executeTask', () => {
         name: 'Test Task',
         description: 'A task for testing',
         selectors: ['.test-selector'],
-        textPatterns: [/test pattern/g]
+        textPatterns: [/test pattern/g],
       },
       'find-contact': {
         name: 'Find Contact',
         description: 'Test specific analysis',
-        selectors: ['.contact']
+        selectors: ['.contact'],
       },
       'extract-content': {
         name: 'Extract Content',
         description: 'Test specific analysis',
-        selectors: ['main']
+        selectors: ['main'],
       },
       'form-interaction': {
         name: 'Form Interaction',
         description: 'Test specific analysis',
-        selectors: ['form']
-      }
+        selectors: ['form'],
+      },
     };
   });
 
@@ -299,7 +298,7 @@ describe('AgentSimulator - executeTask', () => {
   it('should test selector-based discovery successfully', async () => {
     mockPage.$$.mockResolvedValue([{}]); // simulate one element found
     mockPage.$$eval.mockResolvedValue([
-      { text: 'test text', href: 'url', tagName: 'A', attributes: { id: 'test' } }
+      { text: 'test text', href: 'url', tagName: 'A', attributes: { id: 'test' } },
     ]);
     mockPage.evaluate.mockResolvedValue(''); // no text matches
 
