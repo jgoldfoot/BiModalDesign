@@ -427,10 +427,9 @@ class BiModalDesignComplianceAuditor {
                 let totalControls = 0;
                 let labeledControls = 0;
                 
-                controls.forEach(control => {
-                    if (control.type === 'hidden' || control.type === 'submit' || control.type === 'button') {
-                        return; // Skip these types
-                    }
+                Array.from(controls)
+                    .filter(control => control.type !== 'hidden' && control.type !== 'submit' && control.type !== 'button')
+                    .forEach(control => {
                     
                     totalControls++;
                     
