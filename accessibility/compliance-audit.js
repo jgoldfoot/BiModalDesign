@@ -938,11 +938,8 @@ class BiModalDesignComplianceAuditor {
 }
 
 // CLI Implementation
-async function main() {
-    const args = process.argv.slice(2);
-    
-    if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
-        console.log(`
+function printHelp() {
+    console.log(`
 BiModal Design Compliance Audit Tool
 
 Usage:
@@ -977,64 +974,74 @@ Batch File Format:
 https://example.com
 https://test.com
 https://another-site.com
-        `);
+    `);
+}
+
+function parseArguments(args) {
+    const options = {
+        url: null,
+        output: null,
+        format: 'json',
+        timeout: 30000,
+        screenshots: false,
+        config: null,
+        batch: null
+    };
+
+    for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
+
+        if (arg.startsWith('http')) {
+            options.url = arg;
+        } else if (arg === '--output' || arg === '-o') {
+            options.output = args[++i];
+        } else if (arg === '--format' || arg === '-f') {
+            options.format = args[++i];
+        } else if (arg === '--timeout' || arg === '-t') {
+            options.timeout = parseInt(args[++i]);
+        } else if (arg === '--screenshots') {
+            options.screenshots = true;
+        } else if (arg === '--config' || arg === '-c') {
+            options.config = args[++i];
+        } else if (arg === '--batch' || arg === '-b') {
+            options.batch = args[++i];
+        }
+    }
+    return options;
+}
+
+// Helper function to process URLs in concurrent chunks
+async function processInChunks(urls, auditorInstance, concurrency = 5) {
+    const results = [];
+    for (let i = 0; i < urls.length; i += concurrency) {
+        const chunk = urls.slice(i, i + concurrency);
+        const chunkPromises = chunk.map(async (url) => {
+            const cleanUrl = url.trim();
+            console.log(`Auditing: ${cleanUrl}`);
+            const result = await auditorInstance.auditPage(cleanUrl);
+            console.log(`  Score for ${cleanUrl}: ${result.overallScore}% ${result.passed ? '✅' : '❌'}`);
+            return result;
+        });
+        const chunkResults = await Promise.all(chunkPromises);
+        results.push(...chunkResults);
+    }
+    return results;
+}
+
+async function main() {
+    const args = process.argv.slice(2);
+
+    if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
+        printHelp();
         process.exit(0);
     }
 
     try {
         const auditor = new BiModalDesignComplianceAuditor();
-        
-        // Parse command line arguments
-        const options = {
-            url: null,
-            output: null,
-            format: 'json',
-            timeout: 30000,
-            screenshots: false,
-            config: null,
-            batch: null
-        };
-        
-        for (let i = 0; i < args.length; i++) {
-            const arg = args[i];
-            
-            if (arg.startsWith('http')) {
-                options.url = arg;
-            } else if (arg === '--output' || arg === '-o') {
-                options.output = args[++i];
-            } else if (arg === '--format' || arg === '-f') {
-                options.format = args[++i];
-            } else if (arg === '--timeout' || arg === '-t') {
-                options.timeout = parseInt(args[++i]);
-            } else if (arg === '--screenshots') {
-                options.screenshots = true;
-            } else if (arg === '--config' || arg === '-c') {
-                options.config = args[++i];
-            } else if (arg === '--batch' || arg === '-b') {
-                options.batch = args[++i];
-            }
-        }
+        const options = parseArguments(args);
         
         let results;
         
-        // Helper function to process URLs in concurrent chunks
-        const processInChunks = async (urls, auditorInstance, concurrency = 5) => {
-            const results = [];
-            for (let i = 0; i < urls.length; i += concurrency) {
-                const chunk = urls.slice(i, i + concurrency);
-                const chunkPromises = chunk.map(async (url) => {
-                    const cleanUrl = url.trim();
-                    console.log(`Auditing: ${cleanUrl}`);
-                    const result = await auditorInstance.auditPage(cleanUrl);
-                    console.log(`  Score for ${cleanUrl}: ${result.overallScore}% ${result.passed ? '✅' : '❌'}`);
-                    return result;
-                });
-                const chunkResults = await Promise.all(chunkPromises);
-                results.push(...chunkResults);
-            }
-            return results;
-        };
-
         if (options.config) {
             // Load configuration file
             const configData = JSON.parse(await fs.readFile(options.config, 'utf8'));
