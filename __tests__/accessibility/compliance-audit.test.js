@@ -40,6 +40,21 @@ describe('BiModalDesignComplianceAuditor', () => {
     };
   });
 
+  describe('testFR3', () => {
+    it('should gracefully handle errors during execution', async () => {
+      const mockError = new Error('Simulated $$eval failure');
+      const mockPage = {
+        $$eval: jest.fn().mockRejectedValue(mockError),
+      };
+
+      const result = await auditor.testFR3(mockPage);
+
+      expect(result.passed).toBe(false);
+      expect(result.score).toBe(0);
+      expect(result.issues).toContain(`FR-3 test error: ${mockError.message}`);
+    });
+  });
+
   describe('generateReport', () => {
     it('should default to generating a JSON report', async () => {
       const report = await auditor.generateReport(mockResults);
