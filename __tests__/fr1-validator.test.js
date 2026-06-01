@@ -257,7 +257,7 @@ describe('fetchInitialPayload', () => {
     const url = 'https://example.com';
     const mockError = new Error('Network error');
 
-    https.get.mockImplementation((url, options, callback) => {
+    https.get.mockImplementation((_url, _options, _callback) => {
       process.nextTick(() => {
         const errorCallback = mockReq.on.mock.calls.find(call => call[0] === 'error')?.[1];
         if (errorCallback) errorCallback(mockError);
@@ -271,7 +271,7 @@ describe('fetchInitialPayload', () => {
   test('should reject on request timeout', async () => {
     const url = 'https://example.com';
 
-    https.get.mockImplementation((url, options, callback) => {
+    https.get.mockImplementation((_url, _options, _callback) => {
       process.nextTick(() => {
         const timeoutCallback = mockReq.setTimeout.mock.calls[0]?.[1];
         if (timeoutCallback) timeoutCallback();
