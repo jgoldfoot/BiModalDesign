@@ -259,7 +259,6 @@ describe('FR1Checker - generateRecommendations', () => {
   });
 });
 
-
 describe('FR1Checker - checkURL', () => {
   let checker;
 
@@ -287,7 +286,7 @@ describe('FR1Checker - checkURL', () => {
         issues: [],
         warnings: [],
         recommendations: [],
-        details: {}
+        details: {},
       };
     });
 
@@ -305,7 +304,7 @@ describe('FR1Checker - checkURL', () => {
       issues: [],
       warnings: [],
       recommendations: [],
-      details: {}
+      details: {},
     });
   });
 
@@ -328,7 +327,7 @@ describe('FR1Checker - checkURL', () => {
       passed: false,
       score: 0,
       error: 'Network timeout',
-      issues: ['Failed to load page: Network timeout']
+      issues: ['Failed to load page: Network timeout'],
     });
   });
 
@@ -354,7 +353,7 @@ describe('FR1Checker - checkURL', () => {
       passed: false,
       score: 0,
       error: 'Parse error',
-      issues: ['Failed to load page: Parse error']
+      issues: ['Failed to load page: Parse error'],
     });
   });
 });
