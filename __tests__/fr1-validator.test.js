@@ -3,7 +3,12 @@
  * These tests verify the Initial Payload Accessibility validation
  */
 
-const { log, COLORS } = require('../tools/validators/fr1-validator.js');
+const http = require('http');
+const https = require('https');
+const { fetchInitialPayload, log, COLORS } = require('../tools/validators/fr1-validator');
+
+jest.mock('http');
+jest.mock('https');
 
 describe('FR1 Validator', () => {
   describe('log function', () => {
@@ -192,6 +197,123 @@ describe('FR1 Validator', () => {
       const totalWeight = fr1Weight + semanticWeight + ariaWeight;
       expect(totalWeight).toBeLessThanOrEqual(100);
     });
+  });
+});
+
+describe('fetchInitialPayload', () => {
+  let mockReq;
+  let mockRes;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    mockReq = {
+      on: jest.fn(),
+      setTimeout: jest.fn(),
+      destroy: jest.fn(),
+    };
+
+    mockRes = {
+      statusCode: 200,
+      headers: { 'content-type': 'text/html' },
+      on: jest.fn(),
+    };
+
+    // Setup mock implementation for https.get and http.get
+    const setupGetMock = (client) => {
+      client.get.mockImplementation((url, options, callback) => {
+        // Asynchronously call the callback with the mock response to simulate network delay
+        process.nextTick(() => {
+          callback(mockRes);
+          // Simulate data events
+          const dataCallback = mockRes.on.mock.calls.find((call) => call[0] === 'data')?.[1];
+          if (dataCallback) {
+            dataCallback('<html><body>');
+            dataCallback('Test Content');
+            dataCallback('</body></html>');
+          }
+          // Simulate end event
+          const endCallback = mockRes.on.mock.calls.find((call) => call[0] === 'end')?.[1];
+          if (endCallback) endCallback();
+        });
+        return mockReq;
+      });
+    };
+
+    setupGetMock(http);
+    setupGetMock(https);
+  });
+
+  test('should successfully fetch content via HTTP', async () => {
+    const url = 'http://example.com';
+    const result = await fetchInitialPayload(url);
+
+    expect(http.get).toHaveBeenCalledWith(
+      url,
+      expect.objectContaining({
+        headers: {
+          'User-Agent': 'BiModal Design-Validator/1.0 (Simple HTTP; No JS)',
+        },
+      }),
+      expect.any(Function)
+    );
+    expect(https.get).not.toHaveBeenCalled();
+    expect(result).toEqual({
+      statusCode: 200,
+      headers: { 'content-type': 'text/html' },
+      body: '<html><body>Test Content</body></html>',
+    });
+  });
+
+  test('should successfully fetch content via HTTPS', async () => {
+    const url = 'https://example.com';
+    const result = await fetchInitialPayload(url);
+
+    expect(https.get).toHaveBeenCalledWith(
+      url,
+      expect.objectContaining({
+        headers: {
+          'User-Agent': 'BiModal Design-Validator/1.0 (Simple HTTP; No JS)',
+        },
+      }),
+      expect.any(Function)
+    );
+    expect(http.get).not.toHaveBeenCalled();
+    expect(result).toEqual({
+      statusCode: 200,
+      headers: { 'content-type': 'text/html' },
+      body: '<html><body>Test Content</body></html>',
+    });
+  });
+
+  test('should reject on request error', async () => {
+    const url = 'https://example.com';
+    const mockError = new Error('Network error');
+
+    https.get.mockImplementation((_url, _options, _callback) => {
+      process.nextTick(() => {
+        const errorCallback = mockReq.on.mock.calls.find((call) => call[0] === 'error')?.[1];
+        if (errorCallback) errorCallback(mockError);
+      });
+      return mockReq;
+    });
+
+    await expect(fetchInitialPayload(url)).rejects.toThrow('Network error');
+  });
+
+  test('should reject on request timeout', async () => {
+    const url = 'https://example.com';
+
+    https.get.mockImplementation((_url, _options, _callback) => {
+      process.nextTick(() => {
+        const timeoutCallback = mockReq.setTimeout.mock.calls[0]?.[1];
+        if (timeoutCallback) timeoutCallback();
+      });
+      return mockReq;
+    });
+
+    await expect(fetchInitialPayload(url)).rejects.toThrow('Request timeout');
+    expect(mockReq.destroy).toHaveBeenCalled();
   });
 });
 

@@ -203,14 +203,17 @@ Repository: https://github.com/jgoldfoot/BiModalDesign
     if (options.batch) {
       // Batch audit from file
       const urls = await this.loadUrlsFromFile(options.batch);
-      results = [];
 
-      for (const url of urls) {
-        console.log(`Auditing: ${url}`);
-        const result = await auditor.auditPage(url);
-        results.push(result);
-        console.log(`  Score: ${result.overallScore}% ${result.passed ? '✅' : '❌'}`);
-      }
+      // ⚡ Bolt Performance Optimization:
+      // Parallelize batch auditing with Promise.all to significantly speed up execution time.
+      results = await Promise.all(
+        urls.map(async (url) => {
+          console.log(`Auditing: ${url}`);
+          const result = await auditor.auditPage(url);
+          console.log(`  Score: ${result.overallScore}% ${result.passed ? '✅' : '❌'}`);
+          return result;
+        })
+      );
     } else if (options.url) {
       // Single URL audit
       console.log(`Auditing: ${options.url}`);
@@ -733,13 +736,13 @@ Documentation: https://bimodal.design/docs
   }
 
   async loadConfig(configPath) {
-    if (configPath.endsWith('.json')) {
-      const content = await fs.readFile(configPath, 'utf8');
-      return JSON.parse(content);
-    } else if (configPath === 'package.json') {
+    if (configPath === 'package.json') {
       const content = await fs.readFile(configPath, 'utf8');
       const pkg = JSON.parse(content);
       return pkg['bimodal-design'] || {};
+    } else if (configPath.endsWith('.json')) {
+      const content = await fs.readFile(configPath, 'utf8');
+      return JSON.parse(content);
     }
 
     // Default config
