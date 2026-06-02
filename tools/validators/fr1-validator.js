@@ -222,6 +222,8 @@ if (require.main === module) {
 }
 
 module.exports = {
-  fetchInitialPayload,
+  log,
+  COLORS,
   analyzePayload,
+  fetchInitialPayload,
 };
