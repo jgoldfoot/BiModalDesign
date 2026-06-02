@@ -719,11 +719,8 @@ class AgentSimulator {
 }
 
 // CLI Implementation
-async function main() {
-    const args = process.argv.slice(2);
-    
-    if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
-        console.log(`
+function showHelp() {
+    console.log(`
 BiModal Design Agent Simulator Tool
 
 Usage:
@@ -758,48 +755,59 @@ Examples:
   agent-simulator https://example.com --multi-agent --format markdown --output report.md
   agent-simulator https://example.com --tasks form-interaction --format html --output report.html
         `);
+}
+
+function parseArguments(args) {
+    if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
+        showHelp();
         process.exit(0);
     }
 
-    try {
-        const simulator = new AgentSimulator();
+    const url = args.find(arg => arg.startsWith('http'));
+    if (!url) {
+        console.error('Error: Please provide a URL');
+        process.exit(1);
+    }
+
+    const options = {
+        agentType: 'basic',
+        tasks: ['extract-content'],
+        multiAgent: false,
+        output: null,
+        format: 'json',
+        headless: true,
+        timeout: 30000
+    };
+
+    for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
         
-        // Parse arguments
-        const url = args.find(arg => arg.startsWith('http'));
-        if (!url) {
-            console.error('Error: Please provide a URL');
-            process.exit(1);
+        if (arg === '--agent-type' || arg === '-a') {
+            options.agentType = args[++i];
+        } else if (arg === '--tasks' || arg === '-t') {
+            options.tasks = args[++i].split(',');
+        } else if (arg === '--multi-agent' || arg === '-m') {
+            options.multiAgent = true;
+        } else if (arg === '--output' || arg === '-o') {
+            options.output = args[++i];
+        } else if (arg === '--format' || arg === '-f') {
+            options.format = args[++i];
+        } else if (arg === '--headless') {
+            options.headless = args[++i] !== 'false';
+        } else if (arg === '--timeout') {
+            options.timeout = parseInt(args[++i]);
         }
+    }
 
-        const options = {
-            agentType: 'basic',
-            tasks: ['extract-content'],
-            multiAgent: false,
-            output: null,
-            format: 'json',
-            headless: true,
-            timeout: 30000
-        };
+    return { url, options };
+}
 
-        for (let i = 0; i < args.length; i++) {
-            const arg = args[i];
-            
-            if (arg === '--agent-type' || arg === '-a') {
-                options.agentType = args[++i];
-            } else if (arg === '--tasks' || arg === '-t') {
-                options.tasks = args[++i].split(',');
-            } else if (arg === '--multi-agent' || arg === '-m') {
-                options.multiAgent = true;
-            } else if (arg === '--output' || arg === '-o') {
-                options.output = args[++i];
-            } else if (arg === '--format' || arg === '-f') {
-                options.format = args[++i];
-            } else if (arg === '--headless') {
-                options.headless = args[++i] !== 'false';
-            } else if (arg === '--timeout') {
-                options.timeout = parseInt(args[++i]);
-            }
-        }
+async function main() {
+    const args = process.argv.slice(2);
+    const { url, options } = parseArguments(args);
+
+    try {
+        const simulator = new AgentSimulator(options);
 
         // Configure simulator
         simulator.options.headless = options.headless;
