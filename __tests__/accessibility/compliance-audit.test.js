@@ -40,6 +40,82 @@ describe('BiModalDesignComplianceAuditor', () => {
     };
   });
 
+  describe('testFR2', () => {
+    it('should pass with proper heading hierarchy, all landmarks, and lists', async () => {
+      const mockPage = {
+        evaluate: jest.fn()
+          .mockResolvedValueOnce([{ level: 1, text: 'H1' }, { level: 2, text: 'H2' }]) // Headings
+          .mockResolvedValueOnce(['header', 'nav', 'main', 'footer']), // Landmarks
+        $$eval: jest.fn().mockResolvedValue(2), // Lists
+      };
+
+      const result = await auditor.testFR2(mockPage);
+
+      expect(result.passed).toBe(true);
+      expect(result.score).toBe(100);
+      expect(result.issues.length).toBe(0);
+      expect(result.details).toContain('Document outline with 2 headings');
+      expect(result.details).toContain('Proper heading hierarchy maintained');
+      expect(result.details).toContain('All required landmarks present');
+      expect(result.details).toContain('Found 2 list elements');
+    });
+
+    it('should report an issue when no headings are found', async () => {
+      const mockPage = {
+        evaluate: jest.fn()
+          .mockResolvedValueOnce([]) // No headings
+          .mockResolvedValueOnce(['header', 'nav', 'main', 'footer']),
+        $$eval: jest.fn().mockResolvedValue(0),
+      };
+
+      const result = await auditor.testFR2(mockPage);
+
+      expect(result.passed).toBe(false); // 2/3 passed (67% score, need 70% to pass)
+      expect(result.issues).toContain('No heading structure found');
+    });
+
+    it('should report an issue when heading hierarchy is invalid', async () => {
+      const mockPage = {
+        evaluate: jest.fn()
+          .mockResolvedValueOnce([{ level: 1, text: 'H1' }, { level: 3, text: 'H3' }]) // Gap in hierarchy
+          .mockResolvedValueOnce(['header', 'nav', 'main', 'footer']),
+        $$eval: jest.fn().mockResolvedValue(0),
+      };
+
+      const result = await auditor.testFR2(mockPage);
+
+      expect(result.passed).toBe(false);
+      expect(result.issues).toContain('Heading hierarchy has gaps (e.g., h1 directly to h3)');
+    });
+
+    it('should report an issue when required landmarks are missing', async () => {
+      const mockPage = {
+        evaluate: jest.fn()
+          .mockResolvedValueOnce([{ level: 1, text: 'H1' }])
+          .mockResolvedValueOnce(['header', 'footer']), // Missing nav, main
+        $$eval: jest.fn().mockResolvedValue(0),
+      };
+
+      const result = await auditor.testFR2(mockPage);
+
+      expect(result.passed).toBe(false);
+      expect(result.issues).toContain('Missing landmarks: nav, main');
+    });
+
+    it('should gracefully handle errors during execution', async () => {
+      const mockError = new Error('Evaluate failed');
+      const mockPage = {
+        evaluate: jest.fn().mockRejectedValue(mockError),
+      };
+
+      const result = await auditor.testFR2(mockPage);
+
+      expect(result.passed).toBe(false);
+      expect(result.score).toBe(0);
+      expect(result.issues).toContain(`FR-2 test error: ${mockError.message}`);
+    });
+  });
+
   describe('testFR3', () => {
     it('should gracefully handle errors during execution', async () => {
       const mockError = new Error('Simulated $$eval failure');
