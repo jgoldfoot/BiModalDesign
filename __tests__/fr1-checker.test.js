@@ -275,11 +275,11 @@ describe('FR1Checker - checkURL', () => {
   });
 
   it('should return combined result on successful check', async () => {
-    jest.spyOn(checker, 'fetchHTML').mockImplementation(async () => {
+    jest.spyOn(checker, 'fetchHTML').mockImplementation(() => {
       jest.setSystemTime(new Date('2023-01-01T00:00:00.050Z'));
       return '<html></html>';
     });
-    jest.spyOn(checker, 'analyzeHTML').mockImplementation(async () => {
+    jest.spyOn(checker, 'analyzeHTML').mockImplementation(() => {
       jest.setSystemTime(new Date('2023-01-01T00:00:00.100Z'));
       return {
         passed: true,
@@ -310,7 +310,7 @@ describe('FR1Checker - checkURL', () => {
   });
 
   it('should handle errors from fetchHTML', async () => {
-    jest.spyOn(checker, 'fetchHTML').mockImplementation(async () => {
+    jest.spyOn(checker, 'fetchHTML').mockImplementation(() => {
       jest.setSystemTime(new Date('2023-01-01T00:00:00.050Z'));
       throw new Error('Network timeout');
     });
@@ -333,11 +333,11 @@ describe('FR1Checker - checkURL', () => {
   });
 
   it('should handle errors from analyzeHTML', async () => {
-    jest.spyOn(checker, 'fetchHTML').mockImplementation(async () => {
+    jest.spyOn(checker, 'fetchHTML').mockImplementation(() => {
       jest.setSystemTime(new Date('2023-01-01T00:00:00.050Z'));
       return '<html></html>';
     });
-    jest.spyOn(checker, 'analyzeHTML').mockImplementation(async () => {
+    jest.spyOn(checker, 'analyzeHTML').mockImplementation(() => {
       jest.setSystemTime(new Date('2023-01-01T00:00:00.080Z'));
       throw new Error('Parse error');
     });
