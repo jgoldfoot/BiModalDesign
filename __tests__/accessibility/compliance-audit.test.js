@@ -43,8 +43,12 @@ describe('BiModalDesignComplianceAuditor', () => {
   describe('testFR2', () => {
     it('should pass with proper heading hierarchy, all landmarks, and lists', async () => {
       const mockPage = {
-        evaluate: jest.fn()
-          .mockResolvedValueOnce([{ level: 1, text: 'H1' }, { level: 2, text: 'H2' }]) // Headings
+        evaluate: jest
+          .fn()
+          .mockResolvedValueOnce([
+            { level: 1, text: 'H1' },
+            { level: 2, text: 'H2' },
+          ]) // Headings
           .mockResolvedValueOnce(['header', 'nav', 'main', 'footer']), // Landmarks
         $$eval: jest.fn().mockResolvedValue(2), // Lists
       };
@@ -62,7 +66,8 @@ describe('BiModalDesignComplianceAuditor', () => {
 
     it('should report an issue when no headings are found', async () => {
       const mockPage = {
-        evaluate: jest.fn()
+        evaluate: jest
+          .fn()
           .mockResolvedValueOnce([]) // No headings
           .mockResolvedValueOnce(['header', 'nav', 'main', 'footer']),
         $$eval: jest.fn().mockResolvedValue(0),
@@ -76,8 +81,12 @@ describe('BiModalDesignComplianceAuditor', () => {
 
     it('should report an issue when heading hierarchy is invalid', async () => {
       const mockPage = {
-        evaluate: jest.fn()
-          .mockResolvedValueOnce([{ level: 1, text: 'H1' }, { level: 3, text: 'H3' }]) // Gap in hierarchy
+        evaluate: jest
+          .fn()
+          .mockResolvedValueOnce([
+            { level: 1, text: 'H1' },
+            { level: 3, text: 'H3' },
+          ]) // Gap in hierarchy
           .mockResolvedValueOnce(['header', 'nav', 'main', 'footer']),
         $$eval: jest.fn().mockResolvedValue(0),
       };
@@ -90,7 +99,8 @@ describe('BiModalDesignComplianceAuditor', () => {
 
     it('should report an issue when required landmarks are missing', async () => {
       const mockPage = {
-        evaluate: jest.fn()
+        evaluate: jest
+          .fn()
           .mockResolvedValueOnce([{ level: 1, text: 'H1' }])
           .mockResolvedValueOnce(['header', 'footer']), // Missing nav, main
         $$eval: jest.fn().mockResolvedValue(0),
