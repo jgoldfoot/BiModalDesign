@@ -501,6 +501,33 @@ class FR1Checker {
   }
 
   /**
+   * Process a single chunk of URLs
+   * @param {string[]} chunk - Array of URLs to check in this chunk
+   * @returns {Promise<Object[]>} Array of compliance results for the chunk
+   * @private
+   */
+  async _processChunk(chunk) {
+    const chunkPromises = chunk.map(async (url) => {
+      if (this.options.verbose) {
+        console.log(`\nChecking: ${url}`);
+      }
+
+      const result = await this.checkURL(url);
+
+      // Brief output for multiple URLs
+      if (!this.options.verbose) {
+        const status = result.passed ? '✅ PASS' : '❌ FAIL';
+        const score = ((result.score || 0) * 100).toFixed(1);
+        console.log(`${status} (${score}%) ${url}`);
+      }
+
+      return result;
+    });
+
+    return Promise.all(chunkPromises);
+  }
+
+  /**
    * Check multiple URLs
    * @param {string[]} urls - Array of URLs to check
    * @returns {Promise<Object[]>} Array of compliance results
@@ -512,25 +539,7 @@ class FR1Checker {
     // Process URLs in chunks to avoid overwhelming the network
     for (let i = 0; i < urls.length; i += concurrencyLimit) {
       const chunk = urls.slice(i, i + concurrencyLimit);
-      
-      const chunkPromises = chunk.map(async (url) => {
-        if (this.options.verbose) {
-          console.log(`\nChecking: ${url}`);
-        }
-
-        const result = await this.checkURL(url);
-
-        // Brief output for multiple URLs
-        if (!this.options.verbose) {
-          const status = result.passed ? '✅ PASS' : '❌ FAIL';
-          const score = ((result.score || 0) * 100).toFixed(1);
-          console.log(`${status} (${score}%) ${url}`);
-        }
-
-        return result;
-      });
-      
-      const chunkResults = await Promise.all(chunkPromises);
+      const chunkResults = await this._processChunk(chunk);
       results.push(...chunkResults);
     }
     
@@ -681,9 +690,32 @@ Examples:
     
     try {
       if (options.sitemap) {
-        // TODO: Implement sitemap parsing
-        console.error('Sitemap checking not yet implemented');
-        process.exit(1);
+        try {
+          if (options.verbose) {
+            console.log(`Fetching sitemap: ${options.sitemap}`);
+          }
+          const sitemapContent = await checker.fetchHTML(options.sitemap);
+          const { JSDOM } = require('jsdom');
+          const dom = new JSDOM(sitemapContent, { contentType: 'text/xml' });
+          const locElements = dom.window.document.querySelectorAll('loc');
+
+          if (locElements.length === 0) {
+            console.error('No URLs found in the sitemap or invalid sitemap format');
+            process.exit(1);
+          }
+
+          const sitemapUrls = Array.from(locElements).map(el => el.textContent.trim());
+          if (options.verbose) {
+            console.log(`Found ${sitemapUrls.length} URLs in sitemap`);
+          }
+
+          // Combine sitemap URLs with any URLs provided directly via arguments
+          const allUrls = [...new Set([...urls, ...sitemapUrls])];
+          results = await checker.checkMultiple(allUrls);
+        } catch (error) {
+          console.error(`Error fetching or parsing sitemap: ${error.message}`);
+          process.exit(1);
+        }
       } else {
         results = await checker.checkMultiple(urls);
       }

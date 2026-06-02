@@ -253,4 +253,74 @@ describe('BiModalDesignCLI', () => {
       await expect(cli.loadUrlsFromFile('missing.txt')).rejects.toThrow('File not found');
     });
   });
+
+  describe('loadConfig', () => {
+    const fsPromises = require('fs').promises;
+    let readFileSpy;
+
+    beforeEach(() => {
+      readFileSpy = jest.spyOn(fsPromises, 'readFile');
+    });
+
+    afterEach(() => {
+      readFileSpy.mockRestore();
+    });
+
+    it('should parse and return JSON content for .json files', async () => {
+      const mockData = { framework: 'react' };
+      readFileSpy.mockResolvedValue(JSON.stringify(mockData));
+
+      const result = await cli.loadConfig('custom-config.json');
+
+      expect(readFileSpy).toHaveBeenCalledWith('custom-config.json', 'utf8');
+      expect(result).toEqual(mockData);
+    });
+
+    it('should parse and return bimodal-design key from package.json', async () => {
+      const mockPkg = {
+        name: 'test-project',
+        'bimodal-design': { framework: 'vue' },
+      };
+      readFileSpy.mockResolvedValue(JSON.stringify(mockPkg));
+
+      const result = await cli.loadConfig('package.json');
+
+      expect(readFileSpy).toHaveBeenCalledWith('package.json', 'utf8');
+      expect(result).toEqual({ framework: 'vue' });
+    });
+
+    it('should return empty object if package.json has no bimodal-design key', async () => {
+      const mockPkg = { name: 'test-project' };
+      readFileSpy.mockResolvedValue(JSON.stringify(mockPkg));
+
+      const result = await cli.loadConfig('package.json');
+
+      expect(readFileSpy).toHaveBeenCalledWith('package.json', 'utf8');
+      expect(result).toEqual({});
+    });
+
+    it('should return default config if configPath is not json or package.json', async () => {
+      const result = await cli.loadConfig('some-other-file.yml');
+
+      expect(readFileSpy).not.toHaveBeenCalled();
+      expect(result).toEqual({
+        framework: 'vanilla',
+        template: 'basic',
+        version: cli.version,
+      });
+    });
+
+    it('should propagate errors from fs.readFile', async () => {
+      const error = new Error('File not found');
+      readFileSpy.mockRejectedValue(error);
+
+      await expect(cli.loadConfig('missing.json')).rejects.toThrow('File not found');
+    });
+
+    it('should propagate JSON parse errors', async () => {
+      readFileSpy.mockResolvedValue('invalid json {');
+
+      await expect(cli.loadConfig('bad.json')).rejects.toThrow();
+    });
+  });
 });
