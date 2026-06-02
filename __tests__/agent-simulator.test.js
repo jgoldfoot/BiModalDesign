@@ -278,3 +278,134 @@ describe('AgentSimulator - simulateAgent', () => {
     });
   });
 });
+
+describe('AgentSimulator - executeTask', () => {
+  let simulator;
+  let mockPage;
+
+  beforeEach(() => {
+    simulator = new AgentSimulator();
+
+    // Mock page methods
+    mockPage = {
+      $$: jest.fn(),
+      $$eval: jest.fn(),
+      evaluate: jest.fn(),
+    };
+
+    // Mock task specific analysis to isolate tests
+    simulator.analyzeContactTypes = jest.fn().mockReturnValue(['email']);
+    simulator.analyzeContentQuality = jest.fn().mockResolvedValue({ contentQuality: 'good' });
+    simulator.analyzeFormAccessibility = jest.fn().mockResolvedValue({ hasForms: true });
+
+    // Set a predictable task template for testing
+    simulator.taskTemplates = {
+      'test-task': {
+        name: 'Test Task',
+        description: 'A task for testing',
+        selectors: ['.test-selector'],
+        textPatterns: [/test pattern/g],
+      },
+      'find-contact': {
+        name: 'Find Contact',
+        description: 'Test specific analysis',
+        selectors: ['.contact'],
+      },
+      'extract-content': {
+        name: 'Extract Content',
+        description: 'Test specific analysis',
+        selectors: ['main'],
+      },
+      'form-interaction': {
+        name: 'Form Interaction',
+        description: 'Test specific analysis',
+        selectors: ['form'],
+      },
+    };
+  });
+
+  it('should return error for unknown task', async () => {
+    const result = await simulator.executeTask(mockPage, 'unknown-task', {});
+    expect(result).toEqual({ error: 'Unknown task: unknown-task' });
+  });
+
+  it('should test selector-based discovery successfully', async () => {
+    mockPage.$$.mockResolvedValue([{}]); // simulate one element found
+    mockPage.$$eval.mockResolvedValue([
+      { text: 'test text', href: 'url', tagName: 'A', attributes: { id: 'test' } },
+    ]);
+    mockPage.evaluate.mockResolvedValue(''); // no text matches
+
+    const result = await simulator.executeTask(mockPage, 'test-task', {});
+
+    expect(result.success).toBe(true);
+    expect(result.elementsFound).toEqual([{ selector: '.test-selector', count: 1 }]);
+    expect(result.details[0].selector).toBe('.test-selector');
+    expect(result.details[0].elements[0].text).toBe('test text');
+    expect(result.issues).toEqual([]);
+  });
+
+  it('should handle errors when a selector fails', async () => {
+    mockPage.$$.mockRejectedValue(new Error('Selector timeout'));
+    mockPage.evaluate.mockResolvedValue('');
+
+    const result = await simulator.executeTask(mockPage, 'test-task', {});
+
+    expect(result.success).toBe(false);
+    expect(result.issues).toContain('Selector ".test-selector" failed: Selector timeout');
+  });
+
+  it('should test text pattern matching successfully', async () => {
+    mockPage.$$.mockResolvedValue([]); // no elements found
+    mockPage.evaluate.mockResolvedValue('Here is a test pattern in the text.');
+
+    const result = await simulator.executeTask(mockPage, 'test-task', {});
+
+    expect(result.success).toBe(true);
+    expect(result.textMatches.length).toBe(1);
+    expect(result.textMatches[0].pattern).toBe('/test pattern/g');
+    expect(result.textMatches[0].matches).toEqual(['test pattern']);
+  });
+
+  it('should execute task-specific analysis for find-contact', async () => {
+    mockPage.$$.mockResolvedValue([{}]);
+    mockPage.$$eval.mockResolvedValue([]);
+    mockPage.evaluate.mockResolvedValue('');
+
+    const result = await simulator.executeTask(mockPage, 'find-contact', {});
+    expect(simulator.analyzeContactTypes).toHaveBeenCalledWith(result);
+    expect(result.contactTypes).toEqual(['email']);
+  });
+
+  it('should execute task-specific analysis for extract-content', async () => {
+    mockPage.$$.mockResolvedValue([{}]);
+    mockPage.$$eval.mockResolvedValue([]);
+    mockPage.evaluate.mockResolvedValue('');
+
+    const result = await simulator.executeTask(mockPage, 'extract-content', {});
+    expect(simulator.analyzeContentQuality).toHaveBeenCalledWith(mockPage, result);
+    expect(result.contentQuality).toEqual({ contentQuality: 'good' });
+  });
+
+  it('should execute task-specific analysis for form-interaction', async () => {
+    mockPage.$$.mockResolvedValue([{}]);
+    mockPage.$$eval.mockResolvedValue([]);
+    mockPage.evaluate.mockResolvedValue('');
+
+    const result = await simulator.executeTask(mockPage, 'form-interaction', {});
+    expect(simulator.analyzeFormAccessibility).toHaveBeenCalledWith(mockPage, result);
+    expect(result.formAccessibility).toEqual({ hasForms: true });
+  });
+
+  it('should catch general execution failures', async () => {
+    // Make something throw outside of the try-catch for selectors
+    // the evaluate call will throw here
+    mockPage.$$.mockResolvedValue([]);
+    mockPage.evaluate.mockRejectedValue(new Error('Evaluate failed'));
+
+    const result = await simulator.executeTask(mockPage, 'test-task', {});
+
+    expect(result.success).toBe(false);
+    expect(result.issues).toContain('Task execution failed: Evaluate failed');
+  });
+});
