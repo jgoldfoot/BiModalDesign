@@ -21,6 +21,7 @@ jest.mock('../tools/validators/fr1-checker', () => {
 jest.mock('../accessibility/compliance-audit', () => {
   return jest.fn().mockImplementation(() => ({
     runAudit: jest.fn().mockResolvedValue({ overallScore: 80 }),
+    auditPage: jest.fn().mockResolvedValue({ overallScore: 80, passed: true }),
   }));
 });
 jest.mock('../tools/agent-simulator', () => {
@@ -321,6 +322,69 @@ describe('BiModalDesignCLI', () => {
       readFileSpy.mockResolvedValue('invalid json {');
 
       await expect(cli.loadConfig('bad.json')).rejects.toThrow();
+    });
+  });
+
+  describe('runAudit', () => {
+    let ComplianceAuditor;
+
+    beforeEach(() => {
+      // Clear all mocks before each test
+      jest.clearAllMocks();
+
+      ComplianceAuditor = require('../accessibility/compliance-audit');
+
+      // We need to suppress console.log for clean test output
+      jest.spyOn(console, 'log').mockImplementation(() => {});
+
+      // Mock outputResults to avoid file system operations during tests
+      jest.spyOn(cli, 'outputResults').mockResolvedValue();
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should run audit for a single URL', async () => {
+      await cli.runAudit(['http://example.com']);
+
+      // Get the instance created inside runAudit
+      const auditorInstance = ComplianceAuditor.mock.results[0].value;
+
+      expect(auditorInstance.auditPage).toHaveBeenCalledWith('http://example.com');
+      expect(cli.outputResults).toHaveBeenCalledWith(
+        { overallScore: 80, passed: true },
+        expect.objectContaining({ url: 'http://example.com', format: 'json' })
+      );
+    });
+
+    it('should run batch audit for multiple URLs', async () => {
+      // Mock loadUrlsFromFile
+      jest
+        .spyOn(cli, 'loadUrlsFromFile')
+        .mockResolvedValue(['http://example.com/page1', 'http://example.com/page2']);
+
+      await cli.runAudit(['--batch', 'urls.txt']);
+
+      // Get the instance created inside runAudit
+      const auditorInstance = ComplianceAuditor.mock.results[0].value;
+
+      expect(cli.loadUrlsFromFile).toHaveBeenCalledWith('urls.txt');
+      expect(auditorInstance.auditPage).toHaveBeenCalledTimes(2);
+      expect(auditorInstance.auditPage).toHaveBeenCalledWith('http://example.com/page1');
+      expect(auditorInstance.auditPage).toHaveBeenCalledWith('http://example.com/page2');
+
+      expect(cli.outputResults).toHaveBeenCalledWith(
+        [
+          { overallScore: 80, passed: true },
+          { overallScore: 80, passed: true },
+        ],
+        expect.objectContaining({ batch: 'urls.txt' })
+      );
+    });
+
+    it('should throw an error if no URL or batch file is provided', async () => {
+      await expect(cli.runAudit([])).rejects.toThrow('Please provide a URL or batch file');
     });
   });
 });
