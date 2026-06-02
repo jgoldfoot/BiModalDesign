@@ -300,10 +300,9 @@ describe('BiModalDesignCLI', () => {
 
     it('should run batch audit for multiple URLs', async () => {
       // Mock loadUrlsFromFile
-      jest.spyOn(cli, 'loadUrlsFromFile').mockResolvedValue([
-        'http://example.com/page1',
-        'http://example.com/page2'
-      ]);
+      jest
+        .spyOn(cli, 'loadUrlsFromFile')
+        .mockResolvedValue(['http://example.com/page1', 'http://example.com/page2']);
 
       await cli.runAudit(['--batch', 'urls.txt']);
 
@@ -318,7 +317,7 @@ describe('BiModalDesignCLI', () => {
       expect(cli.outputResults).toHaveBeenCalledWith(
         [
           { overallScore: 80, passed: true },
-          { overallScore: 80, passed: true }
+          { overallScore: 80, passed: true },
         ],
         expect.objectContaining({ batch: 'urls.txt' })
       );
