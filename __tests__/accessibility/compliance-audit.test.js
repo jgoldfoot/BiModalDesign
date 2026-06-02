@@ -40,6 +40,96 @@ describe('BiModalDesignComplianceAuditor', () => {
     };
   });
 
+  describe('auditPage', () => {
+    let mockPage;
+    let mockBrowser;
+
+    beforeEach(() => {
+      mockPage = {
+        setUserAgent: jest.fn(),
+        setViewport: jest.fn(),
+        goto: jest.fn().mockResolvedValue(),
+        screenshot: jest.fn().mockResolvedValue('base64screenshot'),
+      };
+
+      mockBrowser = {
+        newPage: jest.fn().mockResolvedValue(mockPage),
+        close: jest.fn().mockResolvedValue(),
+      };
+
+      require('puppeteer').launch.mockResolvedValue(mockBrowser);
+
+      // Mock the FR tests to avoid actual DOM evaluation
+      jest.spyOn(auditor, 'testFR1').mockResolvedValue({ score: 10, passed: true });
+      jest.spyOn(auditor, 'testFR2').mockResolvedValue({ score: 10, passed: true });
+      jest.spyOn(auditor, 'testFR3').mockResolvedValue({ score: 10, passed: true });
+      jest.spyOn(auditor, 'testFR4').mockResolvedValue({ score: 10, passed: true });
+      jest.spyOn(auditor, 'testFR5').mockResolvedValue({ score: 10, passed: true });
+      jest.spyOn(auditor, 'testFR6').mockResolvedValue({ score: 10, passed: true });
+      jest.spyOn(auditor, 'testFR7').mockResolvedValue({ score: 10, passed: true });
+
+      jest.spyOn(auditor, 'calculateOverallScore').mockReturnValue(85);
+      jest.spyOn(auditor, 'generateRecommendations').mockReturnValue(['Fix contrast']);
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should successfully audit a page and return scores', async () => {
+      const url = 'https://example.com';
+      const result = await auditor.auditPage(url);
+
+      expect(require('puppeteer').launch).toHaveBeenCalledWith({ headless: true });
+      expect(mockBrowser.newPage).toHaveBeenCalled();
+      expect(mockPage.setUserAgent).toHaveBeenCalledWith(auditor.options.userAgent);
+      expect(mockPage.setViewport).toHaveBeenCalledWith(auditor.options.viewport);
+      expect(mockPage.goto).toHaveBeenCalledWith(url, {
+        waitUntil: 'networkidle0',
+        timeout: auditor.options.timeout,
+      });
+
+      expect(auditor.testFR1).toHaveBeenCalledWith(mockPage);
+      expect(auditor.testFR7).toHaveBeenCalledWith(mockPage);
+
+      expect(auditor.calculateOverallScore).toHaveBeenCalled();
+      expect(auditor.generateRecommendations).toHaveBeenCalled();
+
+      expect(result.url).toBe(url);
+      expect(result.overallScore).toBe(85);
+      expect(result.passed).toBe(true);
+      expect(result.recommendations).toEqual(['Fix contrast']);
+      expect(result.screenshot).toBeUndefined();
+
+      expect(mockBrowser.close).toHaveBeenCalled();
+    });
+
+    it('should capture a screenshot if includeScreenshots is true', async () => {
+      auditor.options.includeScreenshots = true;
+      const url = 'https://example.com';
+      const result = await auditor.auditPage(url);
+
+      expect(mockPage.screenshot).toHaveBeenCalledWith({ encoding: 'base64', fullPage: true });
+      expect(result.screenshot).toBe('base64screenshot');
+      expect(mockBrowser.close).toHaveBeenCalled();
+    });
+
+    it('should handle errors gracefully during the audit', async () => {
+      const url = 'https://error.com';
+      const errorMessage = 'Navigation failed';
+      mockPage.goto.mockRejectedValue(new Error(errorMessage));
+
+      const result = await auditor.auditPage(url);
+
+      expect(result.url).toBe(url);
+      expect(result.error).toBe(errorMessage);
+      expect(result.passed).toBe(false);
+      expect(result.overallScore).toBe(0);
+
+      expect(mockBrowser.close).toHaveBeenCalled();
+    });
+  });
+
   describe('testFR2', () => {
     it('should pass with proper heading hierarchy, all landmarks, and lists', async () => {
       const mockPage = {
