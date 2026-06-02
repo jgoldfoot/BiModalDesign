@@ -245,6 +245,40 @@ describe('AgentSimulator - compareAgentResults', () => {
   });
 });
 
+describe('AgentSimulator - simulateAgent', () => {
+  let simulator;
+  const puppeteer = require('puppeteer');
+
+  beforeEach(() => {
+    simulator = new AgentSimulator();
+    // Use jest's fake timers to mock Date output
+    jest.useFakeTimers().setSystemTime(new Date('2023-10-27T10:00:00.000Z'));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+    jest.restoreAllMocks();
+  });
+
+  it('should return error object when browser.newPage throws an error', async () => {
+    // Mock puppeteer.launch to return a mock browser with newPage throwing
+    puppeteer.launch = jest.fn().mockResolvedValue({
+      newPage: jest.fn().mockRejectedValue(new Error('Simulated page error')),
+      close: jest.fn().mockResolvedValue(),
+    });
+
+    const result = await simulator.simulateAgent('https://example.com', 'basic');
+
+    expect(result).toEqual({
+      url: 'https://example.com',
+      agentType: 'basic',
+      timestamp: '2023-10-27T10:00:00.000Z',
+      error: 'Simulated page error',
+      success: false,
+    });
+  });
+});
+
 describe('AgentSimulator - executeTask', () => {
   let simulator;
   let mockPage;
@@ -373,5 +407,132 @@ describe('AgentSimulator - executeTask', () => {
 
     expect(result.success).toBe(false);
     expect(result.issues).toContain('Task execution failed: Evaluate failed');
+  });
+});
+
+describe('AgentSimulator - configurePageForAgent', () => {
+  let simulator;
+  let mockPage;
+
+  beforeEach(() => {
+    simulator = new AgentSimulator();
+    mockPage = {
+      setUserAgent: jest.fn(),
+      setViewport: jest.fn(),
+      setJavaScriptEnabled: jest.fn(),
+      setRequestInterception: jest.fn(),
+      on: jest.fn(),
+    };
+  });
+
+  it('should configure page correctly for advanced profile (all enabled)', async () => {
+    const profile = {
+      userAgent: 'Advanced Agent',
+      capabilities: {
+        javascript: true,
+        images: true,
+        css: true,
+      },
+    };
+
+    await simulator.configurePageForAgent(mockPage, profile);
+
+    expect(mockPage.setUserAgent).toHaveBeenCalledWith('Advanced Agent');
+    expect(mockPage.setViewport).toHaveBeenCalledWith(simulator.options.viewport);
+
+    // JS is true, so setJavaScriptEnabled(false) should NOT be called
+    expect(mockPage.setJavaScriptEnabled).not.toHaveBeenCalled();
+
+    // Images and CSS are true, so setRequestInterception should NOT be called
+    expect(mockPage.setRequestInterception).not.toHaveBeenCalled();
+    expect(mockPage.on).not.toHaveBeenCalled();
+  });
+
+  it('should configure page correctly for basic profile (all disabled)', async () => {
+    const profile = {
+      userAgent: 'Basic Agent',
+      capabilities: {
+        javascript: false,
+        images: false,
+        css: false,
+      },
+    };
+
+    await simulator.configurePageForAgent(mockPage, profile);
+
+    expect(mockPage.setUserAgent).toHaveBeenCalledWith('Basic Agent');
+    expect(mockPage.setViewport).toHaveBeenCalledWith(simulator.options.viewport);
+
+    // JS is false, should be disabled
+    expect(mockPage.setJavaScriptEnabled).toHaveBeenCalledWith(false);
+
+    // Images/CSS disabled, request interception should be set
+    expect(mockPage.setRequestInterception).toHaveBeenCalledWith(true);
+    expect(mockPage.on).toHaveBeenCalledWith('request', expect.any(Function));
+  });
+
+  it('should handle request interception correctly', async () => {
+    const profile = {
+      userAgent: 'Intermediate Agent',
+      capabilities: {
+        javascript: true,
+        images: false, // images disabled
+        css: true, // css enabled
+      },
+    };
+
+    await simulator.configurePageForAgent(mockPage, profile);
+
+    // Get the request handler passed to page.on
+    const requestHandler = mockPage.on.mock.calls.find((call) => call[0] === 'request')[1];
+    expect(requestHandler).toBeDefined();
+
+    // Create a mock request
+    const mockRequest = {
+      isInterceptResolutionHandled: jest.fn().mockReturnValue(false),
+      resourceType: jest.fn(),
+      abort: jest.fn(),
+      continue: jest.fn(),
+    };
+
+    // Test early return if already handled
+    mockRequest.isInterceptResolutionHandled.mockReturnValueOnce(true);
+    requestHandler(mockRequest);
+    expect(mockRequest.resourceType).not.toHaveBeenCalled();
+
+    // Test blocking images
+    mockRequest.resourceType.mockReturnValue('image');
+    requestHandler(mockRequest);
+    expect(mockRequest.abort).toHaveBeenCalled();
+    expect(mockRequest.continue).not.toHaveBeenCalled();
+
+    // Reset mocks
+    mockRequest.abort.mockClear();
+    mockRequest.continue.mockClear();
+
+    // Test allowing CSS (since CSS is enabled in profile)
+    mockRequest.resourceType.mockReturnValue('stylesheet');
+    requestHandler(mockRequest);
+    expect(mockRequest.abort).not.toHaveBeenCalled();
+    expect(mockRequest.continue).toHaveBeenCalled();
+
+    // Reset mocks
+    mockRequest.abort.mockClear();
+    mockRequest.continue.mockClear();
+
+    // Test blocking CSS (if CSS was disabled)
+    const profileNoCss = {
+      userAgent: 'Basic Agent',
+      capabilities: { javascript: false, images: true, css: false },
+    };
+    // Clear previous mock.calls on mockPage to get the new requestHandler
+    mockPage.on.mockClear();
+    await simulator.configurePageForAgent(mockPage, profileNoCss);
+    const requestHandlerNoCss = mockPage.on.mock.calls.find((call) => call[0] === 'request')[1];
+
+    mockRequest.abort.mockClear();
+    mockRequest.resourceType.mockReturnValue('stylesheet');
+    requestHandlerNoCss(mockRequest);
+    expect(mockRequest.abort).toHaveBeenCalled();
   });
 });

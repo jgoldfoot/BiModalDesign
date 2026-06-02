@@ -630,11 +630,8 @@ class FR1Checker {
 }
 
 // Command line interface
-if (require.main === module) {
-  const args = process.argv.slice(2);
-  
-  if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
-    console.log(`
+function printHelp() {
+  console.log(`
 BiModal Design FR-1 Checker - Test Initial Payload Accessibility
 
 Usage:
@@ -656,16 +653,15 @@ Examples:
   fr1-checker --format json --output report.json https://example.com
   fr1-checker --sitemap https://example.com/sitemap.xml
 `);
-    process.exit(0);
-  }
-  
-  // Parse arguments
+}
+
+function parseArgs(args) {
   const options = {};
   const urls = [];
-  
+
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
-    
+
     if (arg === '--verbose' || arg === '-v') {
       options.verbose = true;
     } else if (arg === '--user-agent') {
@@ -682,102 +678,122 @@ Examples:
       urls.push(arg);
     }
   }
-  
-  // Main execution
-  async function main() {
-    const checker = new FR1Checker(options);
-    let results;
-    
-    try {
-      if (options.sitemap) {
-        try {
-          if (options.verbose) {
-            console.log(`Fetching sitemap: ${options.sitemap}`);
-          }
-          const sitemapContent = await checker.fetchHTML(options.sitemap);
-          const { JSDOM } = require('jsdom');
-          const dom = new JSDOM(sitemapContent, { contentType: 'text/xml' });
-          const locElements = dom.window.document.querySelectorAll('loc');
 
-          if (locElements.length === 0) {
-            console.error('No URLs found in the sitemap or invalid sitemap format');
-            process.exit(1);
-          }
-
-          const sitemapUrls = Array.from(locElements).map(el => el.textContent.trim());
-          if (options.verbose) {
-            console.log(`Found ${sitemapUrls.length} URLs in sitemap`);
-          }
-
-          // Combine sitemap URLs with any URLs provided directly via arguments
-          const allUrls = [...new Set([...urls, ...sitemapUrls])];
-          results = await checker.checkMultiple(allUrls);
-        } catch (error) {
-          console.error(`Error fetching or parsing sitemap: ${error.message}`);
-          process.exit(1);
-        }
-      } else {
-        results = await checker.checkMultiple(urls);
-      }
-      
-      // Generate summary
-      const summary = checker.generateSummary(results);
-      
-      // Output results
-      if (options.format === 'json') {
-        const output = {
-          summary,
-          results,
-          timestamp: new Date().toISOString(),
-          options: options
-        };
-        
-        const jsonOutput = JSON.stringify(output, null, 2);
-        
-        if (options.output) {
-          await require('fs').promises.writeFile(options.output, jsonOutput);
-          console.log(`Report saved to ${options.output}`);
-        } else {
-          console.log(jsonOutput);
-        }
-      } else {
-        // Text output
-        console.log('\n' + '='.repeat(50));
-        console.log('FR-1 COMPLIANCE SUMMARY');
-        console.log('='.repeat(50));
-        console.log(`Total URLs: ${summary.total}`);
-        console.log(`Passed: ${summary.passed} (${(summary.passed/summary.total*100).toFixed(1)}%)`);
-        console.log(`Failed: ${summary.failed} (${(summary.failed/summary.total*100).toFixed(1)}%)`);
-        console.log(`Average Score: ${(summary.averageScore*100).toFixed(1)}%`);
-        console.log(`Total Issues: ${summary.totalIssues}`);
-        console.log(`Total Warnings: ${summary.totalWarnings}`);
-        
-        if (summary.commonIssues.length > 0) {
-          console.log('\nMost Common Issues:');
-          summary.commonIssues.forEach((issue, i) => {
-            console.log(`${i+1}. ${issue.issue} (${issue.percentage}% of pages)`);
-          });
-        }
-        
-        if (summary.recommendations.length > 0) {
-          console.log('\nRecommendations:');
-          summary.recommendations.forEach((rec, i) => {
-            console.log(`${i+1}. [${rec.priority.toUpperCase()}] ${rec.title}`);
-            console.log(`   ${rec.description}`);
-          });
-        }
-      }
-      
-      // Exit with appropriate code
-      process.exit(summary.failed > 0 ? 1 : 0);
-      
-    } catch (error) {
-      console.error('Error:', error.message);
-      process.exit(1);
-    }
-  }
-  
-  main();
+  return { options, urls };
 }
 
-module.exports = { FR1Checker, checkFR1Compliance: (url, options) => new FR1Checker(options).checkURL(url) };
+async function outputResults(summary, results, options) {
+  if (options.format === 'json') {
+    const output = {
+      summary,
+      results,
+      timestamp: new Date().toISOString(),
+      options: options
+    };
+
+    const jsonOutput = JSON.stringify(output, null, 2);
+
+    if (options.output) {
+      await require('fs').promises.writeFile(options.output, jsonOutput);
+      console.log(`Report saved to ${options.output}`);
+    } else {
+      console.log(jsonOutput);
+    }
+  } else {
+    // Text output
+    console.log('\n' + '='.repeat(50));
+    console.log('FR-1 COMPLIANCE SUMMARY');
+    console.log('='.repeat(50));
+    console.log(`Total URLs: ${summary.total}`);
+    console.log(`Passed: ${summary.passed} (${(summary.passed/summary.total*100).toFixed(1)}%)`);
+    console.log(`Failed: ${summary.failed} (${(summary.failed/summary.total*100).toFixed(1)}%)`);
+    console.log(`Average Score: ${(summary.averageScore*100).toFixed(1)}%`);
+    console.log(`Total Issues: ${summary.totalIssues}`);
+    console.log(`Total Warnings: ${summary.totalWarnings}`);
+
+    if (summary.commonIssues.length > 0) {
+      console.log('\nMost Common Issues:');
+      summary.commonIssues.forEach((issue, i) => {
+        console.log(`${i+1}. ${issue.issue} (${issue.percentage}% of pages)`);
+      });
+    }
+
+    if (summary.recommendations.length > 0) {
+      console.log('\nRecommendations:');
+      summary.recommendations.forEach((rec, i) => {
+        console.log(`${i+1}. [${rec.priority.toUpperCase()}] ${rec.title}`);
+        console.log(`   ${rec.description}`);
+      });
+    }
+  }
+}
+
+async function runCLI(args) {
+  if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
+    printHelp();
+    return process.exit(0);
+  }
+
+  const { options, urls } = parseArgs(args);
+  const checker = new FR1Checker(options);
+  let results;
+
+  try {
+    if (options.sitemap) {
+      try {
+        if (options.verbose) {
+          console.log(`Fetching sitemap: ${options.sitemap}`);
+        }
+        const sitemapContent = await checker.fetchHTML(options.sitemap);
+        const { JSDOM } = require('jsdom');
+        const dom = new JSDOM(sitemapContent, { contentType: 'text/xml' });
+        const locElements = dom.window.document.querySelectorAll('loc');
+
+        if (locElements.length === 0) {
+          console.error('No URLs found in the sitemap or invalid sitemap format');
+          return process.exit(1);
+        }
+
+        const sitemapUrls = Array.from(locElements).map(el => el.textContent.trim());
+        if (options.verbose) {
+          console.log(`Found ${sitemapUrls.length} URLs in sitemap`);
+        }
+
+        // Combine sitemap URLs with any URLs provided directly via arguments
+        const allUrls = [...new Set([...urls, ...sitemapUrls])];
+        results = await checker.checkMultiple(allUrls);
+      } catch (error) {
+        console.error(`Error fetching or parsing sitemap: ${error.message}`);
+        return process.exit(1);
+      }
+    } else {
+      results = await checker.checkMultiple(urls);
+    }
+
+    // Generate summary
+    const summary = checker.generateSummary(results);
+
+    // Output results
+    await outputResults(summary, results, options);
+
+    // Exit with appropriate code
+    return process.exit(summary.failed > 0 ? 1 : 0);
+
+  } catch (error) {
+    console.error('Error:', error.message);
+    return process.exit(1);
+  }
+}
+
+if (require.main === module) {
+  runCLI(process.argv.slice(2));
+}
+
+module.exports = {
+  FR1Checker,
+  checkFR1Compliance: (url, options) => new FR1Checker(options).checkURL(url),
+  runCLI,
+  parseArgs,
+  printHelp,
+  outputResults
+};
