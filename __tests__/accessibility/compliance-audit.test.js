@@ -40,7 +40,6 @@ describe('BiModalDesignComplianceAuditor', () => {
     };
   });
 
-
   describe('auditPage', () => {
     let mockPage;
     let mockBrowser;
@@ -85,7 +84,10 @@ describe('BiModalDesignComplianceAuditor', () => {
       expect(mockBrowser.newPage).toHaveBeenCalled();
       expect(mockPage.setUserAgent).toHaveBeenCalledWith(auditor.options.userAgent);
       expect(mockPage.setViewport).toHaveBeenCalledWith(auditor.options.viewport);
-      expect(mockPage.goto).toHaveBeenCalledWith(url, { waitUntil: 'networkidle0', timeout: auditor.options.timeout });
+      expect(mockPage.goto).toHaveBeenCalledWith(url, {
+        waitUntil: 'networkidle0',
+        timeout: auditor.options.timeout,
+      });
 
       expect(auditor.testFR1).toHaveBeenCalledWith(mockPage);
       expect(auditor.testFR7).toHaveBeenCalledWith(mockPage);
