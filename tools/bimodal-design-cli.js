@@ -736,13 +736,13 @@ Documentation: https://bimodal.design/docs
   }
 
   async loadConfig(configPath) {
-    if (configPath.endsWith('.json')) {
-      const content = await fs.readFile(configPath, 'utf8');
-      return JSON.parse(content);
-    } else if (configPath === 'package.json') {
+    if (configPath === 'package.json') {
       const content = await fs.readFile(configPath, 'utf8');
       const pkg = JSON.parse(content);
       return pkg['bimodal-design'] || {};
+    } else if (configPath.endsWith('.json')) {
+      const content = await fs.readFile(configPath, 'utf8');
+      return JSON.parse(content);
     }
 
     // Default config
