@@ -5,7 +5,7 @@
 
 const http = require('http');
 const https = require('https');
-const { fetchInitialPayload } = require('../tools/validators/fr1-validator');
+const { fetchInitialPayload, analyzePayload } = require('../tools/validators/fr1-validator');
 
 jest.mock('http');
 jest.mock('https');
@@ -303,5 +303,108 @@ describe('URL Validation', () => {
     invalidURLs.forEach((url) => {
       expect(() => new URL(url)).toThrow();
     });
+  });
+});
+
+describe('analyzePayload', () => {
+  test('should score 100 for fully compliant HTML', () => {
+    const html = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <title>Fully Compliant Page</title>
+        <meta property="og:title" content="Fully Compliant Page" />
+      </head>
+      <body>
+        <header role="banner"><h1>Welcome</h1></header>
+        <nav role="navigation">
+          <a href="/home">Home</a>
+          <a href="/about">About</a>
+          <a href="/services">Services</a>
+          <a href="/contact">Contact</a>
+          <a href="/blog">Blog</a>
+          <a href="/sitemap">Sitemap</a>
+        </nav>
+        <main role="main">
+          <article>
+            <h2>Main Content</h2>
+            <p>${'This is some very meaningful text content that goes on and on to meet the minimum character requirements. '.repeat(10)}</p>
+          </article>
+        </main>
+        <footer role="contentinfo"><p>Footer Content</p></footer>
+      </body>
+      </html>
+    `;
+    // Padding to ensure total length > 1000 characters
+    const paddedHtml = html + '<!-- ' + 'A'.repeat(1000) + ' -->';
+
+    const response = { body: paddedHtml };
+    const results = analyzePayload(response);
+
+    expect(results.score).toBe(100);
+    expect(results.passed).toContain('Initial payload contains text content');
+    expect(results.passed).toContain('Content rendered server-side (not blank SPA shell)');
+    expect(results.passed).toContain('Uses semantic HTML5 elements');
+    expect(results.passed).toContain('Core content accessible without JavaScript');
+    expect(results.passed).toContain('Includes structured metadata (Open Graph)');
+    expect(results.passed).toContain('Contains navigable links');
+    expect(results.failed.length).toBe(0);
+    expect(results.warnings.length).toBe(0);
+  });
+
+  test('should fail core checks for empty SPA shell', () => {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>SPA Shell</title>
+      </head>
+      <body>
+        <div id="root"></div>
+        <div id="spinner" class="loading">Loading... Please enable javascript</div>
+        <script src="app.js"></script>
+      </body>
+      </html>
+    `;
+    const response = { body: html };
+    const results = analyzePayload(response);
+
+    expect(results.score).toBeLessThan(50);
+    expect(results.failed).toContain('Initial payload lacks meaningful text content');
+    expect(results.failed).toContain('Appears to be client-side only (empty #root div)');
+    expect(results.failed).toContain('Page shows loading states or requires JavaScript');
+    expect(results.warnings).toContain('No semantic HTML5 elements detected');
+    expect(results.warnings).toContain('Missing structured metadata');
+    expect(results.warnings).toContain('Few or no links found in initial payload');
+  });
+
+  test('should pass core checks but yield warnings for missing optional data', () => {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Core Only Page</title>
+      </head>
+      <body>
+        <main>
+          <h1>Just the facts</h1>
+          <p>${'Here is a lot of text to satisfy the text content check. '.repeat(10)}</p>
+        </main>
+      </body>
+      </html>
+    `;
+    const paddedHtml = html + '<!-- ' + 'A'.repeat(1000) + ' -->';
+    const response = { body: paddedHtml };
+    const results = analyzePayload(response);
+
+    expect(results.score).toBe(100); // 30 + 40 + 15 + 15
+    expect(results.passed).toContain('Initial payload contains text content');
+    expect(results.passed).toContain('Content rendered server-side (not blank SPA shell)');
+    expect(results.passed).toContain('Uses semantic HTML5 elements');
+    expect(results.passed).toContain('Core content accessible without JavaScript');
+
+    // Check warnings
+    expect(results.warnings).toContain('Missing structured metadata');
+    expect(results.warnings).toContain('Few or no links found in initial payload');
   });
 });
