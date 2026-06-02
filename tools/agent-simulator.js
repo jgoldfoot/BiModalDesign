@@ -25,8 +25,12 @@ class AgentSimulator {
             ...options
         };
         
-        // Simulate different agent capabilities
-        this.agentProfiles = {
+        this.agentProfiles = this._initializeAgentProfiles();
+        this.taskTemplates = this._initializeTaskTemplates();
+    }
+
+    _initializeAgentProfiles() {
+        return {
             basic: {
                 name: 'Basic Web Agent',
                 description: 'Simple HTTP requests, no JavaScript execution',
@@ -79,9 +83,10 @@ class AgentSimulator {
                 userAgent: 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
             }
         };
-        
-        // Common agent tasks
-        this.taskTemplates = {
+    }
+
+    _initializeTaskTemplates() {
+        return {
             'find-contact': {
                 name: 'Find Contact Information',
                 description: 'Locate contact details like email, phone, address',
