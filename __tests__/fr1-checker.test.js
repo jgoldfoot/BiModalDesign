@@ -6,7 +6,87 @@ jest.mock(
   { virtual: true }
 );
 
+const https = require('https');
+const { EventEmitter } = require('events');
 const { FR1Checker } = require('../tools/validators/fr1-checker');
+
+describe('FR1Checker - fetchHTML', () => {
+  let checker;
+
+  beforeEach(() => {
+    checker = new FR1Checker();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('should reject when response has non-2xx status code', async () => {
+    const mockReq = new EventEmitter();
+    mockReq.end = jest.fn();
+    mockReq.destroy = jest.fn();
+
+    const mockRes = new EventEmitter();
+    mockRes.statusCode = 404;
+    mockRes.statusMessage = 'Not Found';
+
+    jest.spyOn(https, 'request').mockImplementation((_options, callback) => {
+      callback(mockRes);
+      mockRes.emit('end');
+      return mockReq;
+    });
+
+    await expect(checker.fetchHTML('https://example.com')).rejects.toThrow('HTTP 404: Not Found');
+  });
+
+  it('should reject on request error', async () => {
+    const mockReq = new EventEmitter();
+    mockReq.end = jest.fn();
+    mockReq.destroy = jest.fn();
+
+    jest.spyOn(https, 'request').mockImplementation((_options, _callback) => {
+      // Don't call callback, simulate error
+      setTimeout(() => mockReq.emit('error', new Error('Network error')), 0);
+      return mockReq;
+    });
+
+    await expect(checker.fetchHTML('https://example.com')).rejects.toThrow('Network error');
+  });
+
+  it('should reject on request timeout', async () => {
+    const mockReq = new EventEmitter();
+    mockReq.end = jest.fn();
+    mockReq.destroy = jest.fn();
+
+    jest.spyOn(https, 'request').mockImplementation((_options, _callback) => {
+      setTimeout(() => mockReq.emit('timeout'), 0);
+      return mockReq;
+    });
+
+    await expect(checker.fetchHTML('https://example.com')).rejects.toThrow('Request timeout');
+    expect(mockReq.destroy).toHaveBeenCalled();
+  });
+
+  it('should resolve with data on successful response', async () => {
+    const mockReq = new EventEmitter();
+    mockReq.end = jest.fn();
+    mockReq.destroy = jest.fn();
+
+    const mockRes = new EventEmitter();
+    mockRes.statusCode = 200;
+
+    jest.spyOn(https, 'request').mockImplementation((_options, callback) => {
+      callback(mockRes);
+      mockRes.emit('data', '<html>');
+      mockRes.emit('data', '<body>OK</body></html>');
+      mockRes.emit('end');
+      return mockReq;
+    });
+
+    const result = await checker.fetchHTML('https://example.com');
+    expect(result).toBe('<html><body>OK</body></html>');
+  });
+});
 
 describe('FR1Checker - generateRecommendations', () => {
   let checker;
