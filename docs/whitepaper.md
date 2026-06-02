@@ -1538,7 +1538,7 @@ established knowledge from:
 ### **14.2 Documented Implementation: bimodal.design**
 
 The BiModal Design framework is documented through two implementations by the
-framework creator: the original portfolio site (ai-plus.design) and the
+framework creator: the original portfolio site (blog.goldfoot.com) and the
 framework's dedicated documentation site (bimodal.design). Both serve as living
 proof-of-concepts that evolve with the framework.
 
@@ -1605,7 +1605,7 @@ Organization schemas), OpenGraph meta tags, a sitemap.xml, and richer ARIA
 attributes would bring the site to Maturity Level 2-3 and better demonstrate the
 framework's own recommendations.
 
-#### **14.2.2 ai-plus.design — Original Portfolio Site**
+#### **14.2.2 blog.goldfoot.com — Original Portfolio Site**
 
 The first documented BiModal Design implementation is the framework creator's
 portfolio site. This site predates the v3.0 framework and uses client-side
@@ -1640,7 +1640,7 @@ rendering.
 
 The two sites illustrate complementary strengths and a common pattern in
 real-world adoption: bimodal.design excels at Layer 1 (SSR, content in initial
-payload) but lacks Layers 3-5, while ai-plus.design has strong Layer 2-3
+payload) but lacks Layers 3-5, while blog.goldfoot.com has strong Layer 2-3
 implementation (ARIA, JSON-LD) but weaker Layer 1 (CSR). Neither site has yet
 implemented Layers 4-5 (API surface, agent protocols). This reflects the
 framework's own observation that most implementations start strong at one end of
@@ -1701,7 +1701,7 @@ I seek organizations willing to:
 class InitialPayloadValidator {
   async validate(url) {
     const response = await fetch(url, {
-      headers: { 'User-Agent': 'BiModalDesign-Validator/3.0' },
+      headers: { 'User-Agent': 'BiModal Design-Validator/3.0' },
     });
 
     const html = await response.text();
