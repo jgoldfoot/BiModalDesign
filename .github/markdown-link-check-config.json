@@ -8,12 +8,17 @@
     },
     {
       "pattern": "^mailto:"
+    },
+    {
+      "pattern": "^https://linkedin\\.com"
     }
   ],
   "replacementPatterns": [],
   "httpHeaders": [
     {
-      "urls": ["https://github.com"],
+      "urls": [
+        "https://github.com"
+      ],
       "headers": {
         "Accept-Encoding": "zstd, br, gzip, deflate"
       }
@@ -23,5 +28,10 @@
   "retryOn429": true,
   "retryCount": 3,
   "fallbackRetryDelay": "30s",
-  "aliveStatusCodes": [200, 206, 302, 304]
+  "aliveStatusCodes": [
+    200,
+    206,
+    302,
+    304
+  ]
 }

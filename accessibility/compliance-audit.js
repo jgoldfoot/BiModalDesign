@@ -730,7 +730,7 @@ class BiModalDesignComplianceAuditor {
     }
 
     escapeHtml(unsafe) {
-        if (unsafe === null || unsafe === undefined) return '';
+        if (unsafe == null) return '';
         return unsafe
             .toString()
             .replace(/&/g, "&amp;")
@@ -740,20 +740,23 @@ class BiModalDesignComplianceAuditor {
             .replace(/'/g, "&#039;");
     }
 
-    _getScoreColor(score) {
-        if (score >= 90) return '#22c55e';
-        if (score >= 70) return '#eab308';
-        return '#ef4444';
-    }
+    generateHTMLReport(results) {
+        const isArray = Array.isArray(results);
+        const pages = isArray ? results : [results];
 
-    _getStatusBadge(passed) {
-        return passed
-            ? '<span style="background: #22c55e; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">PASS</span>'
-            : '<span style="background: #ef4444; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">FAIL</span>';
-    }
+        const getScoreColor = (score) => {
+            if (score >= 90) return '#22c55e';
+            if (score >= 70) return '#eab308';
+            return '#ef4444';
+        };
 
-    _generateHTMLHeader() {
-        return `
+        const getStatusBadge = (passed) => {
+            return passed
+                ? '<span style="background: #22c55e; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">PASS</span>'
+                : '<span style="background: #ef4444; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">FAIL</span>';
+        };
+
+        let html = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -784,56 +787,9 @@ class BiModalDesignComplianceAuditor {
             <h1>BiModal Design Compliance Audit Report</h1>
             <p>Generated on ${new Date().toISOString()}</p>
         </div>`;
-    }
 
-    _generateHTMLRequirement(req) {
-        let html = `
-                    <div class="requirement">
-                        <div class="requirement-header">
-                            <span class="requirement-name">${this.escapeHtml(req.name)}</span>
-                            <div>
-                                ${this._getStatusBadge(req.passed)}
-                                <span class="requirement-score" style="color: ${this._getScoreColor(req.score)}; margin-left: 8px;">${req.score}%</span>
-                            </div>
-                        </div>`;
-
-        if (req.details && req.details.length > 0) {
-            html += `<div class="details">
-                            ${req.details.map(detail => `• ${this.escapeHtml(detail)}`).join('<br>')}
-                        </div>`;
-        }
-
-        if (req.issues && req.issues.length > 0) {
-            html += `<div class="issues">
-                            <strong>Issues:</strong><br>
-                            ${req.issues.map(issue => `• ${this.escapeHtml(issue)}`).join('<br>')}
-                        </div>`;
-        }
-
-        html += `</div>`;
-        return html;
-    }
-
-    _generateHTMLRecommendations(recommendations) {
-        if (!recommendations || recommendations.length === 0) return '';
-
-        let html = `
-                    <div class="recommendations">
-                        <h3>Recommendations</h3>`;
-
-        recommendations.forEach(rec => {
+        pages.forEach(result => {
             html += `
-                        <div class="recommendation ${rec.priority === 'high' ? 'high-priority' : ''}">
-                            <strong>${this.escapeHtml(rec.category)}:</strong> ${this.escapeHtml(rec.issue)}
-                        </div>`;
-        });
-
-        html += `</div>`;
-        return html;
-    }
-
-    _generateHTMLPageResult(result) {
-        let html = `
         <div class="page-result">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                 <div>
@@ -841,50 +797,72 @@ class BiModalDesignComplianceAuditor {
                     <p style="color: #64748b; margin: 4px 0 0 0;">Tested on ${new Date(result.timestamp).toLocaleString()}</p>
                 </div>
                 <div style="text-align: center;">
-                    <div class="score-circle" style="background-color: ${this._getScoreColor(result.overallScore)};">
+                    <div class="score-circle" style="background-color: ${getScoreColor(result.overallScore)};">
                         ${result.overallScore}%
                     </div>
-                    <div style="margin-top: 8px;">${this._getStatusBadge(result.passed)}</div>
+                    <div style="margin-top: 8px;">${getStatusBadge(result.passed)}</div>
                 </div>
             </div>`;
 
-        if (result.error) {
-            html += `<div style="background: #fee2e2; color: #dc2626; padding: 16px; border-radius: 6px;">
+            if (result.error) {
+                html += `<div style="background: #fee2e2; color: #dc2626; padding: 16px; border-radius: 6px;">
                     <strong>Error:</strong> ${this.escapeHtml(result.error)}
                 </div>`;
-        } else {
-            html += `<div class="requirements-grid">`;
+            } else {
+                html += `<div class="requirements-grid">`;
 
-            Object.entries(result.requirements).forEach(([_key, req]) => {
-                html += this._generateHTMLRequirement(req);
-            });
+                Object.entries(result.requirements).forEach(([key, req]) => {
+                    html += `
+                    <div class="requirement">
+                        <div class="requirement-header">
+                            <span class="requirement-name">${this.escapeHtml(req.name)}</span>
+                            <div>
+                                ${getStatusBadge(req.passed)}
+                                <span class="requirement-score" style="color: ${getScoreColor(req.score)}; margin-left: 8px;">${req.score}%</span>
+                            </div>
+                        </div>`;
+
+                    if (req.details && req.details.length > 0) {
+                        html += `<div class="details">
+                            ${req.details.map(detail => `• ${this.escapeHtml(detail)}`).join('<br>')}
+                        </div>`;
+                    }
+
+                    if (req.issues && req.issues.length > 0) {
+                        html += `<div class="issues">
+                            <strong>Issues:</strong><br>
+                            ${req.issues.map(issue => `• ${this.escapeHtml(issue)}`).join('<br>')}
+                        </div>`;
+                    }
+
+                    html += `</div>`;
+                });
+
+                html += `</div>`;
+
+                if (result.recommendations && result.recommendations.length > 0) {
+                    html += `
+                    <div class="recommendations">
+                        <h3>Recommendations</h3>`;
+
+                    result.recommendations.forEach(rec => {
+                        html += `
+                        <div class="recommendation ${rec.priority === 'high' ? 'high-priority' : ''}">
+                            <strong>${this.escapeHtml(rec.category)}:</strong> ${this.escapeHtml(rec.issue)}
+                        </div>`;
+                    });
+
+                    html += `</div>`;
+                }
+            }
             
             html += `</div>`;
-            html += this._generateHTMLRecommendations(result.recommendations);
-        }
+        });
 
-        html += `</div>`;
-        return html;
-    }
-
-    _generateHTMLFooter() {
-        return `
+        html += `
     </div>
 </body>
 </html>`;
-    }
-
-    generateHTMLReport(results) {
-        const isArray = Array.isArray(results);
-        const pages = isArray ? results : [results];
-
-        let html = this._generateHTMLHeader();
-
-        pages.forEach(result => {
-            html += this._generateHTMLPageResult(result);
-        });
-
-        html += this._generateHTMLFooter();
         
         return html;
     }

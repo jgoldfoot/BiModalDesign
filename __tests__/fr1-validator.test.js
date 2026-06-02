@@ -5,45 +5,12 @@
 
 const http = require('http');
 const https = require('https');
-const { fetchInitialPayload, log, COLORS } = require('../tools/validators/fr1-validator');
+const { fetchInitialPayload } = require('../tools/validators/fr1-validator');
 
 jest.mock('http');
 jest.mock('https');
 
 describe('FR1 Validator', () => {
-  describe('log function', () => {
-    let consoleSpy;
-
-    beforeEach(() => {
-      consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-    });
-
-    afterEach(() => {
-      consoleSpy.mockRestore();
-    });
-
-    test('should format and log messages with correct colors and symbols', () => {
-      log(COLORS.green, '✓', 'Success message');
-      expect(consoleSpy).toHaveBeenCalledWith(`${COLORS.green}✓${COLORS.reset} Success message`);
-    });
-
-    test('should handle different colors', () => {
-      log(COLORS.red, '✗', 'Error message');
-      expect(consoleSpy).toHaveBeenCalledWith(`${COLORS.red}✗${COLORS.reset} Error message`);
-
-      log(COLORS.yellow, '⚠', 'Warning message');
-      expect(consoleSpy).toHaveBeenCalledWith(`${COLORS.yellow}⚠${COLORS.reset} Warning message`);
-    });
-
-    test('should handle empty message or symbol', () => {
-      log(COLORS.blue, '', 'Test');
-      expect(consoleSpy).toHaveBeenCalledWith(`${COLORS.blue}${COLORS.reset} Test`);
-
-      log(COLORS.gray, '-', '');
-      expect(consoleSpy).toHaveBeenCalledWith(`${COLORS.gray}-${COLORS.reset} `);
-    });
-  });
-
   describe('HTML Analysis', () => {
     test('should pass compliant HTML with semantic structure', () => {
       const goodHTML = `

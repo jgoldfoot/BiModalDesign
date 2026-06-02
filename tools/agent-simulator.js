@@ -21,7 +21,6 @@ class AgentSimulator {
             timeout: 30000,
             viewport: { width: 1200, height: 800 },
             headless: true,
-            silent: false,
             ...options
         };
         
@@ -539,12 +538,6 @@ class AgentSimulator {
         }
     }
 
-    log(message) {
-        if (!this.options.silent) {
-            console.log(message);
-        }
-    }
-
     async runMultiAgentTest(url, options = {}) {
         const {
             agents = ['basic', 'intermediate', 'advanced'],
@@ -560,7 +553,7 @@ class AgentSimulator {
         // to finish sequentially. This decreases execution time of `runMultiAgentTest`
         // by approximately ~35% (~4.3s down to ~2.7s in local benchmarking).
         await Promise.all(agents.map(async (agentType) => {
-            this.log(`Testing with ${agentType} agent...`);
+            console.log(`Testing with ${agentType} agent...`);
             results[agentType] = await this.simulateAgent(url, agentType, tasks);
         }));
 
@@ -823,10 +816,10 @@ async function main() {
         // Run simulation
         let results;
         if (options.multiAgent) {
-            simulator.log(`Running multi-agent test for: ${url}`);
+            console.log(`Running multi-agent test for: ${url}`);
             results = await simulator.runMultiAgentTest(url, { tasks: options.tasks });
         } else {
-            simulator.log(`Running ${options.agentType} agent test for: ${url}`);
+            console.log(`Running ${options.agentType} agent test for: ${url}`);
             results = await simulator.simulateAgent(url, options.agentType, options.tasks);
         }
 
@@ -835,9 +828,9 @@ async function main() {
         
         if (options.output) {
             await fs.writeFile(options.output, report);
-            simulator.log(`Report saved to: ${options.output}`);
+            console.log(`Report saved to: ${options.output}`);
         } else {
-            simulator.log(report);
+            console.log(report);
         }
 
         // Exit with success code

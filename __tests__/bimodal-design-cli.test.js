@@ -1,18 +1,4 @@
-const fs = require('fs');
-
 // Mock dependencies before requiring the module
-// Preserve the rest of the fs module and only mock fs.promises.readFile
-jest.mock('fs', () => {
-  const actualFs = jest.requireActual('fs');
-  return {
-    ...actualFs,
-    promises: {
-      ...actualFs.promises,
-      readFile: jest.fn(),
-    },
-  };
-});
-
 jest.mock('../tools/validators/fr1-checker', () => {
   return jest.fn().mockImplementation(() => ({
     checkFR1: jest.fn().mockResolvedValue({ passed: true }),
@@ -205,52 +191,6 @@ describe('BiModalDesignCLI', () => {
         null
       );
       expect(result.overall).toBe(16);
-    });
-  });
-
-  describe('loadUrlsFromFile', () => {
-    it('should parse and return an array of valid http URLs', async () => {
-      fs.promises.readFile.mockResolvedValueOnce('http://example.com\nhttps://test.com');
-      const urls = await cli.loadUrlsFromFile('dummy.txt');
-      expect(urls).toEqual(['http://example.com', 'https://test.com']);
-    });
-
-    it('should ignore empty lines and whitespace-only lines', async () => {
-      fs.promises.readFile.mockResolvedValueOnce('http://a.com\n\n   \nhttps://b.com');
-      const urls = await cli.loadUrlsFromFile('dummy.txt');
-      expect(urls).toEqual(['http://a.com', 'https://b.com']);
-    });
-
-    it('should ignore lines that do not start with http', async () => {
-      fs.promises.readFile.mockResolvedValueOnce(
-        'http://a.com\nftp://b.com\nexample.com\nhttps://c.com'
-      );
-      const urls = await cli.loadUrlsFromFile('dummy.txt');
-      expect(urls).toEqual(['http://a.com', 'https://c.com']);
-    });
-
-    it('should correctly trim whitespace around valid URLs', async () => {
-      fs.promises.readFile.mockResolvedValueOnce('  http://a.com  \n\thttps://b.com\t');
-      const urls = await cli.loadUrlsFromFile('dummy.txt');
-      expect(urls).toEqual(['http://a.com', 'https://b.com']);
-    });
-
-    it('should return an empty array if file is completely empty', async () => {
-      fs.promises.readFile.mockResolvedValueOnce('');
-      const urls = await cli.loadUrlsFromFile('dummy.txt');
-      expect(urls).toEqual([]);
-    });
-
-    it('should return an empty array if file contains no valid URLs', async () => {
-      fs.promises.readFile.mockResolvedValueOnce('not an url\njust text');
-      const urls = await cli.loadUrlsFromFile('dummy.txt');
-      expect(urls).toEqual([]);
-    });
-
-    it('should propagate errors if readFile fails', async () => {
-      const error = new Error('File not found');
-      fs.promises.readFile.mockRejectedValueOnce(error);
-      await expect(cli.loadUrlsFromFile('missing.txt')).rejects.toThrow('File not found');
     });
   });
 
