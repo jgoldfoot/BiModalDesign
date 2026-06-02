@@ -635,7 +635,7 @@ From: googlebot(at)googlebot.com
 
 ```http
 X-Agent-Optimized: true
-X-Agent-Framework: agentux/2.1.0
+X-Agent-Framework: bimodal-design/2.1.0
 X-Agent-Rendering: ssr
 X-Content-Type-Options: nosniff
 X-Frame-Options: SAMEORIGIN
@@ -910,7 +910,7 @@ class BiModalDesignDetector {
    */
   testLocalStorage() {
     try {
-      const test = 'agentux_test';
+      const test = 'bimodal-design_test';
       localStorage.setItem(test, test);
       localStorage.removeItem(test);
       return true;
@@ -925,7 +925,7 @@ class BiModalDesignDetector {
    */
   testSessionStorage() {
     try {
-      const test = 'agentux_test';
+      const test = 'bimodal-design_test';
       sessionStorage.setItem(test, test);
       sessionStorage.removeItem(test);
       return true;
@@ -1017,7 +1017,10 @@ class BiModalDesignDetector {
    */
   generateSessionId() {
     return (
-      'agentux_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now()
+      'bimodal-design_' +
+      Math.random().toString(36).substr(2, 9) +
+      '_' +
+      Date.now()
     );
   }
 
@@ -1027,7 +1030,7 @@ class BiModalDesignDetector {
    */
   trackDetection(agentInfo) {
     if (typeof window !== 'undefined' && window.fetch) {
-      fetch('/api/agentux/detection', {
+      fetch('/api/bimodal-design/detection', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(agentInfo),
@@ -1145,7 +1148,7 @@ class BiModalDesignDetector {
    */
   disableAnimations() {
     const style = document.createElement('style');
-    style.id = 'agentux-animations';
+    style.id = 'bimodal-design-animations';
     style.textContent = `
       [data-agent-context="detected"] *,
       [data-agent-context="detected"] *::before,
@@ -1244,7 +1247,7 @@ class BiModalDesignDetector {
    */
   simplifyUI() {
     const style = document.createElement('style');
-    style.id = 'agentux-simplify';
+    style.id = 'bimodal-design-simplify';
     style.textContent = `
       [data-agent-context="detected"] {
         font-size: 16px !important;
@@ -1264,14 +1267,14 @@ class BiModalDesignDetector {
    */
   addNavigationAids(preferences) {
     // Add skip links if not present
-    if (!document.querySelector('.agentux-skip-link')) {
+    if (!document.querySelector('.bimodal-design-skip-link')) {
       this.addSkipLinks();
     }
 
     // Add breadcrumbs if appropriate
     if (
       preferences.preferTraditionalNav &&
-      !document.querySelector('[data-agentux-breadcrumbs]')
+      !document.querySelector('[data-bimodal-design-breadcrumbs]')
     ) {
       this.addBreadcrumbs();
     }
@@ -1285,7 +1288,7 @@ class BiModalDesignDetector {
     const skipLink = document.createElement('a');
     skipLink.href = '#main-content';
     skipLink.textContent = 'Skip to main content';
-    skipLink.className = 'agentux-skip-link';
+    skipLink.className = 'bimodal-design-skip-link';
     skipLink.setAttribute('data-agent-action', 'skip-to-content');
 
     skipLink.style.cssText = `
@@ -1328,8 +1331,8 @@ class BiModalDesignDetector {
 
     const breadcrumbs = document.createElement('nav');
     breadcrumbs.setAttribute('aria-label', 'Breadcrumb');
-    breadcrumbs.setAttribute('data-agentux-breadcrumbs', 'true');
-    breadcrumbs.className = 'agentux-breadcrumbs';
+    breadcrumbs.setAttribute('data-bimodal-design-breadcrumbs', 'true');
+    breadcrumbs.className = 'bimodal-design-breadcrumbs';
 
     let breadcrumbHTML =
       '<ol style="display: flex; gap: 0.5rem; margin: 0; padding: 0.5rem; list-style: none; font-size: 0.875rem;">';
@@ -1363,7 +1366,7 @@ class BiModalDesignDetector {
    * Generate unique ID for elements
    * @private
    */
-  generateId(prefix = 'agentux') {
+  generateId(prefix = 'bimodal-design') {
     return `${prefix}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }
@@ -1797,11 +1800,11 @@ enhancer.startMutationObserver();
 }
 
 /* Utility classes for agent optimization */
-.agentux-hidden {
+.bimodal-design-hidden {
   display: none;
 }
 
-.agentux-visually-hidden {
+.bimodal-design-visually-hidden {
   position: absolute !important;
   width: 1px !important;
   height: 1px !important;
@@ -1813,7 +1816,7 @@ enhancer.startMutationObserver();
   border: 0 !important;
 }
 
-.agentux-skip-link {
+.bimodal-design-skip-link {
   position: absolute;
   top: -40px;
   left: 6px;
@@ -1825,7 +1828,7 @@ enhancer.startMutationObserver();
   z-index: 10000;
 }
 
-.agentux-skip-link:focus {
+.bimodal-design-skip-link:focus {
   top: 6px;
 }
 
@@ -2236,7 +2239,7 @@ export default MyApp;
 ```
 
 ```javascript
-// pages/api/agentux/detection.js - Analytics endpoint
+// pages/api/bimodal-design/detection.js - Analytics endpoint
 export default function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -3515,7 +3518,7 @@ From: googlebot(at)googlebot.com
 
 ```http
 X-Agent-Optimized: true
-X-Agent-Framework: agentux/2.1.0
+X-Agent-Framework: bimodal-design/2.1.0
 X-Agent-Rendering: ssr
 X-Content-Type-Options: nosniff
 X-Frame-Options: SAMEORIGIN
@@ -3789,7 +3792,7 @@ class BiModalDesignDetector {
    */
   testLocalStorage() {
     try {
-      const test = 'agentux_test';
+      const test = 'bimodal-design_test';
       localStorage.setItem(test, test);
       localStorage.removeItem(test);
       return true;
@@ -3804,7 +3807,7 @@ class BiModalDesignDetector {
    */
   testSessionStorage() {
     try {
-      const test = 'agentux_test';
+      const test = 'bimodal-design_test';
       sessionStorage.setItem(test, test);
       sessionStorage.removeItem(test);
       return true;
@@ -3896,7 +3899,10 @@ class BiModalDesignDetector {
    */
   generateSessionId() {
     return (
-      'agentux_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now()
+      'bimodal-design_' +
+      Math.random().toString(36).substr(2, 9) +
+      '_' +
+      Date.now()
     );
   }
 
@@ -3906,7 +3912,7 @@ class BiModalDesignDetector {
    */
   trackDetection(agentInfo) {
     if (typeof window !== 'undefined' && window.fetch) {
-      fetch('/api/agentux/detection', {
+      fetch('/api/bimodal-design/detection', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(agentInfo),
@@ -4024,7 +4030,7 @@ class BiModalDesignDetector {
    */
   disableAnimations() {
     const style = document.createElement('style');
-    style.id = 'agentux-animations';
+    style.id = 'bimodal-design-animations';
     style.textContent = `
       [data-agent-context="detected"] *,
       [data-agent-context="detected"] *::before,
@@ -4123,7 +4129,7 @@ class BiModalDesignDetector {
    */
   simplifyUI() {
     const style = document.createElement('style');
-    style.id = 'agentux-simplify';
+    style.id = 'bimodal-design-simplify';
     style.textContent = `
       [data-agent-context="detected"] {
         font-size: 16px !important;
@@ -4143,14 +4149,14 @@ class BiModalDesignDetector {
    */
   addNavigationAids(preferences) {
     // Add skip links if not present
-    if (!document.querySelector('.agentux-skip-link')) {
+    if (!document.querySelector('.bimodal-design-skip-link')) {
       this.addSkipLinks();
     }
 
     // Add breadcrumbs if appropriate
     if (
       preferences.preferTraditionalNav &&
-      !document.querySelector('[data-agentux-breadcrumbs]')
+      !document.querySelector('[data-bimodal-design-breadcrumbs]')
     ) {
       this.addBreadcrumbs();
     }
@@ -4164,7 +4170,7 @@ class BiModalDesignDetector {
     const skipLink = document.createElement('a');
     skipLink.href = '#main-content';
     skipLink.textContent = 'Skip to main content';
-    skipLink.className = 'agentux-skip-link';
+    skipLink.className = 'bimodal-design-skip-link';
     skipLink.setAttribute('data-agent-action', 'skip-to-content');
 
     skipLink.style.cssText = `
@@ -4207,8 +4213,8 @@ class BiModalDesignDetector {
 
     const breadcrumbs = document.createElement('nav');
     breadcrumbs.setAttribute('aria-label', 'Breadcrumb');
-    breadcrumbs.setAttribute('data-agentux-breadcrumbs', 'true');
-    breadcrumbs.className = 'agentux-breadcrumbs';
+    breadcrumbs.setAttribute('data-bimodal-design-breadcrumbs', 'true');
+    breadcrumbs.className = 'bimodal-design-breadcrumbs';
 
     let breadcrumbHTML =
       '<ol style="display: flex; gap: 0.5rem; margin: 0; padding: 0.5rem; list-style: none; font-size: 0.875rem;">';
@@ -4242,7 +4248,7 @@ class BiModalDesignDetector {
    * Generate unique ID for elements
    * @private
    */
-  generateId(prefix = 'agentux') {
+  generateId(prefix = 'bimodal-design') {
     return `${prefix}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }
@@ -4676,11 +4682,11 @@ enhancer.startMutationObserver();
 }
 
 /* Utility classes for agent optimization */
-.agentux-hidden {
+.bimodal-design-hidden {
   display: none;
 }
 
-.agentux-visually-hidden {
+.bimodal-design-visually-hidden {
   position: absolute !important;
   width: 1px !important;
   height: 1px !important;
@@ -4692,7 +4698,7 @@ enhancer.startMutationObserver();
   border: 0 !important;
 }
 
-.agentux-skip-link {
+.bimodal-design-skip-link {
   position: absolute;
   top: -40px;
   left: 6px;
@@ -4704,7 +4710,7 @@ enhancer.startMutationObserver();
   z-index: 10000;
 }
 
-.agentux-skip-link:focus {
+.bimodal-design-skip-link:focus {
   top: 6px;
 }
 
@@ -5115,7 +5121,7 @@ export default MyApp;
 ```
 
 ```javascript
-// pages/api/agentux/detection.js - Analytics endpoint
+// pages/api/bimodal-design/detection.js - Analytics endpoint
 export default function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -6394,7 +6400,7 @@ From: googlebot(at)googlebot.com
 
 ```http
 X-Agent-Optimized: true
-X-Agent-Framework: agentux/2.1.0
+X-Agent-Framework: bimodal-design/2.1.0
 X-Agent-Rendering: ssr
 X-Content-Type-Options: nosniff
 X-Frame-Options: SAMEORIGIN
@@ -6668,7 +6674,7 @@ class BiModalDesignDetector {
    */
   testLocalStorage() {
     try {
-      const test = 'agentux_test';
+      const test = 'bimodal-design_test';
       localStorage.setItem(test, test);
       localStorage.removeItem(test);
       return true;
@@ -6683,7 +6689,7 @@ class BiModalDesignDetector {
    */
   testSessionStorage() {
     try {
-      const test = 'agentux_test';
+      const test = 'bimodal-design_test';
       sessionStorage.setItem(test, test);
       sessionStorage.removeItem(test);
       return true;
@@ -6775,7 +6781,10 @@ class BiModalDesignDetector {
    */
   generateSessionId() {
     return (
-      'agentux_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now()
+      'bimodal-design_' +
+      Math.random().toString(36).substr(2, 9) +
+      '_' +
+      Date.now()
     );
   }
 
@@ -6785,7 +6794,7 @@ class BiModalDesignDetector {
    */
   trackDetection(agentInfo) {
     if (typeof window !== 'undefined' && window.fetch) {
-      fetch('/api/agentux/detection', {
+      fetch('/api/bimodal-design/detection', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(agentInfo),
@@ -6903,7 +6912,7 @@ class BiModalDesignDetector {
    */
   disableAnimations() {
     const style = document.createElement('style');
-    style.id = 'agentux-animations';
+    style.id = 'bimodal-design-animations';
     style.textContent = `
       [data-agent-context="detected"] *,
       [data-agent-context="detected"] *::before,
@@ -7002,7 +7011,7 @@ class BiModalDesignDetector {
    */
   simplifyUI() {
     const style = document.createElement('style');
-    style.id = 'agentux-simplify';
+    style.id = 'bimodal-design-simplify';
     style.textContent = `
       [data-agent-context="detected"] {
         font-size: 16px !important;
@@ -7022,14 +7031,14 @@ class BiModalDesignDetector {
    */
   addNavigationAids(preferences) {
     // Add skip links if not present
-    if (!document.querySelector('.agentux-skip-link')) {
+    if (!document.querySelector('.bimodal-design-skip-link')) {
       this.addSkipLinks();
     }
 
     // Add breadcrumbs if appropriate
     if (
       preferences.preferTraditionalNav &&
-      !document.querySelector('[data-agentux-breadcrumbs]')
+      !document.querySelector('[data-bimodal-design-breadcrumbs]')
     ) {
       this.addBreadcrumbs();
     }
@@ -7043,7 +7052,7 @@ class BiModalDesignDetector {
     const skipLink = document.createElement('a');
     skipLink.href = '#main-content';
     skipLink.textContent = 'Skip to main content';
-    skipLink.className = 'agentux-skip-link';
+    skipLink.className = 'bimodal-design-skip-link';
     skipLink.setAttribute('data-agent-action', 'skip-to-content');
 
     skipLink.style.cssText = `
@@ -7086,8 +7095,8 @@ class BiModalDesignDetector {
 
     const breadcrumbs = document.createElement('nav');
     breadcrumbs.setAttribute('aria-label', 'Breadcrumb');
-    breadcrumbs.setAttribute('data-agentux-breadcrumbs', 'true');
-    breadcrumbs.className = 'agentux-breadcrumbs';
+    breadcrumbs.setAttribute('data-bimodal-design-breadcrumbs', 'true');
+    breadcrumbs.className = 'bimodal-design-breadcrumbs';
 
     let breadcrumbHTML =
       '<ol style="display: flex; gap: 0.5rem; margin: 0; padding: 0.5rem; list-style: none; font-size: 0.875rem;">';
@@ -7121,7 +7130,7 @@ class BiModalDesignDetector {
    * Generate unique ID for elements
    * @private
    */
-  generateId(prefix = 'agentux') {
+  generateId(prefix = 'bimodal-design') {
     return `${prefix}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }
