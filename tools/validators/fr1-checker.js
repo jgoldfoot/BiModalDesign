@@ -681,9 +681,32 @@ Examples:
     
     try {
       if (options.sitemap) {
-        // TODO: Implement sitemap parsing
-        console.error('Sitemap checking not yet implemented');
-        process.exit(1);
+        try {
+          if (options.verbose) {
+            console.log(`Fetching sitemap: ${options.sitemap}`);
+          }
+          const sitemapContent = await checker.fetchHTML(options.sitemap);
+          const { JSDOM } = require('jsdom');
+          const dom = new JSDOM(sitemapContent, { contentType: 'text/xml' });
+          const locElements = dom.window.document.querySelectorAll('loc');
+
+          if (locElements.length === 0) {
+            console.error('No URLs found in the sitemap or invalid sitemap format');
+            process.exit(1);
+          }
+
+          const sitemapUrls = Array.from(locElements).map(el => el.textContent.trim());
+          if (options.verbose) {
+            console.log(`Found ${sitemapUrls.length} URLs in sitemap`);
+          }
+
+          // Combine sitemap URLs with any URLs provided directly via arguments
+          const allUrls = [...new Set([...urls, ...sitemapUrls])];
+          results = await checker.checkMultiple(allUrls);
+        } catch (error) {
+          console.error(`Error fetching or parsing sitemap: ${error.message}`);
+          process.exit(1);
+        }
       } else {
         results = await checker.checkMultiple(urls);
       }
