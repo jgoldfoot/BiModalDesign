@@ -11,10 +11,8 @@
  *   bimodal-design init --framework react
  */
 
-const { spawn: _spawn } = require('child_process');
 const fs = require('fs').promises;
 const path = require('path');
-const { URL: _URL } = require('url');
 
 // Import our tools
 const FR1Checker = require('./validators/fr1-checker');
