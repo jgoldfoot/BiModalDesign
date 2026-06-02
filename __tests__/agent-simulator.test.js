@@ -443,14 +443,14 @@ describe('AgentSimulator - configurePageForAgent', () => {
       capabilities: {
         javascript: true,
         images: false, // images disabled
-        css: true,     // css enabled
+        css: true, // css enabled
       },
     };
 
     await simulator.configurePageForAgent(mockPage, profile);
 
     // Get the request handler passed to page.on
-    const requestHandler = mockPage.on.mock.calls.find(call => call[0] === 'request')[1];
+    const requestHandler = mockPage.on.mock.calls.find((call) => call[0] === 'request')[1];
     expect(requestHandler).toBeDefined();
 
     // Create a mock request
@@ -489,12 +489,12 @@ describe('AgentSimulator - configurePageForAgent', () => {
     // Test blocking CSS (if CSS was disabled)
     const profileNoCss = {
       userAgent: 'Basic Agent',
-      capabilities: { javascript: false, images: true, css: false }
+      capabilities: { javascript: false, images: true, css: false },
     };
     // Clear previous mock.calls on mockPage to get the new requestHandler
     mockPage.on.mockClear();
     await simulator.configurePageForAgent(mockPage, profileNoCss);
-    const requestHandlerNoCss = mockPage.on.mock.calls.find(call => call[0] === 'request')[1];
+    const requestHandlerNoCss = mockPage.on.mock.calls.find((call) => call[0] === 'request')[1];
 
     mockRequest.abort.mockClear();
     mockRequest.resourceType.mockReturnValue('stylesheet');
