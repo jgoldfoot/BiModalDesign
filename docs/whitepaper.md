@@ -93,15 +93,16 @@ around browsing sessions.
   change the design calculus
 - **Expanded GEO Framework**: Deeper treatment of Generative Engine Optimization
   as AI-assisted discovery becomes a primary traffic channel
-- **Standards-Based Approach**: Migration from custom `data-agent-*` attributes
-  to established standards (schema.org, WAI-ARIA, OpenAPI)
+- **Standards-First Approach**: Established standards (schema.org, WAI-ARIA,
+  OpenAPI) as the primary semantic layer, with `data-agent-*` attributes
+  retained as a supplementary layer for agent-specific intent and actions
 
 ### **Quantified Impact**
 
 | Metric                                | Conventional UI | BiModal Design v2.1 | BiModal Design v3.0 (Projected) |
 | ------------------------------------- | --------------- | ------------------- | ------------------------------- |
-| HTTP Retriever Success                | 12%             | 42-70%              | 42-70%                          |
-| Browser Automation Success            | 25-40%          | 50-65%              | 70-85%                          |
+| HTTP Retriever Success                | 12-20%          | 42-65%              | 60-75%                          |
+| Browser Automation Success            | 35-50%          | 55-72%              | 75-88%                          |
 | Vision and Computer-Use Agent Success | 30-50%          | 45-60%              | 75-90%                          |
 | Protocol-Native Success               | N/A             | N/A                 | 90-95%                          |
 | GEO Discoverability                   | Low             | Moderate            | High                            |
@@ -810,34 +811,46 @@ Clearly communicate element state so agents can make reliable decisions:
 </div>
 ```
 
-### **7.2 Migration from `data-agent-*` Attributes**
+### **7.2 Standards-First with `data-agent-*` Attributes**
 
-BiModal Design v2.x recommended custom `data-agent-*` attributes
-(`data-agent-context`, `data-agent-action`, `data-agent-field`). In v3.0, we
-recommend migrating to established standards that are already understood by
-agents, search engines, and accessibility tools.
+BiModal Design v3.0 uses a three-layer attribute architecture. Established
+standards are the **primary** semantic layer, with `data-agent-*` attributes
+retained as a **supplementary** layer for intent and action metadata that
+standards do not cover.
 
-#### **Migration Guide**
+| Layer          | Purpose                        | Example                                           |
+| -------------- | ------------------------------ | ------------------------------------------------- |
+| Schema.org     | Content identity and structure | `itemscope itemtype="https://schema.org/Product"` |
+| WAI-ARIA       | Accessibility and interaction  | `aria-label="Add to cart"`                        |
+| `data-agent-*` | Agent intent, actions, hints   | `data-agent-action="add-to-cart"`                 |
 
-| v2.x Attribute                    | v3.0 Replacement                                  | Rationale                                        |
-| --------------------------------- | ------------------------------------------------- | ------------------------------------------------ |
-| `data-agent-context="product"`    | `itemscope itemtype="https://schema.org/Product"` | Schema.org is universally recognized             |
-| `data-agent-action="add-to-cart"` | `aria-label="Add to cart"` + schema.org `Action`  | WAI-ARIA is supported by all browsers and agents |
-| `data-agent-field="price"`        | `itemprop="price"`                                | Microdata is a W3C standard                      |
-| `data-agent-group="passenger"`    | `<fieldset>` + `<legend>`                         | Native HTML grouping                             |
-| `data-agent-step="shipping"`      | `aria-current="step"`                             | WAI-ARIA step indicator                          |
-| `data-agent-api="/api/..."`       | OpenAPI spec + `<link rel="api">`                 | Industry-standard API documentation              |
+Standards (schema.org, ARIA) describe **what content is**. Agent attributes
+describe **what agents can do with it** — actions, intents, component roles, and
+navigation priorities that no existing standard addresses. See the
+[API Reference](api-reference.md) for the full `data-agent-*` specification.
 
-#### **Why We're Moving Away from `data-agent-*`**
+#### **Migration Guide (v2.x → v3.0)**
 
-1. **No browser or agent framework recognizes them** — they add markup without
-   adding capability
-2. **Established standards already solve these problems** — schema.org,
-   WAI-ARIA, and OpenAPI are universally understood
-3. **Standards evolve with the ecosystem** — custom attributes create
-   maintenance burden with no community support
-4. **Double work** — teams were implementing both `data-agent-*` and standard
-   attributes, providing no incremental value
+Where an established standard covers the same semantics as a v2.x `data-agent-*`
+attribute, prefer the standard. Where no standard equivalent exists,
+`data-agent-*` remains the correct choice.
+
+| v2.x Attribute                    | v3.0 Recommendation                               | Rationale                                       |
+| --------------------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| `data-agent-context="product"`    | `itemscope itemtype="https://schema.org/Product"` | Schema.org is universally recognized            |
+| `data-agent-action="add-to-cart"` | Keep, or pair with `aria-label="Add to cart"`     | No standard captures agent-actionable intent    |
+| `data-agent-field="price"`        | `itemprop="price"`                                | Microdata is a W3C standard                     |
+| `data-agent-group="passenger"`    | `<fieldset>` + `<legend>`                         | Native HTML grouping                            |
+| `data-agent-step="shipping"`      | `aria-current="step"`                             | WAI-ARIA step indicator                         |
+| `data-agent-api="/api/..."`       | OpenAPI spec + `<link rel="api">`                 | Industry-standard API documentation             |
+| `data-agent-component="..."`      | Keep (supplementary)                              | No standard equivalent for component role hints |
+
+#### **When to use `data-agent-*`**
+
+Use `data-agent-*` when established standards do not cover the semantics you
+need — for example, marking an element as an agent-actionable component,
+declaring a navigation priority, or tagging a region with an action intent. Do
+**not** duplicate information that schema.org or ARIA already provides.
 
 #### **Before (v2.x)**
 
@@ -1979,13 +1992,15 @@ resilient, semantic, structured, and protocol-aware.
    in Web Agents" — arXiv:2410.06703v6
 3. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
    Domains" — arXiv:2406.12045
-4. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
+4. **OSWorld**: "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
+   Computer Environments" — arXiv:2404.07972
+5. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
    Websites"
-5. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
+6. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
    web"
-6. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+7. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
    benefits
-7. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+8. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
    March 2025
 
 ### **Agent Protocols**

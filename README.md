@@ -264,6 +264,10 @@ AI-assisted discoverability.
 
 ## Maturity Levels
 
+Maturity levels describe **site compliance**, not agent types. A Maturity Level
+4 site implements all five defense-in-depth layers and serves all six agent
+capability levels (Levels 0-5).
+
 | Level | Name                    | Layers     | Agent Coverage | Success Rate |
 | ----- | ----------------------- | ---------- | -------------- | ------------ |
 | 0     | Infrastructure Ready    | Layer 1    | Level 0-1      | 40-65%       |
@@ -310,8 +314,8 @@ npm test
 - **WebAgents Survey 2025** — "A Survey of WebAgents: Towards Next-Generation AI
   Agents for Web Automation" (arXiv:2503.23350v4)
 - **WebArena-Verified** — Rigorous re-evaluation of autonomous web agents
-- **OSWorld** — Benchmarking Multimodal Agents for Open-Ended Tasks in Real
-  Computer Environments
+- **OSWorld** — "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
+  Computer Environments" (arXiv:2404.07972)
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness
   in Web Agents" (arXiv:2410.06703v6)
 - **MCP** — Model Context Protocol (modelcontextprotocol.io)
