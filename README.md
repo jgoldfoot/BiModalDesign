@@ -57,8 +57,8 @@ Interfaces today face a spectrum of AI consumers, not a single one:
 | Agent Level                            | Example                    | What They See      |
 | -------------------------------------- | -------------------------- | ------------------ |
 | Level 0 — HTTP Retrievers              | curl, web scrapers         | Raw HTML only      |
-| Level 1 — LLM Browsers                 | ChatGPT Browse, Perplexity | Parsed HTML, no JS |
-| Level 2 — Browser Automation           | Playwright agents          | Full rendered DOM  |
+| Level 1 — LLM & Agentic Browsers       | Perplexity Comet           | Parsed HTML, no JS |
+| Level 2 — Browser Automation           | Playwright, Agentic Chrome | Full rendered DOM  |
 | Level 3 — Vision & Computer-Use Agents | Claude Computer Use        | Screenshots & AOM  |
 | Level 4 — Tool-Use Agents              | OpenAI function calling    | API responses      |
 | Level 5 — Protocol-Native              | MCP-connected agents       | Protocol data      |
@@ -76,8 +76,8 @@ spectrum:
 
 ```
 Level 0: HTTP Retrievers      → See only raw HTML (FR-1 critical)
-Level 1: LLM Browsers         → Parse HTML, understand semantics
-Level 2: Browser Automation   → Execute JS, interact with DOM
+Level 1: LLM & Agentic Browsers → Parse HTML, navigate on user's behalf
+Level 2: Browser Automation   → Execute JS, agentic commerce workflows
 Level 3: Vision & Computer-Use Agents → See rendered pages, query OS AOM, click UI elements
 Level 4: Tool-Use Agents      → Call APIs directly via function calling
 Level 5: Protocol-Native      → MCP, A2A, NLWeb — rich agent protocols
@@ -119,6 +119,9 @@ BiModal Design:
 - **35-50% baseline success** for Browser Automation agents on conventional UI,
   improving to **55-72%** with semantic structure and up to **75-88%** with
   structured data.
+- **BrowseComp & VisualWebArena insights** indicate that pure visual reasoning
+  is brittle; well-structured Layer 2 and Layer 3 significantly boost agent
+  reliability.
 
 ---
 
@@ -321,6 +324,10 @@ npm test
   Domains" (arXiv:2406.12045)
 - **WebVoyager** — Benchmarking end-to-end browser agents on live real-world
   websites
+- **VisualWebArena** — Evaluating Multimodal Agents on Realistic Visual Web
+  Tasks
+- **BrowseComp** — Benchmark for Agentic Browser Navigation & Task Execution
+- **WebMCP** — Native browser integration for Model Context Protocol discovery
 
 ---
 

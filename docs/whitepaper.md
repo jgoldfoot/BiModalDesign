@@ -148,24 +148,27 @@ capabilities, limitations, and design implications.
 - **Current prevalence**: Declining as a percentage but still significant for
   indexing and data extraction
 
-#### **Level 1 — LLM Browsers & Basic Agentic Browsers**
+#### **Level 1 — LLM & Agentic Browsers**
 
 - **What they are**: AI systems that fetch web content and use language models
-  to parse, understand, and reason about it, including early agentic browsers
-  that navigate on a human's behalf.
+  to parse, understand, and reason about it. This includes Agentic Browsers that
+  natively wrap foundation models around user browsing sessions to navigate on a
+  human's behalf.
 - **Examples**: ChatGPT Browse, Perplexity Comet, Claude web_fetch, Google AI
   Overviews, Samsung Browser with Perplexity AI
 - **Capabilities**: Parse HTML structure, understand semantic meaning, extract
-  information, follow links — but typically do not execute JavaScript
+  information, follow links — but typically do not execute complex JavaScript
+  workflows.
 - **Design implication**: Semantic HTML and structured data (schema.org,
-  JSON-LD) dramatically improve comprehension accuracy. FR-1 remains critical
-- **Current prevalence**: Rapidly growing; this is the primary channel for GEO
+  JSON-LD) dramatically improve comprehension accuracy. FR-1 remains critical.
+- **Current prevalence**: Rapidly growing; this is the primary channel for GEO.
 
-#### **Level 2 — Browser Automation Agents**
+#### **Level 2 — Browser Automation & Agentic Commerce**
 
 - **What they are**: Agents that control headless browsers to interact with web
-  pages programmatically, including advanced Agentic Commerce workflows.
-- **Examples**: Playwright-based agents, Puppeteer automation, Selenium bots,
+  pages programmatically. This is the foundation of Agentic Commerce, where
+  autonomous systems complete multi-step workflows like purchases.
+- **Examples**: Playwright-based agents, Agentic Chrome features, Selenium bots,
   Claude MCP browser tools, OpenAI Operator
 - **Capabilities**: Full JavaScript execution, DOM interaction, form filling,
   navigation — but rely on CSS selectors, ARIA labels, and DOM structure for
@@ -486,6 +489,9 @@ it's measurable:
   overhead, emphasizing the need for temporal efficiency and "macro actions".
 - **WebVoyager Benchmark**: Highlighted the specific challenges of end-to-end
   agent navigation on live, stateful, and dynamic web applications.
+- **VisualWebArena Benchmark**: Demonstrated that pure visual reasoning is
+  brittle; multimodal agents require strong textual and structural grounding to
+  succeed in complex interfaces.
 - **BrowseComp Benchmark (2026)**: Defined the gold standard for evaluating
   Agentic Browsers, demonstrating the critical need for properly structured web
   applications to ensure high success rates.
@@ -505,7 +511,7 @@ capability level:
 | Level 5 (Protocol-Native)              | N/A                 | N/A                    | 92-98%                  |
 
 _Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
-ST-WebAgentBench, internal analysis_
+ST-WebAgentBench, BrowseComp, internal analysis_
 
 The data reveals a clear pattern: **each additional BiModal Design layer
 improves success rates**, and the **highest reliability comes from API and
@@ -977,12 +983,14 @@ interfaces designed specifically for machine consumption.
 
 ### **8.2 Model Context Protocol (MCP)**
 
-**Standardized Web Discovery:** As MCP matures, bridging the web (Layers 1-3)
-with protocols (Layer 5) is critical. Websites should announce their MCP servers
-natively in the DOM using standard HTML tags:
+**Standardized WebMCP Discovery:** As MCP matures into **WebMCP**, bridging the
+web (Layers 1-3) with protocols (Layer 5) natively in the browser is critical.
+Websites should announce their MCP servers directly in the DOM using standard
+HTML tags:
 `<link rel="alternate" type="application/mcp+json" href="https://api.example.com/mcp" />`
-This allows Level 2 and Level 3 agents browsing the site to discover and upgrade
-to a native protocol connection seamlessly.
+This serves as a bridge, allowing Level 2 Agentic Browsers and Level 3
+Computer-Use agents to discover the server and seamlessly upgrade from
+visual/DOM navigation to deterministic tool invocation.
 
 **Defensive Design & Safety (ST-WebAgentBench Insights):** Benchmarks like
 **ST-WebAgentBench** emphasize the necessity of safety and trustworthiness. When
