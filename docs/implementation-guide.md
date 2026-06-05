@@ -953,3 +953,56 @@ curl -s -o /dev/null -w "%{http_code}" https://your-app.com/api/products
 - **Issues**: [GitHub Issues](https://github.com/jgoldfoot/BiModalDesign/issues)
 - **Discussions**:
   [Community Forum](https://github.com/jgoldfoot/BiModalDesign/discussions)
+
+### Pattern 11: Agent-Accessible Web Components via ElementInternals
+
+When building Web Components, the Shadow DOM inherently encapsulates internal
+markup and state, creating a "black box" that can obscure critical interaction
+data from the Accessibility Object Model (AOM). This is problematic for Level 2
+and Level 3 agents.
+
+To ensure your custom elements remain semantically accessible without cluttering
+the light DOM, use the `ElementInternals` API. This allows the component to
+communicate its role, state, and labels directly to the AOM natively.
+
+```javascript
+class AgentToggle extends HTMLElement {
+  static get formAssociated() {
+    return true;
+  }
+
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+
+    // 1. Attach internals to communicate with the AOM
+    this._internals = this.attachInternals();
+
+    // 2. Set the semantic role directly on the AOM
+    this._internals.role = 'switch';
+
+    // 3. Ensure keyboard focusability
+    if (!this.hasAttribute('tabindex')) {
+      this.setAttribute('tabindex', '0');
+    }
+
+    // Shadow DOM setup omitted for brevity...
+  }
+
+  connectedCallback() {
+    // 4. Expose the accessible name to the AOM
+    this._internals.ariaLabel = this.textContent.trim();
+    this._updateState();
+  }
+
+  _updateState() {
+    // 5. Keep the AOM state in sync with the internal state
+    this._internals.ariaChecked = this.checked ? 'true' : 'false';
+  }
+}
+customElements.define('agent-toggle', AgentToggle);
+```
+
+See the full
+[Web Components ElementInternals Example](../examples/web-components-element-internals.md)
+for more details.

@@ -308,6 +308,15 @@ Furthermore, insights from **VisualWebArena** demonstrate that pure visual
 reasoning frequently fails in complex interfaces without strong textual and
 structural grounding. Layer 2 provides this essential grounding.
 
+As modern interfaces increasingly rely on Web Components, the encapsulation
+provided by the Shadow DOM creates a new challenge: it hides critical state and
+semantic information from the AOM. To solve this, developers must use the
+`ElementInternals` API. By attaching internals to a custom element, the
+component can natively expose its role, `aria-*` states, and accessible name
+directly to the AOM, ensuring that even deeply nested components remain
+transparent and accessible to Level 2 and Level 3 agents without relying on
+brittle light-DOM workarounds.
+
 ### **3.4 Layer 3 — Structured Data**
 
 **Purpose**: Provide machine-readable metadata that explicitly declares content
