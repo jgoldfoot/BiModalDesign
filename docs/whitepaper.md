@@ -505,6 +505,11 @@ it's measurable:
 - **BrowseComp Benchmark (2026)**: Defined the gold standard for evaluating
   Agentic Browsers, demonstrating the critical need for properly structured web
   applications to ensure high success rates.
+- **Odysseys Benchmark (2026)**: Emphasized that real-world tasks are
+  "long-horizon", where compounded navigation errors lead to failure. It
+  introduced the "Trajectory Efficiency" metric, demonstrating that agents need
+  deterministic, multi-step navigation paths rather than relying solely on
+  error-prone visual UI steps.
 
 ### **5.2 Performance Gaps by Agent Type**
 
@@ -521,7 +526,7 @@ capability level:
 | Level 5 (Protocol-Native)              | N/A                 | N/A                    | 92-98%                  |
 
 _Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
-ST-WebAgentBench, BrowseComp, internal analysis_
+ST-WebAgentBench, BrowseComp, Odysseys, internal analysis_
 
 The data reveals a clear pattern: **each additional BiModal Design layer
 improves success rates**, and the **highest reliability comes from API and
@@ -2013,11 +2018,13 @@ resilient, semantic, structured, and protocol-aware.
    Computer Environments" — arXiv:2404.07972
 5. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
    Websites"
-6. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
+6. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
+   arXiv:2604.24964
+7. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
    web"
-7. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+8. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
    benefits
-8. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+9. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
    March 2025
 
 ### **Agent Protocols**

@@ -1006,3 +1006,26 @@ customElements.define('agent-toggle', AgentToggle);
 See the full
 [Web Components ElementInternals Example](../examples/web-components-element-internals.md)
 for more details.
+
+### Pattern 12: Trajectory Efficiency via Relational Navigation (Odysseys)
+
+The Odysseys benchmark demonstrated that agents fail on long-horizon, multi-step
+tasks due to compounded errors in navigating the visual UI. Provide standard
+HTML `<link>` relations to create deterministic navigation paths.
+
+```html
+<head>
+  <!-- Expose logical topology to agents in the head -->
+  <link rel="prev" href="/checkout/step1" title="Return to Cart" />
+  <link rel="next" href="/checkout/step3" title="Proceed to Payment" />
+  <link rel="collection" href="/account/orders" title="View All Orders" />
+</head>
+```
+
+**Why it works**: Agents can bypass visual parsing of the UI entirely to find
+the "Next" button. They can programmatically extract the URL from the
+`rel="next"` tag, drastically improving Trajectory Efficiency and reducing
+failure rates over long-running tasks.
+
+**Reference**:
+[Trajectory Efficiency Example](../examples/odysseys-trajectory-efficiency.md)
