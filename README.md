@@ -328,6 +328,8 @@ npm test
   Domains" (arXiv:2406.12045)
 - **WebVoyager** — Benchmarking end-to-end browser agents on live real-world
   websites
+- **Odysseys** — "Benchmarking Web Agents on Realistic Long Horizon Tasks"
+  (arXiv:2604.24964)
 - **VisualWebArena** — Evaluating Multimodal Agents on Realistic Visual Web
   Tasks
 - **BrowseComp** — Benchmark for Agentic Browser Navigation & Task Execution
