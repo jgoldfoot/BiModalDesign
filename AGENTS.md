@@ -31,8 +31,12 @@ served.
 - OpenAPI for API documentation
 - MCP, A2A, NLWeb for agent protocols
 
-**Important**: v3.0 replaces custom `data-agent-*` attributes with established
-web standards. Do not add new `data-agent-*` attributes.
+**Important**: v3.0 uses established standards (schema.org, WAI-ARIA, OpenAPI)
+as the primary semantic layer. `data-agent-*` attributes are retained as a
+supplementary layer for agent-specific intent and actions that no standard
+covers. Prefer standards where they exist; use `data-agent-*` only when no
+standard equivalent is available. See the [API Reference](docs/api-reference.md)
+for the full `data-agent-*` specification.
 
 ---
 
@@ -94,7 +98,8 @@ When adding examples:
 - Use semantic HTML5 elements (`<article>`, `<section>`, `<nav>`, `<main>`)
 - Use schema.org structured data (`itemscope`, `itemprop`)
 - Use ARIA attributes (`aria-label`, `aria-required`)
-- Do NOT use `data-agent-*` attributes (deprecated in v3.0)
+- Prefer standards over `data-agent-*`; use `data-agent-*` only when no standard
+  equivalent exists (see API Reference)
 - Include JSON-LD structured data blocks
 - Add clear comments explaining which layers are demonstrated
 - Test with the FR-1 validator before committing
@@ -147,7 +152,8 @@ When updating docs:
 
 - Reference the Agent Capability Spectrum (Levels 0-5) where relevant
 - Reference the Defense in Depth layers (Layers 1-5)
-- Use schema.org and ARIA in code examples, not `data-agent-*`
+- Prefer schema.org and ARIA in code examples; use `data-agent-*` only as a
+  supplementary layer when no standard covers the semantics
 - Specify which agent levels benefit from each pattern
 
 ### 5. Key Principles
@@ -157,7 +163,8 @@ When updating docs:
 2. **Semantic Markup**: Use HTML5 elements, ARIA labels, heading hierarchy
    (Layer 2)
 3. **Structured Data**: Include schema.org microdata and JSON-LD (Layer 3)
-4. **Standards Over Custom**: Use established standards, not custom attributes
+4. **Standards-First**: Use established standards as the primary layer;
+   `data-agent-*` as supplementary
 5. **Progressive Enhancement**: JavaScript should enhance, not enable
 6. **Testable**: Changes should be validatable with the FR-1 tool
 
@@ -204,7 +211,7 @@ When generating docs:
 - [ ] Validator runs without errors
 - [ ] CSR example still fails FR-1
 - [ ] SSR example still passes FR-1
-- [ ] New examples use schema.org/ARIA (not `data-agent-*`)
+- [ ] New examples prefer schema.org/ARIA (`data-agent-*` only when needed)
 - [ ] Documentation references v3.0 concepts
 - [ ] Links in README work
 - [ ] Code follows existing patterns

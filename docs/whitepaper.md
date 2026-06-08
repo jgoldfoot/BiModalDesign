@@ -1972,9 +1972,10 @@ BiModal Design has evolved from asking "Can agents see your content?" to asking
    most cost-effective way to serve the broadest range of agents. It is Layer 1,
    not the only layer
 
-4. **Standards over custom attributes**: Schema.org, WAI-ARIA, and OpenAPI
-   replace custom `data-agent-*` attributes — achieving the same goals with
-   ecosystem-wide support
+4. **Standards-first with supplementary agent attributes**: Schema.org,
+   WAI-ARIA, and OpenAPI form the primary semantic layer; `data-agent-*`
+   attributes are retained as a supplementary layer for agent-specific intent
+   and actions that no existing standard covers
 
 5. **Protocols are the future**: MCP, A2A, and NLWeb are creating new agent
    interaction channels that complement, not replace, web-based access
