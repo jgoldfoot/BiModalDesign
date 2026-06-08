@@ -34,7 +34,7 @@ const Navigation = ({ isAgent }) => {
       trackAgentInteraction('navigation_click', {
         action,
         path,
-        component: 'main_navigation'
+        component: 'main_navigation',
       });
     }
   };
@@ -45,7 +45,7 @@ const Navigation = ({ isAgent }) => {
       handleNavigation(to, action);
 
       // For agents that prefer traditional navigation
-      if (isAgent && window.BiModal Design?.preferTraditionalNav) {
+      if (isAgent && window.BiModalDesign?.preferTraditionalNav) {
         window.location.href = to;
         return;
       }
@@ -103,7 +103,9 @@ const Navigation = ({ isAgent }) => {
             <NavLink
               to="/products"
               action="view-products"
-              ariaCurrent={currentPath.startsWith('/products') ? 'page' : undefined}
+              ariaCurrent={
+                currentPath.startsWith('/products') ? 'page' : undefined
+              }
             >
               Products
             </NavLink>
@@ -121,7 +123,9 @@ const Navigation = ({ isAgent }) => {
 
         {isAgent && (
           <div className="agent-status" data-component="status-indicator">
-            <span role="img" aria-label="Agent detected">🤖</span>
+            <span role="img" aria-label="Agent detected">
+              🤖
+            </span>
             <span className="sr-only">Agent-optimized interface</span>
           </div>
         )}
@@ -733,7 +737,7 @@ export const enhanceForAgents = (agentInfo) => {
   applyPerformanceOptimizations(agentInfo);
 
   // Make agent info globally available
-  window.BiModal Design = {
+  window.BiModalDesign = {
     agentInfo,
     isAgent: true,
     enhance: enhanceForAgents,
