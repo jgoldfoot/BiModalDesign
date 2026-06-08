@@ -1914,7 +1914,7 @@ enhancer.startMutationObserver();
  * Express.js middleware for agent detection and routing
  */
 
-const BiModal DesignServer = {
+const BiModalDesignServer = {
   // Agent detection patterns
   patterns: {
     search: [
@@ -2115,13 +2115,13 @@ const express = require('express');
 const app = express();
 
 // Apply agent detection middleware
-app.use(BiModal DesignServer.middleware());
-app.use(BiModal DesignServer.analytics());
+app.use(BiModalDesignServer.middleware());
+app.use(BiModalDesignServer.analytics());
 
 // Route with agent optimization
 app.get(
   '/',
-  BiModal DesignServer.agentRoute({
+  BiModalDesignServer.agentRoute({
     renderSSR: async ({ path, agent }) => {
       if (agent.isAgent) {
         return await renderAgentOptimizedHome(agent);
@@ -2166,7 +2166,7 @@ async function renderAgentOptimizedHome(agent) {
 </html>`;
 }
 
-module.exports = BiModal DesignServer;
+module.exports = BiModalDesignServer;
 ```
 
 ### Next.js Implementation
@@ -2174,7 +2174,7 @@ module.exports = BiModal DesignServer;
 ```javascript
 // pages/_app.js - Next.js BiModal Design integration
 import { useEffect } from 'react';
-import { BiModalDesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/bimodal-design';
 
 function MyApp({ Component, pageProps, agentInfo }) {
   useEffect(() => {
@@ -2276,7 +2276,7 @@ export default function handler(req, res) {
  * Tools for testing agent compatibility
  */
 
-class BiModal DesignTester {
+class BiModalDesignTester {
   constructor(options = {}) {
     this.baseURL = options.baseURL || 'http://localhost:3000';
     this.userAgents = options.userAgents || this.getDefaultUserAgents();
@@ -2548,7 +2548,7 @@ class BiModal DesignTester {
 }
 
 // Usage example
-const tester = new BiModal DesignTester({
+const tester = new BiModalDesignTester({
   baseURL: 'https://example.com',
   timeout: 15000,
 });
@@ -2569,7 +2569,7 @@ console.log('Validation Results:', JSON.stringify(validation, null, 2));
 ### Playwright Test Integration
 
 ```javascript
-// tests/agentux.spec.js - Playwright test suite
+// tests/bimodal-design.spec.js - Playwright test suite
 const { test, expect } = require('@playwright/test');
 
 const agentUserAgents = {
@@ -2702,11 +2702,11 @@ test.describe('BiModal Design Accessibility', () => {
 ### React Hook
 
 ```javascript
-// hooks/useBiModal Design.js
+// hooks/useBiModalDesign.js
 import { useState, useEffect } from 'react';
-import { BiModalDesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/bimodal-design';
 
-export function useBiModal Design(options = {}) {
+export function useBiModalDesign(options = {}) {
   const [agentInfo, setAgentInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -2733,7 +2733,7 @@ export function useBiModal Design(options = {}) {
 
 // Component usage
 function MyComponent() {
-  const { isAgent, agentCategory, isLoading } = useBiModal Design();
+  const { isAgent, agentCategory, isLoading } = useBiModalDesign();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -2753,11 +2753,11 @@ function MyComponent() {
 ### Vue Composable
 
 ```javascript
-// composables/useBiModal Design.js
+// composables/useBiModalDesign.js
 import { ref, onMounted, readonly } from 'vue';
-import { BiModalDesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/bimodal-design';
 
-export function useBiModal Design(options = {}) {
+export function useBiModalDesign(options = {}) {
   const agentInfo = ref(null);
   const isLoading = ref(true);
 
@@ -2790,10 +2790,10 @@ export function useBiModal Design(options = {}) {
 ### Angular Service
 
 ```typescript
-// services/agent-ux.service.ts
+// services/bimodal-design.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BiModalDesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/bimodal-design';
 
 export interface AgentInfo {
   isAgent: boolean;
@@ -2805,7 +2805,7 @@ export interface AgentInfo {
 @Injectable({
   providedIn: 'root',
 })
-export class BiModal DesignService {
+export class BiModalDesignService {
   private agentInfoSubject = new BehaviorSubject<AgentInfo | null>(null);
   private detector: BiModalDesignDetector;
 
@@ -2838,7 +2838,7 @@ export class BiModal DesignService {
 
 // Component usage
 import { Component, OnInit } from '@angular/core';
-import { BiModal DesignService } from './services/agent-ux.service';
+import { BiModalDesignService } from './services/bimodal-design.service';
 
 @Component({
   selector: 'app-root',
@@ -2854,7 +2854,7 @@ import { BiModal DesignService } from './services/agent-ux.service';
   `,
 })
 export class AppComponent implements OnInit {
-  constructor(public agentService: BiModal DesignService) {}
+  constructor(public agentService: BiModalDesignService) {}
 
   ngOnInit() {
     this.agentService.agentInfo$.subscribe((agentInfo) => {
@@ -4796,7 +4796,7 @@ enhancer.startMutationObserver();
  * Express.js middleware for agent detection and routing
  */
 
-const BiModal DesignServer = {
+const BiModalDesignServer = {
   // Agent detection patterns
   patterns: {
     search: [
@@ -4997,13 +4997,13 @@ const express = require('express');
 const app = express();
 
 // Apply agent detection middleware
-app.use(BiModal DesignServer.middleware());
-app.use(BiModal DesignServer.analytics());
+app.use(BiModalDesignServer.middleware());
+app.use(BiModalDesignServer.analytics());
 
 // Route with agent optimization
 app.get(
   '/',
-  BiModal DesignServer.agentRoute({
+  BiModalDesignServer.agentRoute({
     renderSSR: async ({ path, agent }) => {
       if (agent.isAgent) {
         return await renderAgentOptimizedHome(agent);
@@ -5048,7 +5048,7 @@ async function renderAgentOptimizedHome(agent) {
 </html>`;
 }
 
-module.exports = BiModal DesignServer;
+module.exports = BiModalDesignServer;
 ```
 
 ### Next.js Implementation
@@ -5056,7 +5056,7 @@ module.exports = BiModal DesignServer;
 ```javascript
 // pages/_app.js - Next.js BiModal Design integration
 import { useEffect } from 'react';
-import { BiModalDesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/bimodal-design';
 
 function MyApp({ Component, pageProps, agentInfo }) {
   useEffect(() => {
@@ -5158,7 +5158,7 @@ export default function handler(req, res) {
  * Tools for testing agent compatibility
  */
 
-class BiModal DesignTester {
+class BiModalDesignTester {
   constructor(options = {}) {
     this.baseURL = options.baseURL || 'http://localhost:3000';
     this.userAgents = options.userAgents || this.getDefaultUserAgents();
@@ -5430,7 +5430,7 @@ class BiModal DesignTester {
 }
 
 // Usage example
-const tester = new BiModal DesignTester({
+const tester = new BiModalDesignTester({
   baseURL: 'https://example.com',
   timeout: 15000,
 });
@@ -5451,7 +5451,7 @@ console.log('Validation Results:', JSON.stringify(validation, null, 2));
 ### Playwright Test Integration
 
 ```javascript
-// tests/agentux.spec.js - Playwright test suite
+// tests/bimodal-design.spec.js - Playwright test suite
 const { test, expect } = require('@playwright/test');
 
 const agentUserAgents = {
@@ -5584,11 +5584,11 @@ test.describe('BiModal Design Accessibility', () => {
 ### React Hook
 
 ```javascript
-// hooks/useBiModal Design.js
+// hooks/useBiModalDesign.js
 import { useState, useEffect } from 'react';
-import { BiModalDesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/bimodal-design';
 
-export function useBiModal Design(options = {}) {
+export function useBiModalDesign(options = {}) {
   const [agentInfo, setAgentInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -5615,7 +5615,7 @@ export function useBiModal Design(options = {}) {
 
 // Component usage
 function MyComponent() {
-  const { isAgent, agentCategory, isLoading } = useBiModal Design();
+  const { isAgent, agentCategory, isLoading } = useBiModalDesign();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -5635,11 +5635,11 @@ function MyComponent() {
 ### Vue Composable
 
 ```javascript
-// composables/useBiModal Design.js
+// composables/useBiModalDesign.js
 import { ref, onMounted, readonly } from 'vue';
-import { BiModalDesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/bimodal-design';
 
-export function useBiModal Design(options = {}) {
+export function useBiModalDesign(options = {}) {
   const agentInfo = ref(null);
   const isLoading = ref(true);
 
@@ -5672,10 +5672,10 @@ export function useBiModal Design(options = {}) {
 ### Angular Service
 
 ```typescript
-// services/agent-ux.service.ts
+// services/bimodal-design.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BiModalDesignDetector } from '../lib/agentux';
+import { BiModalDesignDetector } from '../lib/bimodal-design';
 
 export interface AgentInfo {
   isAgent: boolean;
@@ -5687,7 +5687,7 @@ export interface AgentInfo {
 @Injectable({
   providedIn: 'root',
 })
-export class BiModal DesignService {
+export class BiModalDesignService {
   private agentInfoSubject = new BehaviorSubject<AgentInfo | null>(null);
   private detector: BiModalDesignDetector;
 
@@ -5720,7 +5720,7 @@ export class BiModal DesignService {
 
 // Component usage
 import { Component, OnInit } from '@angular/core';
-import { BiModal DesignService } from './services/agent-ux.service';
+import { BiModalDesignService } from './services/bimodal-design.service';
 
 @Component({
   selector: 'app-root',
@@ -5736,7 +5736,7 @@ import { BiModal DesignService } from './services/agent-ux.service';
   `,
 })
 export class AppComponent implements OnInit {
-  constructor(public agentService: BiModal DesignService) {}
+  constructor(public agentService: BiModalDesignService) {}
 
   ngOnInit() {
     this.agentService.agentInfo$.subscribe((agentInfo) => {

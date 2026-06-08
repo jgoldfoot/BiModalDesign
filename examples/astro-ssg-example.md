@@ -1568,7 +1568,7 @@ const pageDescription = 'Get in touch with our support team for questions about 
     applyAgentEnhancements(agentInfo);
 
     // Make agent info available globally for other scripts
-    window.BiModal Design = {
+    window.BiModalDesign = {
       agentInfo,
       isAgent: agentInfo.isAgent,
       enhance: applyAgentEnhancements,
