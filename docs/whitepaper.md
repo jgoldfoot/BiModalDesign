@@ -1132,7 +1132,17 @@ of BiModal Design v2.x's core assumptions: that agents can't execute JavaScript
 or see rendered content. This section addresses what this means for the
 framework.
 
-### **9.1 What Vision & Computer-Use Agents Change**
+### **9.1 Preparing for 100% CUA Execution (OSWorld)**
+
+Recent analysis of the OSWorld benchmark highlights the rapid advancement of
+Computing User Agents (CUAs). While CUAs completed only 6% of OSWorld tasks
+sixteen months ago, today they complete approximately 45%. As we project toward
+100% completion rates, we must prepare for the moment when raw AI UI execution
+becomes a solved problem. BiModal Design ensures that interfaces are ready for
+this transition by providing the semantic structure necessary for advanced
+agents to operate reliably when execution barriers are removed.
+
+### **9.2 What Vision & Computer-Use Agents Change**
 
 Vision and computer-use agents (Level 3) interact with web pages the way humans
 do — they see the rendered page, identify UI elements visually, and click, type,
