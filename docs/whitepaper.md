@@ -174,9 +174,10 @@ capabilities, limitations, and design implications.
 - **Capabilities**: Full JavaScript execution, DOM interaction, form filling,
   navigation — but rely on CSS selectors, ARIA labels, and DOM structure for
   element identification.
-- **Design implication**: Semantic HTML, stable selectors, and clear ARIA
-  labeling matter more than FR-1 for these agents. Deterministic state
-  management reduces retry failures.
+- **Design implication**: Semantic HTML and clear ARIA labeling matter more than
+  FR-1 for these agents. They are highly susceptible to **DOM selector drift**
+  (brittle CSS classes breaking automations), making semantic structure a
+  critical resilience mechanism.
 - **Current prevalence**: Growing rapidly in enterprise automation and agentic
   commerce.
 
@@ -524,13 +525,15 @@ capability level:
 | Level 3 (Vision & Computer-Use Agents) | 40-55%              | 55-70%                 | 70-85%                  |
 | Level 4 (Tool-Use via API)             | N/A                 | N/A                    | 88-95%                  |
 | Level 5 (Protocol-Native)              | N/A                 | N/A                    | 92-98%                  |
+| Hybrid Agents (UI → Protocol Handoff)  | N/A                 | N/A                    | 94-99%                  |
 
 _Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
-ST-WebAgentBench, BrowseComp, Odysseys, internal analysis_
+ST-WebAgentBench, BrowseComp, Odysseys, MCP-Universe, internal analysis_
 
 The data reveals a clear pattern: **each additional BiModal Design layer
-improves success rates**, and the **highest reliability comes from API and
-protocol layers** — reinforcing the defense-in-depth approach.
+improves success rates**, and the **highest reliability comes from Hybrid Agents
+using API and protocol layers for execution** — reinforcing the defense-in-depth
+approach where UI structure allows discovery of robust API tools.
 
 ### **5.3 Why BiModal Design Matters Now**
 

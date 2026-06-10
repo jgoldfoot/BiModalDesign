@@ -62,6 +62,7 @@ Interfaces today face a spectrum of AI consumers, not a single one:
 | Level 3 — Vision & Computer-Use Agents | Claude Computer Use        | Screenshots & AOM  |
 | Level 4 — Tool-Use Agents              | OpenAI function calling    | API responses      |
 | Level 5 — Protocol-Native              | MCP-connected agents       | Protocol data      |
+| Hybrid Agents                          | MCP-Universe eval targets  | UI → API Handoff   |
 
 A CSR-only app with `<div id="root"></div>` is invisible to Levels 0-1, fragile
 for Levels 2-3, and unreachable for Levels 4-5 without an API. Most interfaces
@@ -106,6 +107,14 @@ Each layer serves a different segment of the spectrum. Together, they ensure
 graceful degradation — if an agent can't use Layer 5, it falls back to Layer 4,
 then Layer 3, and so on.
 
+### Hybrid Agents and Production Failure Modes
+
+Modern AI workflows often rely on **Hybrid Agents** that traverse the UI but
+prefer to execute transactions via API or protocols (MCP) to avoid **DOM
+selector drift** (where brittle CSS classes break automations). A robust Layer 2
+(Semantic Structure) allows agents to discover and handoff tasks to Layer 5
+(Agent Protocols) seamlessly.
+
 ---
 
 ## Key Research Findings
@@ -119,9 +128,9 @@ BiModal Design:
 - **35-50% baseline success** for Browser Automation agents on conventional UI,
   improving to **55-72%** with semantic structure and up to **75-88%** with
   structured data.
-- **BrowseComp & VisualWebArena insights** indicate that pure visual reasoning
-  is brittle; well-structured Layer 2 and Layer 3 significantly boost agent
-  reliability.
+- **BrowseComp, VisualWebArena & MCP-Universe insights** indicate that pure
+  visual reasoning is brittle; well-structured Layer 2 and Layer 3 significantly
+  boost agent reliability and facilitate reliable tool-use handoffs.
 
 ---
 
@@ -262,6 +271,8 @@ AI-assisted discoverability.
   pattern (Layer 1)
 - **[CSR Mitigation](examples/csr-mitigation.md)** — client-rendered fallback
   strategies
+- **[Hybrid Agent MCP Handoff](examples/hybrid-agent-mcp-handoff.md)** — Layer 2
+  to Layer 5 transaction handoff
 
 ---
 
@@ -316,6 +327,9 @@ npm test
 
 - **WebAgents Survey 2025** — "A Survey of WebAgents: Towards Next-Generation AI
   Agents for Web Automation" (arXiv:2503.23350v4)
+- **MCP-Universe** — "A comprehensive framework and benchmark for evaluating AI
+  agents and LLMs through direct interaction with real-world Model Context
+  Protocol servers"
 - **WebArena-Verified** — Rigorous re-evaluation of autonomous web agents
 - **OSWorld** — "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
   Computer Environments" (arXiv:2404.07972)
