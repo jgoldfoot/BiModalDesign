@@ -508,8 +508,10 @@ it's measurable:
 - **Odysseys Benchmark (2026)**: Emphasized that real-world tasks are
   "long-horizon", where compounded navigation errors lead to failure. It
   introduced the "Trajectory Efficiency" metric, demonstrating that agents need
-  deterministic, multi-step navigation paths rather than relying solely on
-  error-prone visual UI steps.
+  deterministic relational navigation to succeed.
+- **WorkArena++ Benchmark**: Highlighted that enterprise knowledge work requires
+  complex compositional reasoning across dense UIs, exposing the inadequacy of
+  simple visual navigation for multi-step workflows.
 
 ### **5.2 Performance Gaps by Agent Type**
 
@@ -525,7 +527,7 @@ capability level:
 | Level 4 (Tool-Use via API)             | N/A                 | N/A                    | 88-95%                  |
 | Level 5 (Protocol-Native)              | N/A                 | N/A                    | 92-98%                  |
 
-_Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
+_Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld, WorkArena++,
 ST-WebAgentBench, BrowseComp, Odysseys, internal analysis_
 
 The data reveals a clear pattern: **each additional BiModal Design layer
@@ -2021,22 +2023,24 @@ resilient, semantic, structured, and protocol-aware.
 
 1. **WebAgents Survey 2025**: "A Survey of WebAgents: Towards Next-Generation AI
    Agents for Web Automation with Large Foundation Models" — arXiv:2503.23350v4
-2. **ST-WebAgentBench**: "A Benchmark for Evaluating Safety and Trustworthiness
+2. **WorkArena++**: "Towards Compositional Planning and Reasoning-based Common
+   Knowledge Work Tasks" — NeurIPS 2024
+3. **ST-WebAgentBench**: "A Benchmark for Evaluating Safety and Trustworthiness
    in Web Agents" — arXiv:2410.06703v6
-3. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
+4. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
    Domains" — arXiv:2406.12045
-4. **OSWorld**: "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
+5. **OSWorld**: "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
    Computer Environments" — arXiv:2404.07972
-5. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
+6. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
    Websites"
-6. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
+7. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
    arXiv:2604.24964
-7. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
+8. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
    web"
-8. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+9. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
    benefits
-9. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
-   March 2025
+10. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+    March 2025
 
 ### **Agent Protocols**
 

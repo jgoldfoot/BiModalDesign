@@ -317,6 +317,9 @@ npm test
 - **WebAgents Survey 2025** — "A Survey of WebAgents: Towards Next-Generation AI
   Agents for Web Automation" (arXiv:2503.23350v4)
 - **WebArena-Verified** — Rigorous re-evaluation of autonomous web agents
+- **WorkArena++** — "Towards Compositional Planning and Reasoning-based Common
+  Knowledge Work Tasks" (NeurIPS 2024)
+
 - **OSWorld** — "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
   Computer Environments" (arXiv:2404.07972)
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness
