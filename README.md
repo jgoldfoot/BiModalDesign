@@ -200,6 +200,15 @@ Two validation tools are included:
 
 ### Standards-First with Agent Attributes
 
+**Strategic Update (AOM Integration):** For Web Components, BiModal Design
+heavily advocates using the
+[`ElementInternals` API](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals)
+to natively define roles and ARIA states directly in the Accessibility Object
+Model (AOM). This removes the need for custom attributes on Custom Elements,
+dramatically improving discoverability for Level 2 (Browser Automation) and
+Level 3 (Vision & Computer-Use) agents as benchmarked by VisualWebArena. See our
+[AOM Integration Proposal](docs/proposals/aom-integration.md).
+
 v3.0 uses established standards as the **primary** semantic layer, with
 `data-agent-*` attributes as a **supplementary** layer for intent and action
 metadata that standards don't cover:
@@ -262,6 +271,8 @@ AI-assisted discoverability.
   pattern (Layer 1)
 - **[CSR Mitigation](examples/csr-mitigation.md)** — client-rendered fallback
   strategies
+- **[AOM Web Component Example](examples/aom-web-component.html)** — Using
+  `ElementInternals` to expose native semantics to agents
 
 ---
 
