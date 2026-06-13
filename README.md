@@ -347,6 +347,13 @@ npm test
 - **VisualWebArena** — Evaluating Multimodal Agents on Realistic Visual Web
   Tasks
 - **BrowseComp** — Benchmark for Agentic Browser Navigation & Task Execution
+- **Operator** — Evaluating multi-agent vision-and-semantic systems across
+  complex JavaScript interfaces (OpenAI, 2026)
+- **Project Mariner** — Benchmarking "Teach & Repeat" capabilities and
+  multi-task concurrency (Google, 2026)
+- **ScreenSpot** — Benchmark for spatial and visual understanding in GUIs
+- **UFO²** — Multiagent AgentOS featuring hybrid control detection
+  (Microsoft, 2026)
 - **WebMCP** — Native browser integration for Model Context Protocol discovery
 
 ---

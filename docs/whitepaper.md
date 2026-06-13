@@ -1157,7 +1157,7 @@ and scroll. This means:
 - **FR-1 is not strictly necessary** for vision and computer-use agent
   accessibility
 
-### **9.2 Why FR-1 Still Matters**
+### **9.3 Why FR-1 Still Matters**
 
 Despite vision and computer-use agents' ability to see CSR content, FR-1 remains
 critical for several reasons:
@@ -1179,7 +1179,25 @@ critical for several reasons:
 most agents at the lowest cost. Vision and computer-use agents are the expensive
 fallback, not the primary design target.
 
-### **9.3 Designing for Browser Automation**
+### **9.4 Teach & Repeat and Vision/GUI Fusion**
+
+Recent developments with systems like OpenAI Operator and Google Project Mariner
+have demonstrated highly capable, hybrid vision-and-semantic agents. Operator
+achieves strong success rates on complex JavaScript-heavy workflows and leads in
+OSWorld and WebArena benchmarks.
+
+Project Mariner introduces "Teach & Repeat" capabilities, allowing agents to
+reliably learn multi-step workflows by demonstration, achieving high scores on
+ScreenSpot and WebVoyager. This highlights the necessity of structured,
+predictable boundaries (like forms and stable IDs) to support demonstration
+learning.
+
+Additionally, the Microsoft UFO² ecosystem emphasizes multi-agent systems and
+hybrid control detection, fusing visual cues with the underlying accessibility
+tree. Relying purely on DOM or purely on vision is insufficient; the visual
+rendering must align perfectly with the semantic structure.
+
+### **9.5 Designing for Browser Automation**
 
 Browser automation agents (Level 2) interact with the DOM programmatically.
 Design considerations:
@@ -1213,7 +1231,7 @@ Design considerations:
 - Time-based animations that block interaction
 - CAPTCHA and bot-detection that blocks legitimate agent access without fallback
 
-### **9.4 Designing for Vision & Computer-Use Agents**
+### **9.6 Designing for Vision & Computer-Use Agents**
 
 Vision and computer-use agents read screenshots. Design considerations:
 
