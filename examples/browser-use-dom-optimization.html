@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser-Use DOM Optimization Example - BiModal Design</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .documentation {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: #f4f4f5;
+      border-radius: 8px;
+    }
+    .example-container {
+      display: flex;
+      gap: 2rem;
+    }
+    .card {
+      flex: 1;
+      padding: 1.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+    }
+    .code-block {
+      background: #1f2937;
+      color: #f3f4f6;
+      padding: 1rem;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="documentation">
+    <h1>DOM Optimization for Browser-Use Agents</h1>
+    <p>
+      This example demonstrates how to optimize the DOM for AI agents like <code>browser-use</code>.
+      Modern LLM-driven browser automation extracts the page's accessibility tree or DOM into its context window.
+      Deeply nested, bloated DOM structures ("div soup") rapidly consume this context window, increasing latency and failure rates.
+    </p>
+    <p>
+      By <strong>pruning the DOM</strong> and maximizing <strong>semantic density</strong>, we reduce token usage
+      and provide a clearer structural representation for the agent, adhering to Layer 2 of the BiModal Design framework.
+    </p>
+  </div>
+
+  <div class="example-container">
+
+    <!-- Bad Example: Bloated, non-semantic DOM -->
+    <div class="card">
+      <h2>❌ Bloated / Context-Heavy</h2>
+      <p>This structure wastes tokens with excessive wrappers and non-semantic <code>div</code>s.</p>
+
+      <!-- Anti-pattern for agents -->
+      <div class="product-wrapper">
+        <div class="product-inner">
+          <div class="product-content">
+            <div class="title-container">
+              <span class="product-title" style="font-size: 1.5rem; font-weight: bold;">Wireless Headphones</span>
+            </div>
+            <div class="price-container">
+              <div class="price-inner">
+                <span class="price-value">$99.99</span>
+              </div>
+            </div>
+            <div class="action-container">
+              <div class="btn-wrapper">
+                <div class="btn" role="button" tabindex="0" onclick="addToCart()">Add to Cart</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Good Example: Semantically dense, flattened DOM -->
+    <div class="card">
+      <h2>✅ Semantically Dense / Optimized</h2>
+      <p>This flattened structure is highly token-efficient and instantly parsed by an agent.</p>
+
+      <!-- Optimized for agents -->
+      <article class="product-card" aria-label="Wireless Headphones">
+        <h3 class="title">Wireless Headphones</h3>
+        <p class="price" aria-label="Price: $99.99">$99.99</p>
+        <button onclick="addToCart()">Add to Cart</button>
+      </article>
+
+    </div>
+  </div>
+
+</body>
+</html>
