@@ -32,12 +32,14 @@
 - **File**: `README.md`
 - **Line Numbers**: 186-187
 - **Quote**:
+
   ```markdown
   ### FR-1: Initial Payload Accessibility
 
   The foundational requirement: critical content must exist in the initial HTTP
   response. This is Layer 1 of defense in depth — the floor, not the ceiling.
   ```
+
 - **File**: `docs/whitepaper.md`
 - **Line Numbers**: 2109-2111
 - **Quote**:
@@ -134,6 +136,7 @@
 - **File**: `tools/validators/fr1-checker.js`
 - **Line Numbers**: 59-65
 - **Quote**:
+
   ```javascript
   // Test 1: Basic HTML structure
   this.checkBasicStructure(document, analysis);
@@ -153,6 +156,7 @@
   // Test 6: Agent-specific features
   this.checkAgentFeatures(document, analysis);
   ```
+
 - **Label**: [DRIFT]
 - **Notes**: The README claims `fr1-checker.js` validates "image alt text", but
   the underlying implementation has no image-specific checks within its methods.
