@@ -205,7 +205,8 @@ Two validation tools are included:
 - **`fr1-checker.js`** — comprehensive audit covering semantic content,
   navigation accessibility, form labels, heading hierarchy, ARIA landmarks,
   image alt text, and agent-specific features. Use `--verbose` for detailed
-  scoring across six categories.
+  scoring across five component categories (structure, semantics, navigation,
+  forms, content), plus agent-feature checks.
 
 ### Standards-First with Agent Attributes
 
