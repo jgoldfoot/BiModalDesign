@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AOM Integration Example - BiModal Design</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .documentation {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: #f4f4f5;
+      border-radius: 8px;
+    }
+    bimodal-toggle {
+      --toggle-bg: #e4e4e7;
+      --toggle-bg-active: #3b82f6;
+      --toggle-knob: #ffffff;
+
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 9999px;
+      background: var(--toggle-bg);
+      width: 48px;
+      height: 24px;
+      transition: background-color 0.2s ease;
+    }
+
+    bimodal-toggle[checked] {
+      background: var(--toggle-bg-active);
+    }
+
+    bimodal-toggle::part(knob) {
+      width: 20px;
+      height: 20px;
+      background: var(--toggle-knob);
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transform: translateX(0);
+      transition: transform 0.2s ease;
+    }
+
+    bimodal-toggle[checked]::part(knob) {
+      transform: translateX(24px);
+    }
+
+    /* Focus styles for keyboard accessibility */
+    bimodal-toggle:focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="documentation">
+    <h1>AOM Integration Example</h1>
+    <p>
+      This example demonstrates how to build a Custom Element (Web Component) using the
+      <code>ElementInternals</code> API to natively expose semantics to the Accessibility Object Model (AOM).
+    </p>
+    <p>
+      By using <code>attachInternals()</code>, this toggle button directly sets its <code>role</code>,
+      <code>ariaChecked</code> state, and <code>ariaLabel</code> without relying on custom
+      <code>data-agent-*</code> attributes or cluttering the light DOM. This makes the component fully
+      accessible to humans and robustly discoverable by Level 2 (Browser Automation) and Level 3
+      (Vision & Computer-Use) agents.
+    </p>
+  </div>
+
+  <main role="main">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+      <label id="toggle-label" style="font-weight: 500;">Enable Agent Analytics</label>
+      <bimodal-toggle aria-labelledby="toggle-label"></bimodal-toggle>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="font-weight: 500;">Standalone Toggle:</span>
+      <bimodal-toggle aria-label="Standalone toggle"></bimodal-toggle>
+    </div>
+  </main>
+
+  <script>
+    class BiModalToggle extends HTMLElement {
+      static formAssociated = true;
+
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+
+        // Attach ElementInternals for AOM integration
+        this._internals = this.attachInternals();
+
+        // Define default semantics in the AOM
+        this._internals.role = 'switch';
+        this._internals.ariaChecked = 'false';
+
+        // Render the internal shadow DOM
+        this.shadowRoot.innerHTML = `
+          <div part="knob"></div>
+        `;
+
+        this.addEventListener('click', this._toggle);
+        this.addEventListener('keydown', this._handleKeyDown);
+
+        // Make element focusable
+        if (!this.hasAttribute('tabindex')) {
+          this.setAttribute('tabindex', '0');
+        }
+      }
+
+      get checked() {
+        return this.hasAttribute('checked');
+      }
+
+      set checked(value) {
+        if (value) {
+          this.setAttribute('checked', '');
+          this._internals.ariaChecked = 'true';
+        } else {
+          this.removeAttribute('checked');
+          this._internals.ariaChecked = 'false';
+        }
+      }
+
+      _toggle = () => {
+        this.checked = !this.checked;
+        // Dispatch event for listeners
+        this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+      }
+
+      _handleKeyDown = (event) => {
+        // Toggle on Space or Enter
+        if (event.key === ' ' || event.key === 'Enter') {
+          event.preventDefault();
+          this._toggle();
+        }
+      }
+    }
+
+    customElements.define('bimodal-toggle', BiModalToggle);
+  </script>
+
+</body>
+</html>

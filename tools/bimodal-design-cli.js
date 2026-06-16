@@ -186,7 +186,7 @@ Get started:
 For detailed help on a specific command:
   bimodal-design <command> --help
 
-Documentation: https://bimodal.design/docs
+Documentation: https://bimodal.design
 Repository: https://github.com/jgoldfoot/BiModalDesign
         `);
   }
@@ -697,7 +697,7 @@ BiModal Design-compliant ${framework} project created with ${template} template.
 - \`bimodal-design simulate <url>\` - Test agent interactions
 - \`bimodal-design doctor <url>\` - Diagnose issues
 
-Documentation: https://bimodal.design/docs
+Documentation: https://bimodal.design
 `;
 
       await fs.writeFile(path.join(projectPath, 'README.md'), readme);

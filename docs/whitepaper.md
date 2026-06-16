@@ -509,8 +509,10 @@ it's measurable:
 - **Odysseys Benchmark (2026)**: Emphasized that real-world tasks are
   "long-horizon", where compounded navigation errors lead to failure. It
   introduced the "Trajectory Efficiency" metric, demonstrating that agents need
-  deterministic, multi-step navigation paths rather than relying solely on
-  error-prone visual UI steps.
+  deterministic relational navigation to succeed.
+- **WorkArena++ Benchmark**: Highlighted that enterprise knowledge work requires
+  complex compositional reasoning across dense UIs, exposing the inadequacy of
+  simple visual navigation for multi-step workflows.
 
 ### **5.2 Performance Gaps by Agent Type**
 
@@ -527,7 +529,7 @@ capability level:
 | Level 5 (Protocol-Native)              | N/A                 | N/A                    | 92-98%                  |
 | Hybrid Agents (UI → Protocol Handoff)  | N/A                 | N/A                    | 94-99%                  |
 
-_Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld,
+_Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld, WorkArena++,
 ST-WebAgentBench, BrowseComp, Odysseys, MCP-Universe, internal analysis_
 
 The data reveals a clear pattern: **each additional BiModal Design layer
@@ -1158,7 +1160,7 @@ and scroll. This means:
 - **FR-1 is not strictly necessary** for vision and computer-use agent
   accessibility
 
-### **9.2 Why FR-1 Still Matters**
+### **9.3 Why FR-1 Still Matters**
 
 Despite vision and computer-use agents' ability to see CSR content, FR-1 remains
 critical for several reasons:
@@ -1180,7 +1182,25 @@ critical for several reasons:
 most agents at the lowest cost. Vision and computer-use agents are the expensive
 fallback, not the primary design target.
 
-### **9.3 Designing for Browser Automation**
+### **9.4 Teach & Repeat and Vision/GUI Fusion**
+
+Recent developments with systems like OpenAI Operator and Google Project Mariner
+have demonstrated highly capable, hybrid vision-and-semantic agents. Operator
+achieves strong success rates on complex JavaScript-heavy workflows and leads in
+OSWorld and WebArena benchmarks.
+
+Project Mariner introduces "Teach & Repeat" capabilities, allowing agents to
+reliably learn multi-step workflows by demonstration, achieving high scores on
+ScreenSpot and WebVoyager. This highlights the necessity of structured,
+predictable boundaries (like forms and stable IDs) to support demonstration
+learning.
+
+Additionally, the Microsoft UFO² ecosystem emphasizes multi-agent systems and
+hybrid control detection, fusing visual cues with the underlying accessibility
+tree. Relying purely on DOM or purely on vision is insufficient; the visual
+rendering must align perfectly with the semantic structure.
+
+### **9.5 Designing for Browser Automation**
 
 Browser automation agents (Level 2) interact with the DOM programmatically.
 Design considerations:
@@ -1214,7 +1234,7 @@ Design considerations:
 - Time-based animations that block interaction
 - CAPTCHA and bot-detection that blocks legitimate agent access without fallback
 
-### **9.4 Designing for Vision & Computer-Use Agents**
+### **9.6 Designing for Vision & Computer-Use Agents**
 
 Vision and computer-use agents read screenshots. Design considerations:
 
@@ -2024,22 +2044,24 @@ resilient, semantic, structured, and protocol-aware.
 
 1. **WebAgents Survey 2025**: "A Survey of WebAgents: Towards Next-Generation AI
    Agents for Web Automation with Large Foundation Models" — arXiv:2503.23350v4
-2. **ST-WebAgentBench**: "A Benchmark for Evaluating Safety and Trustworthiness
+2. **WorkArena++**: "Towards Compositional Planning and Reasoning-based Common
+   Knowledge Work Tasks" — NeurIPS 2024
+3. **ST-WebAgentBench**: "A Benchmark for Evaluating Safety and Trustworthiness
    in Web Agents" — arXiv:2410.06703v6
-3. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
+4. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
    Domains" — arXiv:2406.12045
-4. **OSWorld**: "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
+5. **OSWorld**: "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
    Computer Environments" — arXiv:2404.07972
-5. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
+6. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
    Websites"
-6. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
+7. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
    arXiv:2604.24964
-7. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
+8. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
    web"
-8. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+9. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
    benefits
-9. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
-   March 2025
+10. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+    March 2025
 
 ### **Agent Protocols**
 

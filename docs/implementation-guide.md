@@ -1029,3 +1029,54 @@ failure rates over long-running tasks.
 
 **Reference**:
 [Trajectory Efficiency Example](../examples/odysseys-trajectory-efficiency.md)
+
+### Pattern 13: Demonstration Learning Optimization (Teach & Repeat)
+
+With the rise of "Teach & Repeat" capabilities in agents like Google Project
+Mariner and complex GUI navigation by systems like OpenAI Operator, interfaces
+must be optimized for demonstration learning.
+
+**Why it's necessary**: Agents learning by observing a human (or another agent)
+rely heavily on stable identifiers, clear boundaries for workflows, and precise
+semantic labeling to reliably replicate the task later. Pure HTML fallback is
+insufficient if the visual structure and the DOM don't strongly correlate.
+
+```html
+<!-- BiModal Pattern: Demonstration Learning Optimization -->
+<div class="workflow-container">
+  <!-- Use <form> to bound the workflow context -->
+  <form id="onboarding-request-form" aria-labelledby="form-title">
+    <h2 id="form-title">Employee Details</h2>
+
+    <!-- Provide explicit <label> associations rather than implicit ones -->
+    <div class="form-group">
+      <label for="employee-first-name">First Name</label>
+      <!-- Use stable IDs and name attributes (no dynamically generated strings) -->
+      <input
+        type="text"
+        id="employee-first-name"
+        name="firstName"
+        required
+        aria-required="true"
+        autocomplete="given-name"
+      />
+    </div>
+
+    <!-- Clear affordances with standard elements -->
+    <button type="submit" id="submit-onboarding-request">Submit Request</button>
+  </form>
+</div>
+```
+
+**Key Principles:**
+
+1. **Stable Identifiers**: Never use dynamically generated class names or IDs
+   (e.g., `id="input-abc123"`) for interactive elements.
+2. **Explicit Workflow Boundaries**: Use semantic elements like `<form>` or
+   `<fieldset>` to encapsulate related steps in a task.
+3. **Multi-Task Concurrency Safe**: Avoid reliance on global state or assuming
+   linear navigation, as advanced agents may attempt to perform multiple tasks
+   simultaneously across different browser tabs.
+
+**Reference**:
+[Operator Teach & Repeat Example](../examples/operator-teach-and-repeat.html)

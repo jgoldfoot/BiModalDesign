@@ -209,6 +209,15 @@ Two validation tools are included:
 
 ### Standards-First with Agent Attributes
 
+**Strategic Update (AOM Integration):** For Web Components, BiModal Design
+heavily advocates using the
+[`ElementInternals` API](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals)
+to natively define roles and ARIA states directly in the Accessibility Object
+Model (AOM). This removes the need for custom attributes on Custom Elements,
+dramatically improving discoverability for Level 2 (Browser Automation) and
+Level 3 (Vision & Computer-Use) agents as benchmarked by VisualWebArena. See our
+[AOM Integration Proposal](docs/proposals/aom-integration.md).
+
 v3.0 uses established standards as the **primary** semantic layer, with
 `data-agent-*` attributes as a **supplementary** layer for intent and action
 metadata that standards don't cover:
@@ -273,6 +282,8 @@ AI-assisted discoverability.
   strategies
 - **[Hybrid Agent MCP Handoff](examples/hybrid-agent-mcp-handoff.md)** — Layer 2
   to Layer 5 transaction handoff
+- **[AOM Web Component Example](examples/aom-web-component.html)** — Using
+  `ElementInternals` to expose native semantics to agents
 
 ---
 
@@ -331,6 +342,9 @@ npm test
   agents and LLMs through direct interaction with real-world Model Context
   Protocol servers"
 - **WebArena-Verified** — Rigorous re-evaluation of autonomous web agents
+- **WorkArena++** — "Towards Compositional Planning and Reasoning-based Common
+  Knowledge Work Tasks" (NeurIPS 2024)
+
 - **OSWorld** — "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
   Computer Environments" (arXiv:2404.07972)
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness
@@ -347,6 +361,13 @@ npm test
 - **VisualWebArena** — Evaluating Multimodal Agents on Realistic Visual Web
   Tasks
 - **BrowseComp** — Benchmark for Agentic Browser Navigation & Task Execution
+- **Operator** — Evaluating multi-agent vision-and-semantic systems across
+  complex JavaScript interfaces (OpenAI, 2026)
+- **Project Mariner** — Benchmarking "Teach & Repeat" capabilities and
+  multi-task concurrency (Google, 2026)
+- **ScreenSpot** — Benchmark for spatial and visual understanding in GUIs
+- **UFO²** — Multiagent AgentOS featuring hybrid control detection
+  (Microsoft, 2026)
 - **WebMCP** — Native browser integration for Model Context Protocol discovery
 
 ---
