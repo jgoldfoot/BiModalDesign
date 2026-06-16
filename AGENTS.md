@@ -231,6 +231,31 @@ cd tools/validators && npm test
 
 ---
 
+## Documentation Drift Reports
+
+Agents that audit the repository for documentation drift (e.g., Rudder) must
+**not** commit point-in-time report files. A drift report is a diagnostic, not a
+repository artifact: once its findings are triaged and fixed, the report is
+stale noise.
+
+Follow these rules:
+
+- **Maintain a single `DRIFT.md` at the repository root.** Overwrite it on each
+  run rather than creating dated or per-run files. It always reflects the
+  current, unresolved drift only.
+- **Never create files like `documentation_drift_report_<date>.md` or
+  `Documentation drift report [<date>].md`.** These accumulate and reintroduce
+  inconsistent naming.
+- **Prefer fixing over reporting.** When a finding is unambiguous (a stale
+  number, a broken link, a contradictory claim), open a PR with the fix instead
+  of only recording it in `DRIFT.md`.
+- **Distinguish DRIFT from VARIATION.** Only list genuine contradictions as
+  drift. Acceptable contextual differences (e.g., a README's conceptual FR-1
+  definition vs. a validator's specific thresholds; the npm package version vs.
+  the framework version) are expected and should not be reported as drift.
+
+---
+
 ## Questions or Issues?
 
 - Check the [White Paper v3.0](docs/whitepaper.md) for framework specification
