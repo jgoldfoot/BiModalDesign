@@ -1186,19 +1186,19 @@ fallback, not the primary design target.
 
 Recent developments with systems like OpenAI Operator and Google Project Mariner
 have demonstrated highly capable, hybrid vision-and-semantic agents. Operator
-achieves strong success rates on complex JavaScript-heavy workflows and leads in
-OSWorld and WebArena benchmarks.
+achieves an 87% success rate on WebVoyager and leads in benchmarks with scores
+of 58.1% on WebArena and 32.6% on OSWorld.
 
-Project Mariner introduces "Teach & Repeat" capabilities, allowing agents to
-reliably learn multi-step workflows by demonstration, achieving high scores on
-ScreenSpot and WebVoyager. This highlights the necessity of structured,
-predictable boundaries (like forms and stable IDs) to support demonstration
-learning.
+Project Mariner introduces advanced capabilities, achieving high scores of 84.0%
+on ScreenSpot and 83.5% on WebVoyager. This highlights the necessity of
+structured, predictable boundaries (like forms and stable IDs) and the avoidance
+of global state to support reliable demonstration learning.
 
-Additionally, the Microsoft UFO² ecosystem emphasizes multi-agent systems and
-hybrid control detection, fusing visual cues with the underlying accessibility
-tree. Relying purely on DOM or purely on vision is insufficient; the visual
-rendering must align perfectly with the semantic structure.
+Additionally, the Microsoft UFO² (The Desktop AgentOS) ecosystem emphasizes
+multi-agent systems and hybrid control detection, fusing visual cues with the
+underlying accessibility tree. Relying purely on DOM or purely on vision is
+insufficient; the visual rendering must align perfectly with the semantic
+structure.
 
 ### **9.5 Designing for Browser Automation**
 
@@ -2056,11 +2056,18 @@ resilient, semantic, structured, and protocol-aware.
    Websites"
 7. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
    arXiv:2604.24964
-8. **Microsoft Build 2025**: "The age of AI agents and building the open agentic
-   web"
-9. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
-   benefits
-10. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+8. **Operator**: Evaluating multi-agent vision-and-semantic systems across
+   complex JavaScript interfaces (OpenAI, 2025)
+9. **Project Mariner**: Benchmarking capabilities and multi-task concurrency
+   (Google, 2025)
+10. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
+11. **UFO²**: The Desktop AgentOS featuring hybrid control detection
+    (Microsoft, 2025)
+12. **Microsoft Build 2025**: "The age of AI agents and building the open
+    agentic web"
+13. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+    benefits
+14. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
     March 2025
 
 ### **Agent Protocols**
