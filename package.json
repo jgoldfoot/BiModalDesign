@@ -1,6 +1,6 @@
 {
   "name": "@bimodal-design/framework",
-  "version": "0.1.0",
+  "version": "3.0.0",
   "description": "A design framework for building dual-mode interfaces that work optimally for both humans and AI agents",
   "main": "index.js",
   "bin": {
