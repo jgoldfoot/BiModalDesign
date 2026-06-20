@@ -26,7 +26,12 @@ const ALLOWED_DIRECTORY =
 // Helper to ensure paths stay within the allowed directory
 function resolveSafePath(requestedPath) {
   const resolved = path.resolve(ALLOWED_DIRECTORY, requestedPath);
-  if (!resolved.startsWith(ALLOWED_DIRECTORY)) {
+  // Compare against the directory + separator so a sibling like
+  // "/workspace-evil" can't slip past a naive prefix check on "/workspace".
+  const root = ALLOWED_DIRECTORY.endsWith(path.sep)
+    ? ALLOWED_DIRECTORY
+    : ALLOWED_DIRECTORY + path.sep;
+  if (resolved !== ALLOWED_DIRECTORY && !resolved.startsWith(root)) {
     throw new Error(
       'Access Denied: Path is outside the allowed agent workspace.'
     );

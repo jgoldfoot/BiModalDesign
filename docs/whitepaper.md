@@ -1017,9 +1017,11 @@ interfaces designed specifically for machine consumption.
 
 **Secure Desktop Execution:** Anthropic's Claude Cowork architecture
 demonstrates that powerful desktop agents require a robust security boundary. By
-executing agentic loops inside a Virtual Machine and using **Local MCP servers**
-as the bridge to the host file system, it prevents malicious or unintended
-system-wide modifications. Local MCP servers are treated as user-installed
+executing code and tool calls inside a Virtual Machine (with only the user's
+selected folder mounted) and using **Local MCP servers** as the bridge to the
+host file system, it prevents malicious or unintended system-wide modifications.
+The agent loop itself runs outside the VM so it can recover if the VM restarts,
+while execution stays contained. Local MCP servers are treated as user-installed
 software with strictly scoped access, solving the containment problem.
 
 **Standardized WebMCP Discovery:** As MCP matures into **WebMCP**, bridging the
@@ -2076,8 +2078,8 @@ resilient, semantic, structured, and protocol-aware.
     benefits
 14. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
     March 2025
-15. **Claude Cowork Architecture**: "How Anthropic Built a Desktop Agent That
-    Actually Respects Your Files" (2026)
+15. **Agent Containment (Claude Cowork)**: Anthropic, "How we contain Claude" —
+    https://www.anthropic.com/engineering/how-we-contain-claude (2026)
 
 ### **Agent Protocols**
 
