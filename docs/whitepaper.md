@@ -1015,6 +1015,13 @@ interfaces designed specifically for machine consumption.
 
 ### **8.2 Model Context Protocol (MCP)**
 
+**Secure Desktop Execution:** Anthropic's Claude Cowork architecture
+demonstrates that powerful desktop agents require a robust security boundary. By
+executing agentic loops inside a Virtual Machine and using **Local MCP servers**
+as the bridge to the host file system, it prevents malicious or unintended
+system-wide modifications. Local MCP servers are treated as user-installed
+software with strictly scoped access, solving the containment problem.
+
 **Standardized WebMCP Discovery:** As MCP matures into **WebMCP**, bridging the
 web (Layers 1-3) with protocols (Layer 5) natively in the browser is critical.
 Websites should announce their MCP servers directly in the DOM using standard
@@ -2069,6 +2076,8 @@ resilient, semantic, structured, and protocol-aware.
     benefits
 14. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
     March 2025
+15. **Claude Cowork Architecture**: "How Anthropic Built a Desktop Agent That
+    Actually Respects Your Files" (2026)
 
 ### **Agent Protocols**
 
