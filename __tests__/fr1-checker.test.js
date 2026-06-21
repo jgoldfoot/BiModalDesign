@@ -264,7 +264,7 @@ describe('FR1Checker - checkURL', () => {
 
   beforeEach(() => {
     checker = new FR1Checker();
-    jest.useFakeTimers();
+    jest.useFakeTimers().setSystemTime(new Date('2023-01-01T00:00:00.000Z'));
     jest.setSystemTime(new Date('2023-01-01T00:00:00.000Z'));
   });
 

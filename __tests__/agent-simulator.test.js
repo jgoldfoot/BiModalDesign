@@ -9,6 +9,7 @@ describe('AgentSimulator - generateMarkdownReport', () => {
     simulator = new AgentSimulator();
     // Use jest's fake timers to mock Date output
     jest.useFakeTimers().setSystemTime(new Date('2023-10-27T10:00:00.000Z'));
+    jest.setSystemTime(new Date('2023-10-27T10:00:00.000Z'));
   });
 
   afterEach(() => {
@@ -253,6 +254,7 @@ describe('AgentSimulator - simulateAgent', () => {
     simulator = new AgentSimulator();
     // Use jest's fake timers to mock Date output
     jest.useFakeTimers().setSystemTime(new Date('2023-10-27T10:00:00.000Z'));
+    jest.setSystemTime(new Date('2023-10-27T10:00:00.000Z'));
   });
 
   afterEach(() => {
