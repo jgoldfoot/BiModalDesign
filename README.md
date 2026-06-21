@@ -363,9 +363,9 @@ npm test
   Tasks
 - **BrowseComp** — Benchmark for Agentic Browser Navigation & Task Execution
 - **Operator** — Evaluating multi-agent vision-and-semantic systems across
-  complex JavaScript interfaces (OpenAI, 2026)
+  complex JavaScript interfaces (OpenAI, 2025)
 - **Project Mariner** — Benchmarking "Teach & Repeat" capabilities and
-  multi-task concurrency (Google, 2026)
+  multi-task concurrency (Google, 2025)
 - **ScreenSpot** — Benchmark for spatial and visual understanding in GUIs
 - **UFO²** — Multiagent AgentOS featuring hybrid control detection
   (Microsoft, 2026)
