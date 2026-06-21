@@ -1195,8 +1195,8 @@ fallback, not the primary design target.
 
 Recent developments with systems like OpenAI Operator and Google Project Mariner
 have demonstrated highly capable, hybrid vision-and-semantic agents. Operator
-achieves an 87% success rate on WebVoyager and leads in benchmarks with scores
-of 58.1% on WebArena and 38.1% on OSWorld.
+achieves a 61.3% success rate on WebVoyager and leads in benchmarks with scores
+of 58.0% on WebArena and 38.0% on OSWorld.
 
 Project Mariner introduces advanced capabilities, achieving high scores of 84.0%
 on ScreenSpot and 83.5% on WebVoyager. This highlights the necessity of
