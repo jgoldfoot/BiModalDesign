@@ -97,6 +97,9 @@ async function main() {
   // Server is running and listening on stdio
 }
 
-if (require.main === module) {
+// Ensure the module is not executed automatically if imported elsewhere
+if (typeof require !== 'undefined' && require.main === module) {
+  main().catch(console.error);
+} else if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
