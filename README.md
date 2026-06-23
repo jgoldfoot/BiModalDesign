@@ -370,6 +370,8 @@ npm test
 - **UFO²** — Multiagent AgentOS featuring hybrid control detection
   (Microsoft, 2026)
 - **WebMCP** — Native browser integration for Model Context Protocol discovery
+- **Code execution with MCP** — Building more efficient agents (Anthropic,
+  Nov 2025)
 
 ---
 
