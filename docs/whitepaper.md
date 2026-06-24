@@ -2065,13 +2065,14 @@ resilient, semantic, structured, and protocol-aware.
    Websites"
 7. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
    arXiv:2604.24964
-8. **Operator**: Evaluating multi-agent vision-and-semantic systems across
-   complex JavaScript interfaces (OpenAI, 2025)
-9. **Project Mariner**: Benchmarking capabilities and multi-task concurrency
-   (Google, 2025)
+8. **OpAgent**: "Operator Agent for Web Navigation" achieving 71.6% on WebArena
+   (arXiv:2602.13559) 8. **Operator**: OpenAI's Computer-Using Agent (58.1% on
+   WebArena)
+9. **Project Mariner**: Google's agent featuring "Teach & Repeat" capabilities,
+   achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)
 10. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
-11. **UFO²**: The Desktop AgentOS featuring hybrid control detection
-    (Microsoft, 2025)
+11. **UFO²**: "The Desktop AgentOS" featuring hybrid control detection that
+    fuses Windows UI Automation with vision (Microsoft, 2025)
 12. **Microsoft Build 2025**: "The age of AI agents and building the open
     agentic web"
 13. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML

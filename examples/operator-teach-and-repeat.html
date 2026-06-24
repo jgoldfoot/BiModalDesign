@@ -1,93 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teach & Repeat Demonstration Example - BiModal Design</title>
-  <style>
-    body { font-family: system-ui, sans-serif; line-height: 1.5; padding: 2rem; max-width: 800px; margin: 0 auto; }
-    .workflow-container { border: 1px solid #ccc; padding: 1.5rem; border-radius: 8px; margin-top: 1rem; }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-    input[type="text"], input[type="email"], select {
-      width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
-    }
-    button { background-color: #0066cc; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; }
-    button:hover { background-color: #0052a3; }
-    .status-message { margin-top: 1rem; padding: 1rem; border-radius: 4px; display: none; }
-    .success { background-color: #e6ffed; border: 1px solid #b7ebc6; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teach & Repeat Demonstration Learning</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 2rem; }
+        .step { border: 1px solid #ccc; padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 4px; }
+        .step h2 { margin-top: 0; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        input[type="text"], input[type="email"], select { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 0.5rem 1rem; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0055aa; }
+        .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    </style>
 </head>
 <body>
+    <main role="main" aria-label="Demonstration Learning Workflow">
+        <h1>Account Provisioning Workflow</h1>
+        <p>This form is optimized for "Teach & Repeat" agents (like Project Mariner) by using stable IDs, explicit labels, semantic groupings, and native web standards.</p>
 
-  <h1>New Employee Onboarding Request</h1>
-  <p>
-    This interface is designed to demonstrate optimization for "Teach & Repeat"
-    Computer-Using Agents (like Google Project Mariner). It uses stable IDs,
-    explicit form boundaries, and precise ARIA labeling to ensure that a
-    recorded trajectory can be reliably re-executed.
-  </p>
+        <form id="provisioning-workflow" action="/submit" method="post" aria-labelledby="workflow-title">
+            <h2 id="workflow-title" class="visually-hidden">New User Provisioning</h2>
 
-  <!--
-    BiModal Pattern: Demonstration Learning Optimization
-    - Use <form> as a clear boundary for the task workflow.
-    - Use stable 'id' and 'name' attributes (no dynamic generation).
-    - Provide explicit <label> associations for hybrid vision/semantic agents.
-  -->
-  <div class="workflow-container">
-    <form id="onboarding-request-form" aria-labelledby="form-title">
-      <h2 id="form-title">Employee Details</h2>
+            <fieldset class="step" aria-labelledby="step1-title">
+                <legend id="step1-title">Step 1: User Details</legend>
 
-      <div class="form-group">
-        <label for="employee-first-name">First Name</label>
-        <input type="text" id="employee-first-name" name="firstName" required aria-required="true" autocomplete="given-name">
-      </div>
+                <label for="user-full-name">Full Name</label>
+                <input type="text" id="user-full-name" name="fullName" required aria-required="true" autocomplete="name">
 
-      <div class="form-group">
-        <label for="employee-last-name">Last Name</label>
-        <input type="text" id="employee-last-name" name="lastName" required aria-required="true" autocomplete="family-name">
-      </div>
+                <label for="user-email-address">Email Address</label>
+                <input type="email" id="user-email-address" name="email" required aria-required="true" autocomplete="email">
+            </fieldset>
 
-      <div class="form-group">
-        <label for="employee-department">Department</label>
-        <select id="employee-department" name="department" required aria-required="true">
-          <option value="">Select a department...</option>
-          <option value="engineering">Engineering</option>
-          <option value="marketing">Marketing</option>
-          <option value="sales">Sales</option>
-          <option value="hr">Human Resources</option>
-        </select>
-      </div>
+            <fieldset class="step" aria-labelledby="step2-title">
+                <legend id="step2-title">Step 2: Role Assignment</legend>
 
-      <div class="form-group">
-        <label for="equipment-needs">Equipment Request</label>
-        <input type="text" id="equipment-needs" name="equipment" placeholder="e.g., MacBook Pro, External Monitor" aria-describedby="equipment-help">
-        <small id="equipment-help" style="display: block; margin-top: 0.25rem; color: #666;">
-          Specify necessary hardware.
-        </small>
-      </div>
+                <label for="user-system-role">System Role</label>
+                <select id="user-system-role" name="role" required aria-required="true">
+                    <option value="" disabled selected>Select a role...</option>
+                    <option value="viewer">Viewer</option>
+                    <option value="editor">Editor</option>
+                    <option value="admin">Administrator</option>
+                </select>
 
-      <button type="submit" id="submit-onboarding-request">Submit Request</button>
-    </form>
+                <label for="user-department">Department</label>
+                <input type="text" id="user-department" name="department" required aria-required="true">
+            </fieldset>
 
-    <div id="submission-status" class="status-message success" role="status" aria-live="polite">
-      Request submitted successfully.
-    </div>
-  </div>
-
-  <script>
-    document.getElementById('onboarding-request-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      // In a real scenario, this would send data to an API (Layer 4)
-      const statusMessage = document.getElementById('submission-status');
-      statusMessage.style.display = 'block';
-      this.reset();
-
-      // Hide success message after a few seconds
-      setTimeout(() => {
-        statusMessage.style.display = 'none';
-      }, 5000);
-    });
-  </script>
+            <div class="step">
+                <h2>Step 3: Confirmation</h2>
+                <button type="submit" id="submit-provisioning-workflow" aria-label="Create User Account">Create User Account</button>
+            </div>
+        </form>
+    </main>
 </body>
 </html>
