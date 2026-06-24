@@ -2066,7 +2066,7 @@ resilient, semantic, structured, and protocol-aware.
 7. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
    arXiv:2604.24964
 8. **OpAgent**: "Operator Agent for Web Navigation" achieving 71.6% on WebArena
-   (arXiv:2602.13559) 8. **Operator**: OpenAI's Computer-Using Agent (58.1% on
+   (arXiv:2602.13559) 8b. **Operator**: OpenAI's Computer-Using Agent (58.1% on
    WebArena)
 9. **Project Mariner**: Google's agent featuring "Teach & Repeat" capabilities,
    achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)

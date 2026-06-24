@@ -54,5 +54,13 @@
             </div>
         </form>
     </main>
+    <script>
+        document.getElementById('provisioning-workflow').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // In a real scenario, this would send data to an API (Layer 4)
+            console.log('Form submitted successfully');
+            this.reset();
+        });
+    </script>
 </body>
 </html>
