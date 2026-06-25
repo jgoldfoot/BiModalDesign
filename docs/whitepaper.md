@@ -1041,6 +1041,19 @@ leveraging standard HTML5 validation attributes (`required`, `pattern`, `min`,
 `max`) in Layer 2 to proactively constrain agent inputs before they even reach
 Layer 4/5.
 
+**Code Execution and Context Efficiency:** As the number of connected MCP
+servers grows, passing all tool definitions and intermediate tool results
+through the LLM's context window creates severe latency and token bottlenecks.
+Anthropic's research on "Code execution with MCP" demonstrates that exposing MCP
+servers as code APIs—allowing the agent to write scripts to interact with the
+servers—can reduce context token usage by up to 98.7%. By leveraging a code
+execution environment, an agent can implement _progressive disclosure_
+(dynamically searching for and loading only the necessary tool definitions) and
+_context-efficient data filtering_ (fetching a 10,000-row dataset, filtering it
+in the execution environment, and passing only the summary back to the LLM).
+Furthermore, this pattern enables privacy-preserving operations by ensuring
+sensitive intermediate data never enters the model's context window.
+
 MCP, introduced by Anthropic in November 2024, has rapidly become the standard
 for connecting AI agents to external services. An MCP server exposes three
 primitives:
@@ -2089,6 +2102,9 @@ resilient, semantic, structured, and protocol-aware.
 8. **Agent-to-Agent Protocol (A2A)**: https://google.github.io/A2A — Google,
    April 2025
 9. **NLWeb**: https://github.com/nicholasgasior/nlweb — Microsoft, May 2025
+10. **Code execution with MCP**:
+    https://www.anthropic.com/engineering/code-execution-with-mcp — Anthropic,
+    Nov 2025
 
 ### **Rendering & Performance**
 

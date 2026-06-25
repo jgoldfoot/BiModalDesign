@@ -371,6 +371,8 @@ npm test
 - **UFO²** — "The Desktop AgentOS" featuring hybrid control detection that fuses
   Windows UI Automation with vision (Microsoft, 2025)
 - **WebMCP** — Native browser integration for Model Context Protocol discovery
+- **Code execution with MCP** — Building more efficient agents (Anthropic,
+  Nov 2025)
 
 ---
 
