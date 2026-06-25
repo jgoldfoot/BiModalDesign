@@ -13,9 +13,10 @@ framework:
 1.  **Operator and CUA:** Powered by models combining vision capabilities with
     advanced reasoning (e.g., GPT-4o with RL), the Operator system is navigating
     complex, JavaScript-heavy websites with an 87% success rate. It has achieved
-    benchmark scores of 58% on WebArena and 38% on OSWorld, solidifying its
-    position as a top performer across diverse environments by specifically
-    targeting GUI elements.
+    benchmark scores of 58.1% on WebArena, while OpAgent achieved 71.6% on
+    WebArena. However, Operator's performance on OSWorld is around 38%, which
+    highlights the need for continuous improvement in handling diverse
+    environments.
 2.  **Google Project Mariner:** Powered by Gemini 2.0, Project Mariner achieved
     an 84.0% score on the ScreenSpot benchmark and an 83.5% success rate on
     WebVoyager. Crucially, it introduces "Teach & Repeat" functionality,
