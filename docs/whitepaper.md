@@ -2078,21 +2078,22 @@ resilient, semantic, structured, and protocol-aware.
    Websites"
 7. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
    arXiv:2604.24964
-8. **OpAgent**: "Operator Agent for Web Navigation" achieving 71.6% on WebArena
-   (arXiv:2602.13559) 8b. **Operator**: OpenAI's Computer-Using Agent (58.1% on
-   WebArena)
-9. **Project Mariner**: Google's agent featuring "Teach & Repeat" capabilities,
-   achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)
-10. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
-11. **UFO²**: "The Desktop AgentOS" featuring hybrid control detection that
+8. **OpAgent**: "Operator Agent for Web Navigation" — 71.6% on WebArena
+   (arXiv:2602.13559)
+9. **Operator**: OpenAI's Computer-Using Agent (87% on WebVoyager, 58.1% on
+   WebArena, 38.1% on OSWorld)
+10. **Project Mariner**: Google's agent featuring "Teach & Repeat" capabilities,
+    achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)
+11. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
+12. **UFO²**: "The Desktop AgentOS" featuring hybrid control detection that
     fuses Windows UI Automation with vision (Microsoft, 2025)
-12. **Microsoft Build 2025**: "The age of AI agents and building the open
+13. **Microsoft Build 2025**: "The age of AI agents and building the open
     agentic web"
-13. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+14. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
     benefits
-14. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+15. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
     March 2025
-15. **Agent Containment (Claude Cowork)**: Anthropic, "How we contain Claude" —
+16. **Agent Containment (Claude Cowork)**: Anthropic, "How we contain Claude" —
     https://www.anthropic.com/engineering/how-we-contain-claude (2026)
 
 ### **Agent Protocols**

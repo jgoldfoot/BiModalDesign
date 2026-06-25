@@ -364,7 +364,8 @@ npm test
 - **BrowseComp** — Benchmark for Agentic Browser Navigation & Task Execution
 - **OpAgent** — "Operator Agent for Web Navigation" achieving 71.6% on WebArena
   (arXiv:2602.13559)
-- **Operator** — OpenAI's Computer-Using Agent (58.1% on WebArena)
+- **Operator** — OpenAI's Computer-Using Agent (87% on WebVoyager, 58.1% on
+  WebArena, 38.1% on OSWorld)
 - **Project Mariner** — Google's agent featuring "Teach & Repeat" capabilities,
   achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)
 - **ScreenSpot** — Benchmark for spatial and visual understanding in GUIs
