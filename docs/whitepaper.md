@@ -309,6 +309,14 @@ Furthermore, insights from **VisualWebArena** demonstrate that pure visual
 reasoning frequently fails in complex interfaces without strong textual and
 structural grounding. Layer 2 provides this essential grounding.
 
+Recent 2026 benchmarks from the open-source ecosystem further validate this.
+Developer frameworks dominating adoption—such as **Browser-Use** (89.1%
+WebVoyager) and **Skyvern 2.0** (85.85% WebVoyager)—heavily rely on DOM parsing
+and semantic structure to manage agent context windows efficiently. These
+DOM-first or hybrid approaches require rigorous Layer 2 implementations to
+process multi-step workflows like forms without hallucination or context
+exhaustion.
+
 As modern interfaces increasingly rely on Web Components, the encapsulation
 provided by the Shadow DOM creates a new challenge: it hides critical state and
 semantic information from the AOM. To solve this, developers must use the
@@ -2106,6 +2114,13 @@ resilient, semantic, structured, and protocol-aware.
 10. **Code execution with MCP**:
     https://www.anthropic.com/engineering/code-execution-with-mcp — Anthropic,
     Nov 2025
+
+11. **Browser-Use** — Open-source framework achieving 89.1% on WebVoyager
+    benchmark (2026)
+12. **Skyvern 2.0** — Vision-first browser agent framework achieving 85.85% on
+    WebVoyager benchmark (2026)
+13. **Agent-E** — Autonomous web agent framework achieving 73.1% on WebVoyager
+    benchmark (2026)
 
 ### **Rendering & Performance**
 

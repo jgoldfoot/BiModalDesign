@@ -374,6 +374,12 @@ npm test
 - **WebMCP** — Native browser integration for Model Context Protocol discovery
 - **Code execution with MCP** — Building more efficient agents (Anthropic,
   Nov 2025)
+- **Browser-Use** — Open-source framework achieving 89.1% on WebVoyager
+  benchmark (2026)
+- **Skyvern 2.0** — Vision-first browser agent framework achieving 85.85% on
+  WebVoyager benchmark (2026)
+- **Agent-E** — Autonomous web agent framework achieving 73.1% on WebVoyager
+  benchmark (2026)
 
 ---
 
