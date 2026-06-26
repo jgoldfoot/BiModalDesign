@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BiModal Design - Production-Ready MCP Component Example</title>
+
+    <!-- Layer 5: Native MCP Discovery -->
+    <link rel="alternate" type="application/mcp+json" href="https://api.example.com/mcp-catalog" />
+
+    <!-- Layer 3: Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Production-Ready MCP Component",
+        "description": "Example of a robust Web Component integrating ElementInternals and MCP discovery."
+      }
+    </script>
+
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        line-height: 1.5;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+      agent-action-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #0056b3;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      agent-action-button:hover {
+        background-color: #004494;
+      }
+      agent-action-button[aria-disabled="true"] {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Layer 1: Content in initial HTML (FR-1) -->
+    <!-- Layer 2: Semantic structure with ARIA and native HTML -->
+    <main aria-labelledby="main-title">
+      <h1 id="main-title">Robust Agent Interactions</h1>
+      <p>
+        This page demonstrates a production-ready Web Component that mitigates
+        the 20-40% benchmark-to-production gap by leveraging <code>ElementInternals</code>
+        for robust Accessibility Object Model (AOM) integration (Layer 2) and an
+        HTML <code>&lt;link&gt;</code> tag for Model Context Protocol (MCP) discovery (Layer 5).
+      </p>
+
+      <section aria-labelledby="action-section">
+        <h2 id="action-section">Automated Tasks</h2>
+
+        <!-- The Custom Web Component -->
+        <agent-action-button id="process-data-btn">
+          Process Enterprise Data
+        </agent-action-button>
+
+        <p id="status-message" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <script>
+      /**
+       * Layer 2: Native AOM Integration for Custom Elements
+       * Using ElementInternals avoids brittle light DOM attributes and
+       * ensures Level 2/3 agents can query the Accessibility Tree directly.
+       */
+      class AgentActionButton extends HTMLElement {
+        constructor() {
+          super();
+          // Attach internals to natively expose semantics to AOM
+          this._internals = this.attachInternals();
+          this._internals.role = 'button';
+          this._internals.ariaLabel = 'Process Enterprise Data via MCP';
+          this._internals.ariaDisabled = 'false';
+
+          this.addEventListener('click', this.handleClick.bind(this));
+          this.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.handleClick();
+            }
+          });
+        }
+
+        connectedCallback() {
+          // Ensure element can receive focus
+          if (!this.hasAttribute('tabindex')) {
+            this.setAttribute('tabindex', '0');
+          }
+        }
+
+        handleClick() {
+          if (this._internals.ariaDisabled === 'true') return;
+
+          this._internals.ariaDisabled = 'true';
+          this._internals.ariaBusy = 'true';
+          document.getElementById('status-message').textContent = 'Processing...';
+
+          // Simulate an async operation (e.g., interacting with an MCP server)
+          setTimeout(() => {
+            this._internals.ariaDisabled = 'false';
+            this._internals.ariaBusy = 'false';
+            document.getElementById('status-message').textContent = 'Processing Complete.';
+          }, 2000);
+        }
+      }
+
+      customElements.define('agent-action-button', AgentActionButton);
+    </script>
+  </body>
+</html>

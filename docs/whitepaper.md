@@ -316,7 +316,10 @@ semantic information from the AOM. To solve this, developers must use the
 component can natively expose its role, `aria-*` states, and accessible name
 directly to the AOM, ensuring that even deeply nested components remain
 transparent and accessible to Level 2 and Level 3 agents without relying on
-brittle light-DOM workarounds.
+brittle light-DOM workarounds. Combining `ElementInternals` with native Model
+Context Protocol (MCP) discovery (e.g., via `<link>` tags) creates
+production-ready custom elements that address both Layer 2 and Layer 5 needs
+robustly.
 
 ### **3.4 Layer 3 — Structured Data**
 
@@ -561,6 +564,10 @@ organic search.
   30-50%
 - **Operational efficiency**: API and protocol layers enable automation that
   GUI-only interfaces cannot support
+- **Production Resilience vs. Benchmarks**: A verified 20-40 percentage point
+  performance drop is routinely observed when moving from structured benchmarks
+  (e.g., WebArena) to production tasks. BiModal Design's defense-in-depth
+  strategy mitigates DOM selector drift and structural failures.
 
 #### **4. The Rendering Divide Persists**
 
