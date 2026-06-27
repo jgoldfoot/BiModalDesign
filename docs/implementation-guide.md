@@ -954,7 +954,75 @@ curl -s -o /dev/null -w "%{http_code}" https://your-app.com/api/products
 - **Discussions**:
   [Community Forum](https://github.com/jgoldfoot/BiModalDesign/discussions)
 
-### Pattern 11: Agent-Accessible Web Components via ElementInternals
+### Pattern 11: MCP Client Capabilities (Sampling and Roots)
+
+To move beyond uni-directional tool calling, MCP servers can request actions
+from the client using Client Capabilities. This pattern offloads reasoning to
+the client's LLM via `sampling` and respects local boundaries via `roots`.
+
+```typescript
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
+
+const server = new McpServer({
+  name: 'advanced-workspace-server',
+  version: '1.0.0',
+});
+
+server.tool(
+  'analyze_local_file',
+  { filename: z.string() },
+  async ({ filename }, { client }) => {
+    // 1. Verify safe workspace boundaries
+    if (!client.capabilities?.roots) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: 'Error: Roots capability required for safe access.',
+          },
+        ],
+        isError: true,
+      };
+    }
+    const rootsResult = await client.requestRoots();
+    const allowedRoots = rootsResult.roots.map((r) => r.uri);
+
+    // (Verify filename against allowedRoots here)
+    const fileContent = 'Simulated long file content...';
+
+    // 2. Delegate reasoning to the client LLM
+    if (!client.capabilities?.sampling) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: 'Error: Sampling capability required for analysis.',
+          },
+        ],
+        isError: true,
+      };
+    }
+    const sampleResult = await client.requestSampling({
+      messages: [
+        { role: 'user', content: `Analyze this content:\n\n${fileContent}` },
+      ],
+      maxTokens: 500,
+    });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: `Analysis complete:\n${sampleResult.content[0].text}`,
+        },
+      ],
+    };
+  }
+);
+```
+
+### Pattern 12: Agent-Accessible Web Components via ElementInternals
 
 When building Web Components, the Shadow DOM inherently encapsulates internal
 markup and state, creating a "black box" that can obscure critical interaction
