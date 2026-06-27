@@ -61,7 +61,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jest": "^29.15.2",
     "jest": "^30.4.2",
-    "js-yaml": "^4.3.0",
+    "js-yaml": "^3.14.0",
     "jsdom": "29.1.1",
     "prettier": "^3.8.4",
     "undici": "^7.28.0"
