@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VLM-DOM Filtering Example</title>
+  <meta name="description" content="An example demonstrating VLM-Optimized DOM filtering and native ElementInternals for BiModal Design Layer 2 compliance.">
+
+  <!-- Layer 3: Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "VLM-DOM Filtering Example",
+      "description": "An example demonstrating VLM-Optimized DOM filtering and native ElementInternals for BiModal Design Layer 2 compliance."
+    }
+  </script>
+
+  <style>
+    body { font-family: system-ui, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 2rem; }
+    .card { border: 1px solid #ccc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+    .icon { width: 24px; height: 24px; fill: currentColor; }
+    .layout-wrapper { display: flex; flex-direction: column; gap: 0.5rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Layer 1 & 2: Content Accessibility and Semantic Structure -->
+  <main aria-label="Main Application Content">
+    <h1>VLM-Optimized DOM Filtering</h1>
+
+    <p>This example demonstrates how to prune the accessibility tree to improve the accuracy of VLM Set-of-Marks generation (e.g. VisualWebArena) and OS-level Computer-Use agents (e.g. OSWorld).</p>
+
+    <section aria-labelledby="products-heading">
+      <h2 id="products-heading">Featured Products</h2>
+
+      <!--
+        VLM Optimization:
+        We use role="presentation" on structural/layout wrappers to prevent them from
+        cluttering the AOM and confusing DOM-parsing agents.
+      -->
+      <div class="layout-wrapper" role="presentation">
+
+        <article class="card" itemscope itemtype="https://schema.org/Product">
+          <!--
+            VLM Optimization:
+            Decorative icons are explicitly hidden from the accessibility tree
+            using aria-hidden="true" to reduce noise for vision-language models.
+          -->
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M12 2L2 22h20L12 2z"/>
+          </svg>
+
+          <div role="presentation">
+            <h3 itemprop="name">Wireless Headphones</h3>
+            <p itemprop="description">High-fidelity audio with active noise cancellation.</p>
+            <p itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+              <span itemprop="priceCurrency" content="USD">$</span><span itemprop="price" content="199.99">199.99</span>
+            </p>
+          </div>
+
+          <!-- Web Component demonstrating native OS-level AOM integration -->
+          <agent-button action-intent="add_to_cart">Add to Cart</agent-button>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /**
+     * Layer 2/3 OS-Level Optimization:
+     * Using ElementInternals to natively expose roles and states to the
+     * Accessibility Object Model (AOM), removing the need for custom attributes.
+     */
+    class AgentButton extends HTMLElement {
+      constructor() {
+        super();
+        // Attach ElementInternals to natively map to the OS accessibility tree
+        this.internals = this.attachInternals();
+
+        // Define native semantics
+        this.internals.role = 'button';
+        this.internals.ariaLabel = this.textContent.trim();
+
+        const shadow = this.attachShadow({ mode: 'open' });
+        const button = document.createElement('button');
+        button.textContent = this.textContent;
+
+        button.addEventListener('click', () => {
+          this.internals.ariaPressed = 'true';
+          console.log(`Action executed: ${this.getAttribute('action-intent')}`);
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+          button {
+            background: #0066cc; color: white; border: none;
+            padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;
+          }
+          button:hover { background: #0052a3; }
+        `;
+
+        shadow.appendChild(style);
+        shadow.appendChild(button);
+      }
+    }
+
+    customElements.define('agent-button', AgentButton);
+  </script>
+</body>
+</html>

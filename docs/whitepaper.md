@@ -768,6 +768,14 @@ _These principles build upon FR-1 (Layer 1). Without Layer 1 compliance, Layers
 
 #### **7.1.1 Semantic Clarity (Layer 2)**
 
+**VLM-Optimized DOM Filtering:** Recent benchmarks like WebArena and
+VisualWebArena demonstrate that state-of-the-art navigation utilizes VLM-DOM
+fusion (e.g., OpAgent) and Set-of-Marks prompting. To maximize the accuracy of
+these agents, Layer 2 must actively prune non-semantic noise from the
+accessibility tree. Use `aria-hidden="true"` on decorative icons and
+`role="presentation"` or `role="none"` on structural layout wrappers to provide
+a clean, high-signal AOM.
+
 Use HTML5 landmarks and ARIA to communicate content structure:
 
 ```html

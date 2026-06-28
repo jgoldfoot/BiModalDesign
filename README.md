@@ -285,6 +285,9 @@ AI-assisted discoverability.
   to Layer 5 transaction handoff
 - **[AOM Web Component Example](examples/aom-web-component.html)** — Using
   `ElementInternals` to expose native semantics to agents
+- **[VLM-DOM Filtering Example](examples/vlm-dom-filtering.html)** —
+  VLM-Optimized DOM pruning using `aria-hidden` and `role="presentation"` for
+  Layer 2
 
 ---
 
