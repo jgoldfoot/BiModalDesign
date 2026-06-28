@@ -19,3 +19,8 @@ and `--disable-setuid-sandbox` **Learning:** Hardcoding insecure arguments
 disables critical security features, exposing the host machine to potentially
 malicious code from audited sites. **Prevention:** Avoid bypassing browser
 security sandboxes in scripts meant to execute against untrusted inputs.
+
+## 2026-06-28 - Unfixable Moderate Vulnerability in js-yaml Blocking CI
+**Vulnerability:** `js-yaml` has a moderate vulnerability (Quadratic-complexity DoS) that causes `npm audit --audit-level=moderate` to fail.
+**Learning:** `npm audit fix` cannot resolve it without a breaking change to `jest`, and forcing an override breaks `@istanbuljs/load-nyc-config` (which `jest --coverage` relies on).
+**Prevention:** CI workflows (`security.yml`, `ci.yml`) should use `npm audit --audit-level=high` to enforce critical and high vulnerabilities without being permanently blocked by unresolvable moderate issues in the testing toolchain.
