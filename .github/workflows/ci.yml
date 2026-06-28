@@ -120,13 +120,13 @@ jobs:
       run: npm install --include=optional
 
     - name: Run npm audit
-      run: npm audit --audit-level=high || true
+      run: npm audit --audit-level=moderate || true
       continue-on-error: true
 
     - name: Check for known vulnerabilities
       run: |
         npm audit --json > audit.json || true
-        cat audit.json
+        cat audit.json || true
 
   docs:
     name: Validate Documentation
