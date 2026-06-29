@@ -1,7 +1,7 @@
 {
   "name": "@bimodal-design/framework",
   "version": "3.0.0",
-  "description": "A design framework for building dual-mode interfaces that work optimally for both humans and AI agents",
+  "description": "A design framework for building interfaces that work across the full AI agent capability spectrum — from HTTP retrievers to protocol-native agents",
   "main": "index.js",
   "bin": {
     "bimodal-design": "./tools/bimodal-design-cli.js",

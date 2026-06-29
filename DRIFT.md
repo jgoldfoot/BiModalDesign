@@ -5,7 +5,7 @@ Living record of **genuine, unresolved** cross-artifact inconsistencies. Per
 each run and lists only real contradictions — not acceptable contextual
 variations.
 
-_Last reviewed: 2026-06-21_
+_Last reviewed: 2026-06-29_
 
 ## Open
 
@@ -23,6 +23,16 @@ can legitimately coexist, but neither doc references the other. **Decision
 needed:** add a sentence linking the two models, or leave them independent.
 
 ## Resolved this cycle
+
+- **[DRIFT] package.json description** — used the obsolete binary framing
+  ("dual-mode interfaces … for both humans and AI agents"). Updated to the v3.0
+  agent-capability-spectrum description.
+- **[DRIFT] Maturity level names in `__tests__/setup.test.js`** — defined levels
+  1–3 as "Basic Accessibility / Semantic Stability / Agent-Tested",
+  contradicting the canonical docs. Corrected to "Semantically Accessible /
+  Data-Rich / API-Enabled".
+
+### Resolved earlier
 
 - **[DRIFT] Citation years** — README cited Operator and Project Mariner as
   2026; whitepaper cited 2025. Operator launched Jan 2025 and Mariner was
