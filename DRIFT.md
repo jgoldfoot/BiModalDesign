@@ -9,6 +9,19 @@ _Last reviewed: 2026-06-29_
 
 ## Open
 
+### [QUESTION] Maturity Levels vs. Certification Tiers
+
+Two compliance models coexist without a cross-reference:
+
+- **README.md** — Maturity Levels 0–4, defined by which Defense-in-Depth layers
+  are implemented (Infrastructure Ready → Agent-Native).
+- **docs/whitepaper.md** — Certification Tiers, defined by audit score (90%+
+  Certified, 75–89% Advanced, 60–74% Foundational, <60% At Risk).
+
+These measure different things (architecture implemented vs. score achieved) and
+can legitimately coexist, but neither doc references the other. **Decision
+needed:** add a sentence linking the two models, or leave them independent.
+
 ### [QUESTION] FR-1 Checker scoring details
 
 - **README.md** (line 206) says `fr1-checker.js` does a "comprehensive audit
@@ -54,3 +67,28 @@ _Last reviewed: 2026-06-29_
 - **docs/whitepaper.md** (line 2068): "A Survey of WebAgents: Towards
   Next-Generation AI Agents for Web Automation with Large Foundation Models" —
   arXiv:2503.23350v4
+
+## Resolved this cycle
+
+- **[DRIFT] Citation years** — README cited Operator and Project Mariner as
+  2026; whitepaper cited 2025. Operator launched Jan 2025 and Mariner was
+  announced Dec 2024, so 2025 is correct. Fixed in README.
+
+## Reviewed — acceptable variation (no action)
+
+- **Quick Start uses `node tools/validators/...` vs. the `bmd-validate` bin
+  alias** — intentional: the README targets repo cloners; the bin aliases serve
+  installed-package users. Both are valid.
+- **`role="main"` / `role="navigation"` in the README snippet vs. omitted in
+  `examples/ssr-pass-example.html`** — both correct; the example relies on
+  native HTML5 landmark semantics, which is acceptable.
+- **`data-agent-*` prominence** — the README's three-layer table and the
+  whitepaper's Layer 2/3 principles are consistent; emphasis differs by document
+  purpose.
+- **Foundational Requirement 1 (FR-1) definitions** — phrased slightly
+  differently in `README.md` and `docs/whitepaper.md` but represent the same
+  core concept.
+- **Framework Maturity Levels table** — identically defined in both documents
+  containing the 5-level table.
+- **Code snippets Layer 1 comments** — slightly different comments in
+  `examples/ssr-pass-example.html` vs the `README.md`.
