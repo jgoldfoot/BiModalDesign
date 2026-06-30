@@ -1222,7 +1222,21 @@ underlying accessibility tree. Relying purely on DOM or purely on vision is
 insufficient; the visual rendering must align perfectly with the semantic
 structure.
 
-### **9.5 Designing for Browser Automation**
+### **9.5 Observation Scaffolding for Open-Weight Agents**
+
+As of mid-2026, open-weight models (such as WebTactix and WebChallenger) have
+achieved performance parity with frontier proprietary systems on benchmarks like
+WebArena and VisualWebArena. These smaller models possess sufficient reasoning
+capabilities but are highly sensitive to noisy state representations.
+
+To support these agents, developers must actively scaffold the observation
+phase. This means presenting a clean, noise-free state representation that maps
+1:1 between visual elements and the Accessibility Object Model (AOM). Using ARIA
+live regions for state updates and explicit labeling reduces cognitive load and
+token usage, allowing open-weight agents to formulate actions reliably without
+relying on the extensive "magic" parsing capabilities of massive closed models.
+
+### **9.6 Designing for Browser Automation**
 
 Browser automation agents (Level 2) interact with the DOM programmatically.
 Design considerations:
@@ -2084,16 +2098,20 @@ resilient, semantic, structured, and protocol-aware.
    WebArena, 38.1% on OSWorld)
 10. **Project Mariner**: Google's agent featuring "Teach & Repeat" capabilities,
     achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)
-11. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
-12. **UFO²**: "The Desktop AgentOS" featuring hybrid control detection that
+11. **WebTactix**: DeepSeek v3.2 based open-weight model achieving 74.3% on
+    WebArena (2026)
+12. **WebChallenger**: Open-weight system (32B LLM + 7B VLM) achieving 56.3% on
+    WebArena and 48.7% on VisualWebArena (arXiv:2606.10423v1)
+13. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
+14. **UFO²**: "The Desktop AgentOS" featuring hybrid control detection that
     fuses Windows UI Automation with vision (Microsoft, 2025)
-13. **Microsoft Build 2025**: "The age of AI agents and building the open
+15. **Microsoft Build 2025**: "The age of AI agents and building the open
     agentic web"
-14. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+16. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
     benefits
-15. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+17. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
     March 2025
-16. **Agent Containment (Claude Cowork)**: Anthropic, "How we contain Claude" —
+18. **Agent Containment (Claude Cowork)**: Anthropic, "How we contain Claude" —
     https://www.anthropic.com/engineering/how-we-contain-claude (2026)
 
 ### **Agent Protocols**

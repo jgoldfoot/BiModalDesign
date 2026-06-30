@@ -368,6 +368,10 @@ npm test
   WebArena, 38.1% on OSWorld)
 - **Project Mariner** — Google's agent featuring "Teach & Repeat" capabilities,
   achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)
+- **WebTactix** — DeepSeek v3.2 based open-weight model achieving 74.3% on
+  WebArena (2026)
+- **WebChallenger** — Open-weight system (32B LLM + 7B VLM) achieving 56.3% on
+  WebArena and 48.7% on VisualWebArena (arXiv:2606.10423v1)
 - **ScreenSpot** — Benchmark for spatial and visual understanding in GUIs
 - **UFO²** — "The Desktop AgentOS" featuring hybrid control detection that fuses
   Windows UI Automation with vision (Microsoft, 2025)

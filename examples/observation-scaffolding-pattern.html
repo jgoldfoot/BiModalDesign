@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observation Scaffolding for Open-Weight Agents</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 2rem; }
+        .dashboard { border: 1px solid #ccc; padding: 1.5rem; border-radius: 4px; }
+        .status-panel { padding: 1rem; margin-bottom: 1rem; background-color: #f8f9fa; border-left: 4px solid #0066cc; }
+        button { padding: 0.5rem 1rem; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0055aa; }
+        .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    </style>
+</head>
+<body>
+    <main role="main" aria-label="System Dashboard">
+        <h1>System Status Dashboard</h1>
+        <p>This interface demonstrates "Observation Scaffolding" designed for open-weight agents (like WebTactix or WebChallenger). By explicitly managing state updates through ARIA live regions and maintaining a clean 1:1 mapping in the Accessibility Object Model (AOM), we reduce the cognitive load and token usage required for the agent to parse the DOM.</p>
+
+        <div class="dashboard" aria-labelledby="dashboard-title">
+            <h2 id="dashboard-title" class="visually-hidden">Server Management</h2>
+
+            <!-- Observation Scaffolding: The live region explicitly tells the agent the current state without requiring it to infer from visual changes or re-parse the entire DOM -->
+            <div class="status-panel" role="status" aria-live="polite" aria-atomic="true" id="server-status-display">
+                Server status: <span id="current-state-text">Running</span>. Last updated: <span id="last-update-time">Just now</span>.
+            </div>
+
+            <div class="actions">
+                <!-- Explicit labeling guides action formulation -->
+                <button type="button" id="btn-restart" aria-controls="server-status-display">
+                    Restart Server
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('btn-restart').addEventListener('click', function() {
+            const statusDisplay = document.getElementById('current-state-text');
+            const timeDisplay = document.getElementById('last-update-time');
+            const btn = document.getElementById('btn-restart');
+
+            // Disable button during operation to prevent duplicate actions
+            btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
+            statusDisplay.textContent = 'Restarting...';
+
+            setTimeout(() => {
+                statusDisplay.textContent = 'Running';
+                const now = new Date();
+                timeDisplay.textContent = now.toLocaleTimeString();
+
+                // Re-enable and reset state
+                btn.disabled = false;
+                btn.removeAttribute('aria-busy');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
