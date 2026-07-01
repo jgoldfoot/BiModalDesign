@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BiModal Design - CUA Visual-Semantic Alignment Pattern</title>
+  <style>
+    body { font-family: system-ui, sans-serif; line-height: 1.5; padding: 2rem; max-width: 800px; margin: 0 auto; }
+    .example-block { border: 1px solid #ddd; padding: 1.5rem; margin-bottom: 2rem; border-radius: 8px; }
+    .bad { border-color: #ffcccc; background-color: #fff5f5; }
+    .good { border-color: #ccffcc; background-color: #f5fff5; }
+    .badge { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem; font-weight: bold; margin-bottom: 1rem; }
+    .badge.bad { background-color: #ffe6e6; color: #cc0000; }
+    .badge.good { background-color: #e6ffe6; color: #006600; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; }
+    .icon { display: inline-block; width: 1em; height: 1em; background-color: currentColor; mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center / contain; -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center / contain; vertical-align: middle; margin-right: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Visual-Semantic Alignment for Multimodal Agents</h1>
+
+  <p>Multimodal Computer-Using Agents (like Claude Mythos) use both vision (screenshots) and the accessibility tree (AOM) to navigate. When the visible text does not match the accessible name, these agents often fail to correlate the visual bounding box with the underlying interactive element.</p>
+
+  <p>This follows WCAG 2.5.3: Label in Name. The accessible name must contain the visible text.</p>
+
+  <div class="example-block bad">
+    <span class="badge bad">Anti-Pattern (Mismatched)</span>
+    <p><strong>Agent Failure Mode:</strong> The vision agent sees the text "Buy Now". It queries the accessibility tree for a button named "Buy Now". It cannot find one, because the developer overrode the accessible name with an <code>aria-label</code> that does not contain the visible text.</p>
+
+    <!-- ANTI-PATTERN: The aria-label overrides the visible text entirely -->
+    <button aria-label="Complete your purchase">Buy Now</button>
+  </div>
+
+  <div class="example-block good">
+    <span class="badge good">Recommended Pattern (Aligned)</span>
+    <p><strong>Agent Success Mode:</strong> The vision agent sees "Buy Now" and finds a matching element in the accessibility tree. The accessible name is exactly the visible text.</p>
+
+    <!-- PATTERN: Rely on native text content for the accessible name -->
+    <button>Buy Now</button>
+  </div>
+
+  <div class="example-block bad">
+    <span class="badge bad">Anti-Pattern (Icon with Mismatched Aria-Label)</span>
+    <p><strong>Agent Failure Mode:</strong> The user sees the text "Add to Favorites" next to an icon. The button has an <code>aria-label="Save Item"</code>. The vision agent is confused by the mismatch between the visible text and the accessible name.</p>
+
+    <!-- ANTI-PATTERN: The aria-label does not contain the visible text -->
+    <button aria-label="Save Item">
+      <span class="icon" aria-hidden="true"></span>
+      Add to Favorites
+    </button>
+  </div>
+
+  <div class="example-block good">
+    <span class="badge good">Recommended Pattern (Icon with Aligned Text)</span>
+    <p><strong>Agent Success Mode:</strong> The accessible name contains the visible text. The vision model and the accessibility tree are perfectly aligned.</p>
+
+    <!-- PATTERN: If expanding the name, the visible text MUST be included, preferably at the start -->
+    <button aria-label="Add to Favorites - Item 1234">
+      <span class="icon" aria-hidden="true"></span>
+      Add to Favorites
+    </button>
+  </div>
+</body>
+</html>

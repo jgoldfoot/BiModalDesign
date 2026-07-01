@@ -1162,12 +1162,23 @@ framework.
 ### **9.1 Preparing for 100% CUA Execution (OSWorld)**
 
 Recent analysis of the OSWorld benchmark highlights the rapid advancement of
-Computing User Agents (CUAs). While CUAs completed only 6% of OSWorld tasks
-sixteen months ago, today they complete approximately 45%. As we project toward
-100% completion rates, we must prepare for the moment when raw AI UI execution
-becomes a solved problem. BiModal Design ensures that interfaces are ready for
-this transition by providing the semantic structure necessary for advanced
-agents to operate reliably when execution barriers are removed.
+Computing User Agents (CUAs). Multimodal systems combining pixel-based vision
+with the accessibility tree are setting new state-of-the-art benchmarks (e.g.,
+Claude Mythos Preview at 85.4% and Claude Mythos 5 at 85.0% on
+OSWorld-Verified). While early CUAs completed only 6% of OSWorld tasks two years
+ago, today they complete over 85%. As we project toward 100% completion rates,
+we must prepare for the moment when raw AI UI execution becomes a solved
+problem.
+
+**Visual-Semantic Alignment:** For multimodal CUAs (like Claude Mythos), it is
+critical that the visible text rendered on screen perfectly aligns with the
+element's accessible name in the AOM. When an agent visually reads "Confirm
+Order" but the underlying `aria-label` is "Submit Purchase", it may fail to
+correlate the visual bounding box with the interactive element. Adhering
+strictly to WCAG 2.5.3 (Label in Name) ensures deterministic agent control.
+BiModal Design ensures that interfaces are ready for this transition by
+providing the semantic structure necessary for advanced agents to operate
+reliably when execution barriers are removed.
 
 ### **9.2 What Vision & Computer-Use Agents Change**
 

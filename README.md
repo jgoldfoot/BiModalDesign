@@ -347,7 +347,8 @@ npm test
   Knowledge Work Tasks" (NeurIPS 2024)
 
 - **OSWorld** — "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
-  Computer Environments" (arXiv:2404.07972)
+  Computer Environments" (arXiv:2404.07972). Top scores: Claude Mythos Preview
+  (85.4%), Claude Mythos 5 (85.0%).
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness
   in Web Agents" (arXiv:2410.06703v6)
 - **MCP** — Model Context Protocol (modelcontextprotocol.io)
