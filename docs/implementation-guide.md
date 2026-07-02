@@ -1080,3 +1080,21 @@ insufficient if the visual structure and the DOM don't strongly correlate.
 
 **Reference**:
 [Operator Teach & Repeat Example](../examples/operator-teach-and-repeat.html)
+
+### Pattern 14: Long-Horizon State Exposure (OSWorld 2.0)
+
+_Status: Proposed for v3.0 based on OSWorld 2.0 benchmark findings._
+
+In complex workflows requiring hundreds of tool calls, even frontier agents
+suffer from "Constraint Amnesia." They lose track of mid-task constraints,
+historical choices, and dynamic limits as their context window shifts.
+
+To support these long-horizon agents, do not rely on the agent to remember
+transient alerts or previously submitted forms. Instead, explicitly persist
+accumulated task state, dynamic constraints, and historical actions directly in
+the DOM using semantically anchored elements (e.g., `<aside>`, `<output>`,
+`<section aria-labelledby="...">`). This ensures that critical state is
+permanently available in the Accessibility Object Model (AOM) for the agent to
+reference at any step.
+
+See `examples/osworld2-state-exposure.html` for an example.

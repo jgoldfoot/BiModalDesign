@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enterprise Expense Reimbursement (OSWorld 2.0 Long-Horizon Pattern)</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 2rem;
+        padding: 2rem;
+      }
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      .agent-state-panel {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-left: 4px solid #0056b3;
+      }
+      /* Optional: Hide the agent state panel from human users if it duplicates UI,
+         but keep it in the accessibility tree and DOM for agents. */
+      @media (max-width: 768px) {
+        body {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main role="main">
+      <h1>File New Expense Report</h1>
+
+      <!-- Primary Workflow Area -->
+      <form id="expense-form">
+        <fieldset>
+          <legend>Step 3 of 10: Receipt Upload</legend>
+          <p>Please upload your hotel receipt from the Denver conference.</p>
+
+          <label for="receipt">Select file:</label>
+          <input type="file" id="receipt" name="receipt" required />
+
+          <!-- Mid-task alert that agents often miss or forget -->
+          <div role="alert" aria-live="polite" class="alert alert-warning">
+            Note: Your per diem limit for Denver is $150/night. Receipts exceeding this will require manual VP approval.
+          </div>
+
+          <button type="submit">Upload and Continue</button>
+        </fieldset>
+      </form>
+    </main>
+
+    <!--
+      Pattern 14: Long-Horizon State Exposure
+      This <aside> persists the accumulated state of the workflow.
+      It solves the OSWorld 2.0 "Constraint Amnesia" and "Hidden State" problems
+      by explicitly anchoring past decisions and current constraints in the DOM.
+    -->
+    <aside aria-label="Workflow Context and Constraints" class="agent-state-panel">
+      <h2>Active Workflow State</h2>
+
+      <section aria-labelledby="state-constraints">
+        <h3 id="state-constraints">Current Constraints</h3>
+        <ul>
+          <li><strong>Task:</strong> Q2 Marketing Conference Reimbursement</li>
+          <li><strong>Destination:</strong> Denver, CO</li>
+          <li><strong>Lodging Limit:</strong> $150.00 / night</li>
+          <li><strong>Meals Limit:</strong> $65.00 / day</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="state-history">
+        <h3 id="state-history">Completed Steps (Hidden State Recovery)</h3>
+        <!-- <output> is semantically strong for calculating/accumulating results -->
+        <output form="expense-form" name="workflow-history">
+          <ol>
+            <li>
+              Step 1: Flight Booking
+              <span class="status">✓ Completed</span>
+              <span class="visually-hidden">Details: $450.00, Delta Airlines, Confirmed.</span>
+            </li>
+            <li>
+              Step 2: Ground Transport
+              <span class="status">✓ Completed</span>
+              <span class="visually-hidden">Details: $45.00, Uber, Confirmed.</span>
+            </li>
+            <li aria-current="step">
+              Step 3: Hotel Receipt (Current)
+            </li>
+          </ol>
+        </output>
+      </section>
+
+      <section aria-labelledby="state-running-total">
+        <h3 id="state-running-total">Running Totals</h3>
+        <p>Total Reimbursable so far: <strong>$495.00</strong></p>
+      </section>
+    </aside>
+  </body>
+</html>

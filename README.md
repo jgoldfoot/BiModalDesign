@@ -346,6 +346,8 @@ npm test
 - **WorkArena++** — "Towards Compositional Planning and Reasoning-based Common
   Knowledge Work Tasks" (NeurIPS 2024)
 
+- **OSWorld 2.0** — "Benchmarking Computer Use Agents on Long-Horizon Real-World
+  Tasks" (arXiv:2606.29537)
 - **OSWorld** — "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
   Computer Environments" (arXiv:2404.07972)
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness

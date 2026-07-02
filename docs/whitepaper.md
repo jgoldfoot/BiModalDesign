@@ -513,6 +513,11 @@ it's measurable:
 - **WorkArena++ Benchmark**: Highlighted that enterprise knowledge work requires
   complex compositional reasoning across dense UIs, exposing the inadequacy of
   simple visual navigation for multi-step workflows.
+- **OSWorld 2.0 Benchmark**: Demonstrated that in complex, long-horizon
+  workflows requiring hundreds of tool calls, even frontier agents suffer from
+  "constraint amnesia" and hidden state failures. They lose track of mid-task
+  information and guess rather than recover implicit goals, requiring explicit
+  state persistence.
 
 ### **5.2 Performance Gaps by Agent Type**
 
@@ -1159,15 +1164,24 @@ of BiModal Design v2.x's core assumptions: that agents can't execute JavaScript
 or see rendered content. This section addresses what this means for the
 framework.
 
-### **9.1 Preparing for 100% CUA Execution (OSWorld)**
+### **9.1 Preparing for 100% CUA Execution (OSWorld 2.0)**
 
-Recent analysis of the OSWorld benchmark highlights the rapid advancement of
-Computing User Agents (CUAs). While CUAs completed only 6% of OSWorld tasks
-sixteen months ago, today they complete approximately 45%. As we project toward
-100% completion rates, we must prepare for the moment when raw AI UI execution
-becomes a solved problem. BiModal Design ensures that interfaces are ready for
-this transition by providing the semantic structure necessary for advanced
-agents to operate reliably when execution barriers are removed.
+Recent analysis of the OSWorld benchmark initially highlighted the rapid
+advancement of Computing User Agents (CUAs). However, the release of **OSWorld
+2.0** reveals a significant plateau when scaling to real-world, long-horizon
+tasks. While short tasks see 45% completion, complex workflows taking ~1.6 human
+hours see frontier agents maxing out near 20.6% completion.
+
+The primary failure mode in OSWorld 2.0 is not raw execution, but **Constraint
+Amnesia** and **Hidden State Failure**. Over hundreds of tool calls, agents lose
+track of dynamic constraints, forget mid-task alerts, and skip verification
+steps.
+
+As we prepare for 100% CUA execution, BiModal Design must move beyond immediate
+DOM accessibility. Interfaces must actively persist accumulated workflow state
+and constraints (using patterns like semantically anchored `<aside>` panels and
+`<output>` elements) to explicitly shield the agent from its shifting context
+window limits.
 
 ### **9.2 What Vision & Computer-Use Agents Change**
 
@@ -2072,28 +2086,30 @@ resilient, semantic, structured, and protocol-aware.
    in Web Agents" — arXiv:2410.06703v6
 4. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
    Domains" — arXiv:2406.12045
-5. **OSWorld**: "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
+5. **OSWorld 2.0**: "Benchmarking Computer Use Agents on Long-Horizon Real-World
+   Tasks" — arXiv:2606.29537
+6. **OSWorld**: "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
    Computer Environments" — arXiv:2404.07972
-6. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
+7. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
    Websites"
-7. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
+8. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
    arXiv:2604.24964
-8. **OpAgent**: "Operator Agent for Web Navigation" — 71.6% on WebArena
+9. **OpAgent**: "Operator Agent for Web Navigation" — 71.6% on WebArena
    (arXiv:2602.13559)
-9. **Operator**: OpenAI's Computer-Using Agent (87% on WebVoyager, 58.1% on
-   WebArena, 38.1% on OSWorld)
-10. **Project Mariner**: Google's agent featuring "Teach & Repeat" capabilities,
+10. **Operator**: OpenAI's Computer-Using Agent (87% on WebVoyager, 58.1% on
+    WebArena, 38.1% on OSWorld)
+11. **Project Mariner**: Google's agent featuring "Teach & Repeat" capabilities,
     achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)
-11. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
-12. **UFO²**: "The Desktop AgentOS" featuring hybrid control detection that
+12. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
+13. **UFO²**: "The Desktop AgentOS" featuring hybrid control detection that
     fuses Windows UI Automation with vision (Microsoft, 2025)
-13. **Microsoft Build 2025**: "The age of AI agents and building the open
+14. **Microsoft Build 2025**: "The age of AI agents and building the open
     agentic web"
-14. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+15. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
     benefits
-15. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+16. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
     March 2025
-16. **Agent Containment (Claude Cowork)**: Anthropic, "How we contain Claude" —
+17. **Agent Containment (Claude Cowork)**: Anthropic, "How we contain Claude" —
     https://www.anthropic.com/engineering/how-we-contain-claude (2026)
 
 ### **Agent Protocols**
