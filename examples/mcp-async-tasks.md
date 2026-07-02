@@ -116,8 +116,7 @@ function createServer(): Server {
     async (request, ctx): Promise<CallToolResult | CreateTaskResult> => {
       const { name, arguments: args } = request.params;
       const taskParams = (request.params._meta?.task ?? request.params.task) as
-        | { ttl?: number; pollInterval?: number }
-        | undefined;
+        { ttl?: number; pollInterval?: number } | undefined;
 
       if (name !== 'generate_comprehensive_audit') {
         throw new Error(`Unknown tool: ${name}`);
