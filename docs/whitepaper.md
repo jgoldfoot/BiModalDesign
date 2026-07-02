@@ -367,6 +367,8 @@ protocols.
 **Requirements**:
 
 - MCP server exposing tools, resources, and prompts
+- MCP Client Capabilities integration (e.g., `sampling`, `elicitation`, `roots`)
+  for bi-directional delegation
 - A2A agent card describing capabilities and interaction patterns
 - NLWeb endpoint for natural language queries (where applicable)
 - Protocol-specific authentication and authorization
