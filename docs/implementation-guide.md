@@ -960,6 +960,12 @@ To move beyond uni-directional tool calling, MCP servers can request actions
 from the client using Client Capabilities. This pattern offloads reasoning to
 the client's LLM via `sampling` and respects local boundaries via `roots`.
 
+> Client support varies — always check `getClientCapabilities()` first and
+> degrade gracefully. Method names follow the `@modelcontextprotocol/sdk` server
+> API; pin your SDK version. See
+> [examples/mcp-client-capabilities.md](../examples/mcp-client-capabilities.md)
+> for the full example (including elicitation).
+
 ```typescript
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
@@ -969,54 +975,59 @@ const server = new McpServer({
   version: '1.0.0',
 });
 
+// A server issues requests back to the client via its underlying connection,
+// exposed as `server.server`.
 server.tool(
   'analyze_local_file',
   { filename: z.string() },
-  async ({ filename }, { client }) => {
-    // 1. Verify safe workspace boundaries
-    if (!client.capabilities?.roots) {
+  async ({ filename }) => {
+    const caps = server.server.getClientCapabilities();
+
+    // 1. Roots — scope file access to the client's allowed workspace directories.
+    if (!caps?.roots) {
       return {
         content: [
           {
             type: 'text',
-            text: 'Error: Roots capability required for safe access.',
+            text: 'Error: roots capability required for safe access.',
           },
         ],
         isError: true,
       };
     }
-    const rootsResult = await client.requestRoots();
-    const allowedRoots = rootsResult.roots.map((r) => r.uri);
-
-    // (Verify filename against allowedRoots here)
+    const { roots } = await server.server.listRoots();
+    const allowedRoots = roots.map((r) => r.uri);
+    void allowedRoots; // (Verify `filename` resolves within allowedRoots here.)
     const fileContent = 'Simulated long file content...';
 
-    // 2. Delegate reasoning to the client LLM
-    if (!client.capabilities?.sampling) {
+    // 2. Sampling — delegate token-heavy reasoning to the client's LLM.
+    if (!caps?.sampling) {
       return {
         content: [
           {
             type: 'text',
-            text: 'Error: Sampling capability required for analysis.',
+            text: 'Error: sampling capability required for analysis.',
           },
         ],
         isError: true,
       };
     }
-    const sampleResult = await client.requestSampling({
+    const result = await server.server.createMessage({
       messages: [
-        { role: 'user', content: `Analyze this content:\n\n${fileContent}` },
+        {
+          role: 'user',
+          content: {
+            type: 'text',
+            text: `Analyze this content:\n\n${fileContent}`,
+          },
+        },
       ],
       maxTokens: 500,
     });
+    const analysis = result.content.type === 'text' ? result.content.text : '';
 
     return {
-      content: [
-        {
-          type: 'text',
-          text: `Analysis complete:\n${sampleResult.content[0].text}`,
-        },
-      ],
+      content: [{ type: 'text', text: `Analysis complete:\n${analysis}` }],
     };
   }
 );

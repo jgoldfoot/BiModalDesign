@@ -41,14 +41,15 @@ describe('BiModal Design Framework', () => {
   test('should have maturity levels defined', () => {
     const maturityLevels = {
       0: 'Infrastructure Ready',
-      1: 'Basic Accessibility',
-      2: 'Semantic Stability',
-      3: 'Agent-Tested',
+      1: 'Semantically Accessible',
+      2: 'Data-Rich',
+      3: 'API-Enabled',
       4: 'Agent-Native',
     };
 
     expect(Object.keys(maturityLevels).length).toBe(5);
     expect(maturityLevels[0]).toBe('Infrastructure Ready');
+    expect(maturityLevels[2]).toBe('Data-Rich');
     expect(maturityLevels[4]).toBe('Agent-Native');
   });
 });

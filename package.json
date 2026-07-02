@@ -1,7 +1,7 @@
 {
   "name": "@bimodal-design/framework",
   "version": "3.0.0",
-  "description": "A design framework for building dual-mode interfaces that work optimally for both humans and AI agents",
+  "description": "A design framework for building interfaces that work across the full AI agent capability spectrum — from HTTP retrievers to protocol-native agents",
   "main": "index.js",
   "bin": {
     "bimodal-design": "./tools/bimodal-design-cli.js",
@@ -57,14 +57,12 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "eslint": "^10.5.0",
+    "eslint": "^10.6.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jest": "^29.15.2",
+    "eslint-plugin-jest": "^29.15.3",
     "jest": "^30.4.2",
-    "js-yaml": "^3.14.0",
     "jsdom": "29.1.1",
-    "prettier": "^3.8.4",
-    "undici": "^7.28.0"
+    "prettier": "^3.9.2"
   },
   "files": [
     "tools/",
@@ -81,6 +79,6 @@
     "access": "public"
   },
   "optionalDependencies": {
-    "puppeteer": "25.1.0"
+    "puppeteer": "25.2.1"
   }
 }
