@@ -633,8 +633,7 @@ server.setRequestHandler(
   async (request, ctx): Promise<CallToolResult | CreateTaskResult> => {
     const { name, arguments: args } = request.params;
     const taskParams = (request.params._meta?.task ?? request.params.task) as
-      | { ttl?: number; pollInterval?: number }
-      | undefined;
+      { ttl?: number; pollInterval?: number } | undefined;
     if (!taskParams) throw new Error(`Tool ${name} requires task mode`);
 
     const options: CreateTaskOptions = {
