@@ -111,6 +111,15 @@ _Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld, BrowseComp,
 ST-WebAgentBench, Microsoft Build 2025, 2026 AI Agent Benchmarks, internal
 analysis_
 
+> **How to read this table.** These figures are **projections, not
+> measurements.** The public benchmarks cited above evaluate _agents_ on the
+> current web — no controlled comparison of BiModal-compliant vs. conventional
+> interfaces has been run, and the framework did not exist when most of them
+> were published. The ranges map published agent-success data to the layers
+> BiModal Design codifies and should be read as directional design guidance, not
+> validated results. The "v2.1" column reflects sites built to the earlier
+> specification, not a formal study.
+
 ### **Strategic Impact**
 
 Organizations implementing BiModal Design v3.0 principles can expect:
@@ -534,8 +543,15 @@ capability level:
 _Sources: WebArena, WebArena-Verified, VisualWebArena, OSWorld, WorkArena++,
 ST-WebAgentBench, BrowseComp, Odysseys, MCP-Universe, internal analysis_
 
-The data reveals a clear pattern: **each additional BiModal Design layer
-improves success rates**, and the **highest reliability comes from Hybrid Agents
+> **These ranges are directional projections, not measurements.** The cited
+> benchmarks evaluate agents on the current web, not BiModal-compliant vs.
+> conventional interfaces; the "Semantic Structure" and "Full BiModal Design"
+> columns map their observed success ranges to the design patterns BiModal
+> Design codifies. No controlled study of the framework itself has been run.
+
+Read that way, the ranges express the framework's central hypothesis: **each
+additional layer is expected to widen the population of agents that can
+succeed**, and the **highest projected reliability comes from Hybrid Agents
 using API and protocol layers for execution** — reinforcing the defense-in-depth
 approach where UI structure allows discovery of robust API tools.
 
@@ -2071,7 +2087,8 @@ resilient, semantic, structured, and protocol-aware.
 2. **WorkArena++**: "Towards Compositional Planning and Reasoning-based Common
    Knowledge Work Tasks" — NeurIPS 2024
 3. **ST-WebAgentBench**: "A Benchmark for Evaluating Safety and Trustworthiness
-   in Web Agents" — arXiv:2410.06703v6
+   in Web Agents" — Levy, Wiesel, Marreed, Oved, Yaeli, Shlomov (IBM Research),
+   arXiv:2410.06703 (2024); accepted at ICLR 2026
 4. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
    Domains" — arXiv:2406.12045
 5. **OSWorld**: "Benchmarking Multimodal Agents for Open-Ended Tasks in Real

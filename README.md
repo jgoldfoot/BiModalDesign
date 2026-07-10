@@ -119,18 +119,23 @@ selector drift** (where brittle CSS classes break automations). A robust Layer 2
 
 ## Key Research Findings
 
-Research and benchmarks indicate significant improvements when adhering to
-BiModal Design:
+> **How to read these numbers.** The ranges below are **projections synthesized
+> from public agent benchmarks** (WebArena, VisualWebArena, ST-WebAgentBench,
+> OSWorld, and others) — not results of a controlled A/B test of BiModal Design.
+> Those benchmarks evaluate _agents_ on the current web; they predate this
+> framework and did not compare BiModal-compliant vs. conventional interfaces.
+> We map their observed low and high ends to the design patterns BiModal Design
+> codifies. Treat them as **directional, not measured.**
 
-- **12-20% baseline success** for HTTP Retrievers on conventional CSR sites,
-  improving to **42-65%** with Layer 1 compliance and **60-75%** with full Layer
-  1-3 implementation.
-- **35-50% baseline success** for Browser Automation agents on conventional UI,
-  improving to **55-72%** with semantic structure and up to **75-88%** with
-  structured data.
+- **~12-20% baseline success** for HTTP Retrievers on conventional CSR sites, in
+  benchmarks associated with **~42-65%** where Layer 1 patterns are present and
+  **~60-75%** with full Layer 1-3 patterns.
+- **~35-50% baseline success** for Browser Automation agents on conventional UI,
+  associated with **~55-72%** where semantic structure is present and up to
+  **~75-88%** with structured data.
 - **BrowseComp, VisualWebArena & MCP-Universe insights** indicate that pure
-  visual reasoning is brittle; well-structured Layer 2 and Layer 3 significantly
-  boost agent reliability and facilitate reliable tool-use handoffs.
+  visual reasoning is brittle; well-structured Layer 2 and Layer 3 correlate
+  with higher agent reliability and support reliable tool-use handoffs.
 
 ---
 
@@ -349,7 +354,7 @@ npm test
 - **OSWorld** — "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
   Computer Environments" (arXiv:2404.07972)
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness
-  in Web Agents" (arXiv:2410.06703v6)
+  in Web Agents" — Levy et al., IBM Research (arXiv:2410.06703, 2024; ICLR 2026)
 - **MCP** — Model Context Protocol (modelcontextprotocol.io)
 - **A2A** — Agent-to-Agent Protocol (Google, 2025)
 - **NLWeb** — Natural Language Web Protocol (Microsoft, 2025)
