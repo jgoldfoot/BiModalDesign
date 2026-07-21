@@ -500,8 +500,10 @@ it's measurable:
 - **Microsoft Build 2025**: Introduced "agentic web" with NLWeb protocol for
   AI-native interactions.
 - **Anthropic MCP**: Model Context Protocol adoption exceeds 10,000 public MCP
-  servers since its November 2024 launch, now evolving into **WebMCP** natively
-  in browsers.
+  servers since its November 2024 launch. Its `2026-07-28` revision makes the
+  protocol stateless at the transport layer and adds a formal Extensions
+  framework. A separate browser-side specification, **WebMCP**, is incubating at
+  the W3C to expose page-registered tools to in-browser agents.
 - **Enterprise Adoption**: 230,000+ organizations using platforms like Copilot
   Studio for agent automation.
 - **Academic Research**: 200+ papers published on web agent architectures and
@@ -1042,10 +1044,17 @@ The agent loop itself runs outside the VM so it can recover if the VM restarts,
 while execution stays contained. Local MCP servers are treated as user-installed
 software with strictly scoped access, solving the containment problem.
 
-**Standardized WebMCP Discovery:** As MCP matures into **WebMCP**, bridging the
-web (Layers 1-3) with protocols (Layer 5) natively in the browser is critical.
-Websites should announce their MCP servers directly in the DOM using standard
-HTML tags:
+**Standardized WebMCP Discovery:** **WebMCP** is a distinct browser-side
+specification rather than a later stage of MCP itself: it is a Draft Community
+Group Report (20 July 2026) from the W3C Web Machine Learning Community Group,
+edited by Brandon Walderman (Microsoft) with Khushal Sagar and Dominic Farolino
+(Google). It exposes a `ModelContext` object to pages via
+`document.modelContext`, through which a site registers tools for an agent
+operating in the browser. Note that it is **not** a W3C Standard and is not on
+the W3C Standards Track; treat it as incubation-stage. With that caveat,
+bridging the web (Layers 1-3) with protocols (Layer 5) natively in the browser
+is critical. Websites should announce their MCP servers directly in the DOM
+using standard HTML tags:
 `<link rel="alternate" type="application/mcp+json" href="https://api.example.com/mcp" />`
 This serves as a bridge, allowing Level 2 Agentic Browsers and Level 3
 Computer-Use agents to discover the server and seamlessly upgrade from
@@ -1073,17 +1082,35 @@ Furthermore, this pattern enables privacy-preserving operations by ensuring
 sensitive intermediate data never enters the model's context window.
 
 MCP, introduced by Anthropic in November 2024, has rapidly become the standard
-for connecting AI agents to external services. An MCP server exposes three
+for connecting AI agents to external services. An MCP server exposes three core
 primitives:
 
 - **Tools**: Actions the agent can take (e.g., search products, add to cart,
   check order status)
-- **Tasks (experimental, added 2025-11-25)**: Asynchronous, long-running
-  operations a client launches and then polls for results (e.g., bulk data
-  processing, complex research)
 - **Resources**: Data the agent can read (e.g., product catalog, user profile,
   order history)
 - **Prompts**: Pre-built interaction patterns (e.g., "help me find a product")
+
+Beyond these core primitives, the `2026-07-28` revision introduces an
+**Extensions** framework for capabilities that version independently of the core
+protocol. Two extensions matter for BiModal Design:
+
+- **Tasks** (`io.modelcontextprotocol/tasks`): asynchronous, long-running
+  operations. Formerly an experimental core feature in `2025-11-25`, Tasks moved
+  out of the core protocol and into an official extension, replacing the
+  blocking `tasks/result` method with polling via `tasks/get`.
+- **MCP Apps**: server-rendered UIs delivered through the protocol.
+
+**Protocol-level statelessness (`2026-07-28`).** The largest revision since MCP
+launched removes protocol-level sessions: the `initialize` handshake and the
+`Mcp-Session-Id` header are gone, and list endpoints no longer vary
+per-connection. Servers that need cross-call state now pass explicit,
+server-minted handles as ordinary tool arguments. For Layer 5 implementers this
+lowers the deployment floor considerably — a remote MCP server that previously
+required sticky sessions and a shared session store can run behind an ordinary
+round-robin load balancer. The revision also adds a formal feature lifecycle
+with a minimum twelve-month deprecation window, and deprecates the Roots,
+Sampling, and Logging features.
 
 #### **BiModal Design + MCP: Example**
 
@@ -1177,15 +1204,31 @@ of BiModal Design v2.x's core assumptions: that agents can't execute JavaScript
 or see rendered content. This section addresses what this means for the
 framework.
 
-### **9.1 Preparing for 100% CUA Execution (OSWorld)**
+### **9.1 The Long-Horizon Gap (OSWorld)**
 
-Recent analysis of the OSWorld benchmark highlights the rapid advancement of
-Computing User Agents (CUAs). While CUAs completed only 6% of OSWorld tasks
-sixteen months ago, today they complete approximately 45%. As we project toward
-100% completion rates, we must prepare for the moment when raw AI UI execution
-becomes a solved problem. BiModal Design ensures that interfaces are ready for
-this transition by providing the semantic structure necessary for advanced
-agents to operate reliably when execution barriers are removed.
+The OSWorld benchmark has tracked the rapid advancement of Computing User Agents
+(CUAs). At the original OSWorld 1.0 release, the best model completed 12.24% of
+tasks against a human baseline of 72.36%. Frontier scores climbed steeply from
+there — steeply enough that OSWorld 1.0 is now superseded: on 2026-06-26 the
+maintainers directed users to **OSWorld 2.0** as the current version.
+
+That successor complicates any straight-line projection toward "solved" UI
+execution. OSWorld 2.0 comprises 108 long-horizon workflows that take human
+users a median of roughly 1.6 hours each and average 318 tool calls, against
+about 30 in OSWorld 1.0. On it, the best frontier agent evaluated (Claude Opus
+4.8 with maximum thinking and batched tool calls) completes only **20.6%** of
+tasks at a 500-step budget, with a 54.8% partial score.
+
+The lesson for BiModal Design is that short-horizon UI competence and
+long-horizon task completion are different problems, and progress on the first
+has not resolved the second. Agents do not fail these workflows because they
+cannot identify a button; they fail on cross-source reasoning, implicit-state
+inference, and sustained context. This strengthens rather than weakens the case
+for the framework: semantic structure (Layer 2), structured data (Layer 3), and
+deterministic protocol handoff (Layers 4-5) reduce exactly the accumulated
+per-step ambiguity that compounds across a long horizon. Interfaces should be
+built for agents that will remain imperfect over long tasks, not for a near-term
+moment when raw UI execution becomes a solved problem.
 
 ### **9.2 What Vision & Computer-Use Agents Change**
 
@@ -2092,39 +2135,53 @@ resilient, semantic, structured, and protocol-aware.
 4. **τ-bench**: "A Benchmark for Tool-Agent-User Interaction in Real-World
    Domains" — arXiv:2406.12045
 5. **OSWorld**: "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
-   Computer Environments" — arXiv:2404.07972
-6. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
+   Computer Environments" — arXiv:2404.07972. Superseded by OSWorld 2.0 as of
+   2026-06-26.
+6. **OSWorld 2.0**: "OSWorld 2.0: Benchmarking Computer Use Agents on
+   Long-Horizon Real-World Tasks" — Yuan, Zhou, Xiong et al. (XLANG Lab),
+   arXiv:2606.29537 (28 June 2026). 108 long-horizon workflows; best frontier
+   agent completes 20.6% at a 500-step budget.
+7. **WebVoyager**: "Benchmarking End-to-End Web Agents on Live Real-World
    Websites"
-7. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
-   arXiv:2604.24964
-8. **OpAgent**: "Operator Agent for Web Navigation" — 71.6% on WebArena
-   (arXiv:2602.13559)
-9. **Operator**: OpenAI's Computer-Using Agent (87% on WebVoyager, 58.1% on
-   WebArena, 38.1% on OSWorld)
-10. **Project Mariner**: Google's agent featuring "Teach & Repeat" capabilities,
+8. **Odysseys**: "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
+   Jang, Koh, Fried, Salakhutdinov, arXiv:2604.24964 (27 April 2026). 200
+   long-horizon live-web tasks; strongest evaluated model 44.5%.
+9. **OpAgent**: "Operator Agent for Web Navigation" — Guo, Yang, Yang et al.,
+   71.6% on WebArena (arXiv:2602.13559, 14 February 2026)
+10. **Operator**: OpenAI's Computer-Using Agent (87% on WebVoyager, 58.1% on
+    WebArena, 38.1% on OSWorld)
+11. **Project Mariner**: Google's agent featuring "Teach & Repeat" capabilities,
     achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)
-11. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
-12. **UFO²**: "The Desktop AgentOS" featuring hybrid control detection that
+12. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
+13. **UFO²**: "The Desktop AgentOS" featuring hybrid control detection that
     fuses Windows UI Automation with vision (Microsoft, 2025)
-13. **Microsoft Build 2025**: "The age of AI agents and building the open
+14. **Microsoft Build 2025**: "The age of AI agents and building the open
     agentic web"
-14. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
+15. **State of Web Accessibility 2024**: Comprehensive research on semantic HTML
     benefits
-15. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
+16. **Automated Evaluation of Web Accessibility**: Nature Scientific Reports,
     March 2025
-16. **Agent Containment (Claude Cowork)**: Anthropic, "How we contain Claude" —
+17. **Agent Containment (Claude Cowork)**: Anthropic, "How we contain Claude" —
     https://www.anthropic.com/engineering/how-we-contain-claude (2026)
 
 ### **Agent Protocols**
 
-7. **Model Context Protocol (MCP)**: https://modelcontextprotocol.io —
-   Anthropic, November 2024
-8. **Agent-to-Agent Protocol (A2A)**: https://google.github.io/A2A — Google,
-   April 2025
-9. **NLWeb**: https://github.com/nicholasgasior/nlweb — Microsoft, May 2025
-10. **Code execution with MCP**:
-    https://www.anthropic.com/engineering/code-execution-with-mcp — Anthropic,
-    Nov 2025
+1. **Model Context Protocol (MCP)**: https://modelcontextprotocol.io —
+   Anthropic, November 2024. Current revision `2026-07-28` (release candidate
+   locked 21 May 2026): stateless protocol core, Extensions framework, Tasks and
+   MCP Apps extensions, authorization hardening, formal deprecation policy.
+   Changelog: https://modelcontextprotocol.io/specification/draft/changelog
+2. **WebMCP**: https://webmachinelearning.github.io/webmcp/ — W3C Web Machine
+   Learning Community Group, Draft Community Group Report (20 July 2026).
+   Exposes `document.modelContext`. Not a W3C Standard; not on the Standards
+   Track.
+3. **Agent-to-Agent Protocol (A2A)**: https://a2a-protocol.org — released by
+   Google April 2025; governed by the Linux Foundation since June 2025.
+   Specification v1.0.0.
+4. **NLWeb**: https://github.com/nicholasgasior/nlweb — Microsoft, May 2025
+5. **Code execution with MCP**:
+   https://www.anthropic.com/engineering/code-execution-with-mcp — Anthropic,
+   Nov 2025
 
 ### **Rendering & Performance**
 

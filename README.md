@@ -352,18 +352,27 @@ npm test
   Knowledge Work Tasks" (NeurIPS 2024)
 
 - **OSWorld** — "Benchmarking Multimodal Agents for Open-Ended Tasks in Real
-  Computer Environments" (arXiv:2404.07972)
+  Computer Environments" (arXiv:2404.07972). Superseded by OSWorld 2.0 as of
+  2026-06-26.
+- **OSWorld 2.0** — "Benchmarking Computer Use Agents on Long-Horizon Real-World
+  Tasks" — Yuan, Zhou, Xiong et al., XLANG Lab (arXiv:2606.29537, June 2026).
+  108 long-horizon workflows; best frontier agent completes 20.6% at a 500-step
+  budget.
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness
   in Web Agents" — Levy et al., IBM Research (arXiv:2410.06703, 2024; ICLR 2026)
-- **MCP** — Model Context Protocol (modelcontextprotocol.io)
-- **A2A** — Agent-to-Agent Protocol (Google, 2025)
+- **MCP** — Model Context Protocol (modelcontextprotocol.io). Revision
+  `2026-07-28`: stateless protocol core, Extensions framework (Tasks, MCP Apps),
+  authorization hardening, formal deprecation policy.
+- **A2A** — Agent-to-Agent Protocol, spec v1.0.0 (released by Google 2025;
+  governed by the Linux Foundation since June 2025)
 - **NLWeb** — Natural Language Web Protocol (Microsoft, 2025)
 - **τ-bench** — "A Benchmark for Tool-Agent-User Interaction in Real-World
   Domains" (arXiv:2406.12045)
 - **WebVoyager** — Benchmarking end-to-end browser agents on live real-world
   websites
-- **Odysseys** — "Benchmarking Web Agents on Realistic Long Horizon Tasks"
-  (arXiv:2604.24964)
+- **Odysseys** — "Benchmarking Web Agents on Realistic Long Horizon Tasks" —
+  Jang, Koh, Fried, Salakhutdinov (arXiv:2604.24964, April 2026). 200
+  long-horizon live-web tasks; strongest evaluated model 44.5%.
 - **VisualWebArena** — Evaluating Multimodal Agents on Realistic Visual Web
   Tasks
 - **BrowseComp** — Benchmark for Agentic Browser Navigation & Task Execution
@@ -376,7 +385,10 @@ npm test
 - **ScreenSpot** — Benchmark for spatial and visual understanding in GUIs
 - **UFO²** — "The Desktop AgentOS" featuring hybrid control detection that fuses
   Windows UI Automation with vision (Microsoft, 2025)
-- **WebMCP** — Native browser integration for Model Context Protocol discovery
+- **WebMCP** — Browser API letting a page register tools for in-browser agents
+  via `document.modelContext`. W3C Web Machine Learning Community Group, Draft
+  Community Group Report (20 July 2026). Not a W3C Standard; not on the
+  Standards Track.
 - **Code execution with MCP** — Building more efficient agents (Anthropic,
   Nov 2025)
 
