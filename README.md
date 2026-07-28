@@ -4,9 +4,9 @@
 > agent capability spectrum — from HTTP retrievers to protocol-native agents.**
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Status: Research Framework](https://img.shields.io/badge/Status-Research%20Framework-yellow.svg)]()
-[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)]()
-[![Version: 3.0](https://img.shields.io/badge/version-3.0-blue.svg)]()
+[![Status: Research Framework](https://img.shields.io/badge/Status-Research%20Framework-yellow.svg)](<>)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](<>)
+[![Version: 3.0](https://img.shields.io/badge/version-3.0-blue.svg)](<>)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ---
@@ -135,7 +135,17 @@ selector drift** (where brittle CSS classes break automations). A robust Layer 2
   **~75-88%** with structured data.
 - **BrowseComp, VisualWebArena & MCP-Universe insights** indicate that pure
   visual reasoning is brittle; well-structured Layer 2 and Layer 3 correlate
-  with higher agent reliability and support reliable tool-use handoffs.
+  with higher agent reliability and support reliable tool-use handoffs. **MAG**
+  (2026) adds a fresh data point: evaluated on rendered screenshots rather than
+  DOM or accessibility trees, the strongest model completes fewer than 40% of
+  tasks.
+- **Long-horizon orchestration remains unsolved, and reported scores may be
+  optimistic.** On **WeaveBench** (2026), which requires agents to combine GUI,
+  CLI, and code operations within a single trajectory, the best frontier
+  model-runtime pairing reaches a 41.2% PassRate. Its trajectory-aware judge
+  also found that outcome-only grading substantially overestimates agent
+  performance — a caution that applies to the benchmark figures the ranges above
+  are derived from.
 
 ---
 
@@ -375,6 +385,14 @@ npm test
   long-horizon live-web tasks; strongest evaluated model 44.5%.
 - **VisualWebArena** — Evaluating Multimodal Agents on Realistic Visual Web
   Tasks
+- **WeaveBench** — "A Long-Horizon, Real-World Benchmark for Computer-Use Agents
+  with Hybrid Interfaces" — 114 tasks across 8 work domains requiring GUI, CLI,
+  and code operations in one trajectory; best PassRate 41.2%
+  (arXiv:2606.09426, 2026)
+- **MAG** — "A Web-Agent Benchmark and Harness for Multimodal Action and Guide
+  Generation" — screenshot-grounded evaluation via Set-of-Mark and pixel
+  coordinates; strongest model completes fewer than 40% of tasks
+  (arXiv:2607.10079, 2026)
 - **BrowseComp** — Benchmark for Agentic Browser Navigation & Task Execution
 - **OpAgent** — "Operator Agent for Web Navigation" achieving 71.6% on WebArena
   (arXiv:2602.13559)
