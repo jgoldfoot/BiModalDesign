@@ -5,9 +5,30 @@ Living record of **genuine, unresolved** cross-artifact inconsistencies. Per
 each run and lists only real contradictions — not acceptable contextual
 variations.
 
-_Last reviewed: 2026-06-29_
+_Last reviewed: 2026-07-21_
 
 ## Open
+
+### [QUESTION] Unverified MCP discovery pattern (`application/mcp+json`)
+
+Both README.md (Quick Start, Layer 5 snippet) and docs/whitepaper.md
+(Standardized WebMCP Discovery) recommend announcing an MCP server with:
+
+```html
+<link rel="alternate" type="application/mcp+json" href="/mcp-server" />
+```
+
+The 2026-07-21 research scan could not confirm from any primary source that
+`application/mcp+json` is a registered media type or that this `link` pattern is
+a specified discovery mechanism in either the MCP specification or the WebMCP
+Draft Community Group Report. WebMCP's actual surface is
+`document.modelContext`, which is a different mechanism.
+
+This may be an original framework proposal rather than an existing standard — a
+legitimate thing to publish, but it currently reads as established practice.
+**Decision needed:** confirm a primary source, or relabel it as a BiModal Design
+proposal. Not edited in the scan PR, since the scan cuts unverified claims
+rather than silently rewriting authored recommendations.
 
 ### [QUESTION] Maturity Levels vs. Certification Tiers
 
