@@ -526,6 +526,22 @@ it's measurable:
 - **WorkArena++ Benchmark**: Highlighted that enterprise knowledge work requires
   complex compositional reasoning across dense UIs, exposing the inadequacy of
   simple visual navigation for multi-step workflows.
+- **WeaveBench (2026)**: The first benchmark to test long-horizon orchestration
+  _across_ interfaces rather than treating each interface as a separable
+  capability. Its 114 tasks across 8 real-world work domains each require an
+  agent to combine GUI observations and actions with CLI and code operations in
+  a single trajectory. Across frontier model-runtime pairings the best PassRate
+  reaches only 41.2%. Its companion trajectory-aware judge — which inspects
+  deliverables, files, screenshots, logs, and action traces — found that
+  outcome-only grading substantially overestimates agent performance
+  (arXiv:2606.09426).
+- **MAG Benchmark (2026)**: Evaluates agents on rendered screenshots using
+  Set-of-Mark element selection and raw pixel coordinates, rather than the DOM
+  or accessibility-tree representations most prior benchmarks supply. Even the
+  strongest model completes fewer than 40% of tasks, and a GRPO method augmented
+  with expert trajectories nearly doubles a supervised 9B agent's success rate
+  from 6.9% to 13.2% — reinforcing that screenshot-only grounding remains a weak
+  substitute for structural signal (arXiv:2607.10079).
 
 ### **5.2 Performance Gaps by Agent Type**
 
@@ -556,6 +572,20 @@ additional layer is expected to widen the population of agents that can
 succeed**, and the **highest projected reliability comes from Hybrid Agents
 using API and protocol layers for execution** — reinforcing the defense-in-depth
 approach where UI structure allows discovery of robust API tools.
+
+> **The Hybrid Agents row is the least anchored projection in this table.** The
+> closest published measurement is WeaveBench (arXiv:2606.09426), where the best
+> frontier model-runtime pairing reaches a 41.2% PassRate. That number is not a
+> refutation of the 94-99% projection, because the two use "hybrid" differently:
+> WeaveBench measures agents orchestrating GUI, CLI, and code operations across
+> long-horizon tasks on a desktop, whereas this table projects agents that
+> _discover_ a task through the UI and _execute_ it through a documented API or
+> MCP tool. But no benchmark yet isolates that second pattern, so the row rests
+> on inference rather than evidence. WeaveBench's second result is a caution
+> that applies to every figure cited in this section: its trajectory-aware judge
+> found that outcome-only grading substantially overestimates agent performance,
+> which means the published success rates the columns above are mapped from are
+> likely optimistic.
 
 ### **5.3 Why BiModal Design Matters Now**
 
@@ -1510,6 +1540,13 @@ explicit content policies:
   Design's semantic structure requirements
 - **WCAG 2.2**: BiModal Design's Layer 2 directly builds on and extends WCAG
   compliance
+- **WCAG-EM 2.0**: Published as a W3C Group Note on 23 July 2026 by the
+  Accessibility Guidelines Working Group. Where WCAG-EM 1 covered websites and
+  web pages, WCAG-EM 2 extends its step-by-step conformance evaluation
+  methodology to apps and other digital products. Teams already running a
+  WCAG-EM audit can treat it as the procedural companion to a BiModal Design
+  Layer 2 assessment, though it evaluates human accessibility conformance and
+  does not assess Layers 1 or 3-5
 
 ### **11.6 Human-in-the-Loop (HITL) for Tool-Agent-User Interaction (τ-bench)**
 
@@ -2163,6 +2200,12 @@ resilient, semantic, structured, and protocol-aware.
     March 2025
 17. **Agent Containment (Claude Cowork)**: Anthropic, "How we contain Claude" —
     https://www.anthropic.com/engineering/how-we-contain-claude (2026)
+18. **WeaveBench**: "A Long-Horizon, Real-World Benchmark for Computer-Use
+    Agents with Hybrid Interfaces" — Li, Zhou, Yu, Xu, Yang, Li, Shan;
+    arXiv:2606.09426 (v1 8 Jun 2026, v3 6 Jul 2026)
+19. **MAG**: "A Web-Agent Benchmark and Harness for Multimodal Action and Guide
+    Generation" — Gan, Wei, Liang, Cai, Zhang, Ni; arXiv:2607.10079 (11
+    Jul 2026)
 
 ### **Agent Protocols**
 
@@ -2199,6 +2242,8 @@ resilient, semantic, structured, and protocol-aware.
 15. **WAI-ARIA 1.2**: https://www.w3.org/TR/wai-aria-1.2/
 16. **OpenAPI 3.0**: https://spec.openapis.org/oas/v3.0.0
 17. **WCAG 2.2**: https://www.w3.org/TR/WCAG22/
+18. **WCAG-EM 2.0**: https://www.w3.org/TR/wcag-em-2/ — W3C Group Note, 23 July
+    2026
 
 ### **BiModal Design Resources**
 
