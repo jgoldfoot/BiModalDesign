@@ -581,12 +581,11 @@ approach where UI structure allows discovery of robust API tools.
 > long-horizon tasks on a desktop, whereas this table projects agents that
 > _discover_ a task through the UI and _execute_ it through a documented API or
 > MCP tool. But no benchmark yet isolates that second pattern, so the row rests
-> on inference rather than evidence and should be read as the framework's
-> strongest claim in need of the weakest support. WeaveBench's second result is
-> a caution that applies to every figure cited in this section: its
-> trajectory-aware judge found that outcome-only grading substantially
-> overestimates agent performance, which means the published success rates the
-> columns above are mapped from are likely optimistic.
+> on inference rather than evidence. WeaveBench's second result is a caution
+> that applies to every figure cited in this section: its trajectory-aware judge
+> found that outcome-only grading substantially overestimates agent performance,
+> which means the published success rates the columns above are mapped from are
+> likely optimistic.
 
 ### **5.3 Why BiModal Design Matters Now**
 
