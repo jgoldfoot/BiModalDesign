@@ -2228,22 +2228,21 @@ resilient, semantic, structured, and protocol-aware.
 
 ### **Rendering & Performance**
 
-10. **React Server Components**:
-    https://react.dev/reference/rsc/server-components
-11. **Astro Islands Architecture**:
-    https://docs.astro.build/en/concepts/islands/
-12. **Next.js App Router**: https://nextjs.org/docs/app
-13. **Progressive Enhancement**:
-    https://www.gov.uk/service-manual/technology/using-progressive-enhancement
+1. **React Server Components**:
+   https://react.dev/reference/rsc/server-components
+2. **Astro Islands Architecture**: https://docs.astro.build/en/concepts/islands/
+3. **Next.js App Router**: https://nextjs.org/docs/app
+4. **Progressive Enhancement**:
+   https://www.gov.uk/service-manual/technology/using-progressive-enhancement
 
 ### **Standards**
 
-14. **Schema.org**: https://schema.org
-15. **WAI-ARIA 1.2**: https://www.w3.org/TR/wai-aria-1.2/
-16. **OpenAPI 3.0**: https://spec.openapis.org/oas/v3.0.0
-17. **WCAG 2.2**: https://www.w3.org/TR/WCAG22/
-18. **WCAG-EM 2.0**: https://www.w3.org/TR/wcag-em-2/ — W3C Group Note, 23 July
-    2026
+1. **Schema.org**: https://schema.org
+2. **WAI-ARIA 1.2**: https://www.w3.org/TR/wai-aria-1.2/
+3. **OpenAPI 3.0**: https://spec.openapis.org/oas/v3.0.0
+4. **WCAG 2.2**: https://www.w3.org/TR/WCAG22/
+5. **WCAG-EM 2.0**: https://www.w3.org/TR/wcag-em-2/ — W3C Group Note, 23 July
+   2026
 
 ### **BiModal Design Resources**
 
