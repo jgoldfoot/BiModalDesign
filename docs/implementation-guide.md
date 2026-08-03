@@ -959,6 +959,14 @@ To move beyond uni-directional tool calling, MCP servers can request actions
 from the client using Client Capabilities. This pattern offloads reasoning to
 the client's LLM via `sampling` and respects local boundaries via `roots`.
 
+> **Deprecated as of MCP `2026-07-28`.** The Roots, Sampling, and Logging
+> features are now formally Deprecated under MCP's feature lifecycle policy
+> (minimum twelve-month window), and server-initiated requests such as
+> `roots/list` and `sampling/createMessage` are superseded by the Multi
+> Round-Trip Requests pattern. This pattern remains functional during the
+> deprecation window; new Layer 5 implementations should not adopt it. See the
+> [2026-07-28 changelog](https://modelcontextprotocol.io/specification/2026-07-28/changelog).
+
 > Client support varies — always check `getClientCapabilities()` first and
 > degrade gracefully. Method names follow the `@modelcontextprotocol/sdk` server
 > API; pin your SDK version. See
