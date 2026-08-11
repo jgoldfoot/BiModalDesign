@@ -542,6 +542,18 @@ it's measurable:
   with expert trajectories nearly doubles a supervised 9B agent's success rate
   from 6.9% to 13.2% — reinforcing that screenshot-only grounding remains a weak
   substitute for structural signal (arXiv:2607.10079).
+- **BenchJack (2026)**: Turned the evaluation lens on the benchmarks themselves.
+  Applied to 10 popular agent benchmarks spanning software engineering, web
+  navigation, desktop computing, and terminal operations, its automated
+  red-teaming pipeline synthesized reward-hacking exploits that achieve
+  near-perfect scores on most of them without solving a single task, surfacing
+  219 distinct flaws across eight recurring classes. Its extended
+  generative-adversarial pipeline then patched what it found, cutting the
+  hackable-task ratio from near 100% to under 10% on four benchmarks and fully
+  patching WebArena and OSWorld within three iterations. The durable lesson for
+  this section is methodological rather than numerical: agent success rates
+  should be read as directional evidence, and evaluation pipelines need an
+  adversarial mindset (arXiv:2605.12673).
 
 ### **5.2 Performance Gaps by Agent Type**
 
@@ -586,6 +598,15 @@ approach where UI structure allows discovery of robust API tools.
 > found that outcome-only grading substantially overestimates agent performance,
 > which means the published success rates the columns above are mapped from are
 > likely optimistic.
+
+> **A second caution applies to the sources, not just the scores.** BenchJack
+> (arXiv:2605.12673) audited 10 popular agent benchmarks — including WebArena
+> and OSWorld, both cited above — and produced exploits scoring near-perfectly
+> on most of them without solving a single task, across 219 distinct flaws. The
+> flaws it found in WebArena and OSWorld were fully patched within three
+> iterations, so this does not invalidate the sources; it does mean that any
+> single published figure should be treated as a directional signal rather than
+> a settled measurement, which is how this table asks to be read.
 
 ### **5.3 Why BiModal Design Matters Now**
 

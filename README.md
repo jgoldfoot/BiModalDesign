@@ -146,6 +146,16 @@ selector drift** (where brittle CSS classes break automations). A robust Layer 2
   also found that outcome-only grading substantially overestimates agent
   performance — a caution that applies to the benchmark figures the ranges above
   are derived from.
+- **The source benchmarks have themselves been shown to be gameable.**
+  **BenchJack** (2026) audited 10 popular agent benchmarks spanning software
+  engineering, web navigation, desktop computing, and terminal operations, and
+  synthesized reward-hacking exploits that achieve near-perfect scores on most
+  of them **without solving a single task** — surfacing 219 distinct flaws
+  across eight recurring classes. This is a reason to read the ranges above as
+  directional rather than precise. It is not a reason to discard them: the same
+  work patched the flaws it found, reducing the hackable-task ratio from near
+  100% to under 10% on four benchmarks and **fully patching WebArena and OSWorld
+  within three iterations** (arXiv:2605.12673).
 
 ---
 
@@ -395,6 +405,11 @@ npm test
   Generation" — screenshot-grounded evaluation via Set-of-Mark and pixel
   coordinates; strongest model completes fewer than 40% of tasks
   (arXiv:2607.10079, 2026)
+- **BenchJack** — "Do Androids Dream of Breaking the Game? Systematically
+  Auditing AI Agent Benchmarks with BenchJack" — Wang et al., UC Berkeley
+  (arXiv:2605.12673, May 2026). An automated red-teaming system for benchmark
+  designers; audited 10 agent benchmarks, surfaced 219 distinct flaws across
+  eight classes, and fully patched WebArena and OSWorld within three iterations.
 - **BrowseComp** — Benchmark for Agentic Browser Navigation & Task Execution
 - **OpAgent** — "Operator Agent for Web Navigation" achieving 71.6% on WebArena
   (arXiv:2602.13559)
