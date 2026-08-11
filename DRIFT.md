@@ -5,7 +5,7 @@ Living record of **genuine, unresolved** cross-artifact inconsistencies. Per
 each run and lists only real contradictions — not acceptable contextual
 variations.
 
-_Last reviewed: 2026-07-21_
+_Last reviewed: 2026-08-03_
 
 ## Open
 
@@ -29,6 +29,28 @@ legitimate thing to publish, but it currently reads as established practice.
 **Decision needed:** confirm a primary source, or relabel it as a BiModal Design
 proposal. Not edited in the scan PR, since the scan cuts unverified claims
 rather than silently rewriting authored recommendations.
+
+**Update (2026-08-03 scan):** MCP `2026-07-28` adds `server/discover`, an RPC
+servers **MUST** implement to advertise protocol versions, capabilities, and
+identity
+([changelog](https://modelcontextprotocol.io/specification/2026-07-28/changelog),
+major change 3). This does not resolve the question — `server/discover` is
+post-connection negotiation, whereas the `<link>` tag addresses pre-connection
+discovery from a page — but it narrows it: the framework can now position the
+`<link>` pattern explicitly as a bridge to `server/discover` rather than as an
+independent standard. Still needs Joel's call on labelling.
+
+### [DRIFT] Implementation guide teaches deprecated MCP features
+
+`docs/whitepaper.md` (§ MCP primitives) records that Roots, Sampling, and
+Logging are Deprecated as of `2026-07-28`, while `docs/implementation-guide.md`
+Pattern 11 teaches Sampling and Roots as a forward-looking pattern. The
+2026-08-03 scan added a deprecation caveat to Pattern 11, but did not rewrite
+the pattern itself — that is an authoring decision.
+`examples/mcp-client-capabilities.md` and
+`docs/proposals/015-mcp-client-capabilities.md` carry the same assumption and
+were left untouched. **Decision needed:** migrate these to the Multi Round-Trip
+Requests pattern, or mark them as legacy for the deprecation window.
 
 ### [QUESTION] Maturity Levels vs. Certification Tiers
 

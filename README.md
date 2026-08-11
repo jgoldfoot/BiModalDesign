@@ -371,8 +371,10 @@ npm test
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness
   in Web Agents" — Levy et al., IBM Research (arXiv:2410.06703, 2024; ICLR 2026)
 - **MCP** — Model Context Protocol (modelcontextprotocol.io). Revision
-  `2026-07-28`: stateless protocol core, Extensions framework (Tasks, MCP Apps),
-  authorization hardening, formal deprecation policy.
+  `2026-07-28`, released 28 July 2026: stateless protocol core, mandatory
+  `server/discover` RPC, Multi Round-Trip Requests, cacheable list results,
+  Extensions framework (Tasks, MCP Apps), authorization hardening, formal
+  deprecation policy.
 - **A2A** — Agent-to-Agent Protocol, spec v1.0.0 (released by Google 2025;
   governed by the Linux Foundation since June 2025)
 - **NLWeb** — Natural Language Web Protocol (Microsoft, 2025)
@@ -405,7 +407,8 @@ npm test
   Windows UI Automation with vision (Microsoft, 2025)
 - **WebMCP** — Browser API letting a page register tools for in-browser agents
   via `document.modelContext`. W3C Web Machine Learning Community Group, Draft
-  Community Group Report (20 July 2026). Not a W3C Standard; not on the
+  Community Group Report — a continuously updated editor's draft with no stable
+  publication date (retrieved 3 August 2026). Not a W3C Standard; not on the
   Standards Track.
 - **Code execution with MCP** — Building more efficient agents (Anthropic,
   Nov 2025)

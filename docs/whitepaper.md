@@ -1076,9 +1076,11 @@ software with strictly scoped access, solving the containment problem.
 
 **Standardized WebMCP Discovery:** **WebMCP** is a distinct browser-side
 specification rather than a later stage of MCP itself: it is a Draft Community
-Group Report (20 July 2026) from the W3C Web Machine Learning Community Group,
-edited by Brandon Walderman (Microsoft) with Khushal Sagar and Dominic Farolino
-(Google). It exposes a `ModelContext` object to pages via
+Group Report from the W3C Web Machine Learning Community Group, edited by
+Brandon Walderman (Microsoft) with Khushal Sagar and Dominic Farolino (Google).
+The report is a continuously updated editor's draft whose header date is
+regenerated on each commit, so it has no stable publication date; cite it by
+retrieval date. It exposes a `ModelContext` object to pages via
 `document.modelContext`, through which a site registers tools for an agent
 operating in the browser. Note that it is **not** a W3C Standard and is not on
 the W3C Standards Track; treat it as incubation-stage. With that caveat,
@@ -1141,6 +1143,23 @@ required sticky sessions and a shared session store can run behind an ordinary
 round-robin load balancer. The revision also adds a formal feature lifecycle
 with a minimum twelve-month deprecation window, and deprecates the Roots,
 Sampling, and Logging features.
+
+**In-protocol discovery (`server/discover`).** With the `initialize` handshake
+removed, `2026-07-28` adds `server/discover`, an RPC that servers **MUST**
+implement to advertise their supported protocol versions, capabilities,
+identity, and enabled extensions. Clients MAY call it before any other request.
+For Layer 5 this matters to BiModal Design specifically: MCP now carries its own
+capability discovery inside the protocol, so a page-level announcement mechanism
+is a bridge for agents that have not yet connected, not a substitute for
+negotiation.
+
+**Server-initiated requests are superseded (MRTR).** The revision replaces
+server-initiated requests — `roots/list`, `sampling/createMessage`,
+`elicitation/create` — with the Multi Round-Trip Requests pattern: the server
+returns an `InputRequiredResult` (`resultType: "input_required"`) carrying its
+`inputRequests`, and the client retries the original request with
+`inputResponses`. Layer 5 implementations written against the older
+bi-directional model should plan a migration.
 
 #### **BiModal Design + MCP: Example**
 
@@ -2210,14 +2229,19 @@ resilient, semantic, structured, and protocol-aware.
 ### **Agent Protocols**
 
 1. **Model Context Protocol (MCP)**: https://modelcontextprotocol.io —
-   Anthropic, November 2024. Current revision `2026-07-28` (release candidate
-   locked 21 May 2026): stateless protocol core, Extensions framework, Tasks and
-   MCP Apps extensions, authorization hardening, formal deprecation policy.
-   Changelog: https://modelcontextprotocol.io/specification/draft/changelog
+   Anthropic, November 2024. Current revision `2026-07-28`, released 28 July
+   2026: stateless protocol core, mandatory `server/discover` RPC, Multi
+   Round-Trip Requests (MRTR), cacheable list results, header-based routing,
+   Extensions framework, Tasks and MCP Apps extensions, authorization hardening,
+   formal feature lifecycle and deprecation policy. Changelog:
+   https://modelcontextprotocol.io/specification/2026-07-28/changelog
 2. **WebMCP**: https://webmachinelearning.github.io/webmcp/ — W3C Web Machine
-   Learning Community Group, Draft Community Group Report (20 July 2026).
-   Exposes `document.modelContext`. Not a W3C Standard; not on the Standards
-   Track.
+   Learning Community Group. Continuously updated editor's draft published as a
+   Draft Community Group Report; the document header is regenerated on each
+   commit, so it carries no stable publication date and should be cited by
+   retrieval date rather than by the date shown. Exposes
+   `document.modelContext`. Not a W3C Standard; not on the Standards Track.
+   (Retrieved 3 August 2026.)
 3. **Agent-to-Agent Protocol (A2A)**: https://a2a-protocol.org — released by
    Google April 2025; governed by the Linux Foundation since June 2025.
    Specification v1.0.0.
