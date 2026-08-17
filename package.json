@@ -79,6 +79,6 @@
     "access": "public"
   },
   "optionalDependencies": {
-    "puppeteer": "25.5.0"
+    "puppeteer": "25.7.0"
   }
 }
