@@ -115,6 +115,12 @@ selector drift** (where brittle CSS classes break automations). A robust Layer 2
 (Semantic Structure) allows agents to discover and handoff tasks to Layer 5
 (Agent Protocols) seamlessly.
 
+**"Seamlessly" is the design goal, not the observed default.** Under a hybrid
+GUI-MCP harness on OSWorld-MCP, a reasoning agent invoked a tool on only 23.9%
+of the tasks where a tool was reachable (arXiv:2608.03327). The handoff has to
+be made cheaper and more discoverable than continuing through the UI — not
+merely possible.
+
 ---
 
 ## Key Research Findings
@@ -146,6 +152,17 @@ selector drift** (where brittle CSS classes break automations). A robust Layer 2
   also found that outcome-only grading substantially overestimates agent
   performance — a caution that applies to the benchmark figures the ranges above
   are derived from.
+- **Exposing a protocol surface is necessary but not sufficient — the agent has
+  to choose it.** A 2026 study of hybrid GUI-MCP agents ran one identical
+  harness on the **OSWorld-MCP** benchmark (309 tasks) and found that merely
+  making MCP tools available does not settle which way the effect goes: the same
+  tools improved a reasoning model by **+4.0pp** and degraded a non-reasoning
+  model by **-5.9pp** (5 runs each, both beyond 2 SE). Even the reasoning model
+  called a tool on only **55 of 309 tasks — 23.9% of the tool-reachable ones**,
+  a shortfall the authors name the **adoption gap** (arXiv:2608.03327). For
+  BiModal Design this sharpens what Layer 5 has to deliver: publishing tools is
+  the precondition, but discoverability and an obviously cheaper tool route are
+  what convert them into use.
 - **The source benchmarks have themselves been shown to be gameable.**
   **BenchJack** (2026) audited 10 popular agent benchmarks spanning software
   engineering, web navigation, desktop computing, and terminal operations, and
@@ -385,8 +402,10 @@ npm test
   `server/discover` RPC, Multi Round-Trip Requests, cacheable list results,
   Extensions framework (Tasks, MCP Apps), authorization hardening, formal
   deprecation policy.
-- **A2A** — Agent-to-Agent Protocol, spec v1.0.0 (released by Google 2025;
-  governed by the Linux Foundation since June 2025)
+- **A2A** — Agent-to-Agent Protocol. Launched by Google April 2025; contributed
+  to the Linux Foundation, which announced it as the project's new home on 23
+  June 2025. Specification **v1.0.0 released 12 March 2026** under Linux
+  Foundation governance (latest patch v1.0.1, 28 May 2026)
 - **NLWeb** — Natural Language Web Protocol (Microsoft, 2025)
 - **τ-bench** — "A Benchmark for Tool-Agent-User Interaction in Real-World
   Domains" (arXiv:2406.12045)
@@ -405,6 +424,13 @@ npm test
   Generation" — screenshot-grounded evaluation via Set-of-Mark and pixel
   coordinates; strongest model completes fewer than 40% of tasks
   (arXiv:2607.10079, 2026)
+- **Screenshots or Tools?** — "Eliciting Tool Use and Managing Multimodal
+  Context in Hybrid GUI-MCP Computer-Use Agents" — Fan, Li, Ma, Tan, Huang, Wu,
+  Zhang, Shang, Chen (arXiv:2608.03327, v1 4 Aug 2026, v2 6 Aug 2026). One
+  GUI-MCP harness on OSWorld-MCP (309 tasks): identical MCP tools move a
+  reasoning model +4.0pp and a non-reasoning model -5.9pp; the reasoning model
+  calls a tool on 55/309 tasks (23.9% of tool-reachable ones) — the **adoption
+  gap**.
 - **BenchJack** — "Do Androids Dream of Breaking the Game? Systematically
   Auditing AI Agent Benchmarks with BenchJack" — Wang et al., UC Berkeley
   (arXiv:2605.12673, May 2026). An automated red-teaming system for benchmark
@@ -423,8 +449,11 @@ npm test
 - **WebMCP** — Browser API letting a page register tools for in-browser agents
   via `document.modelContext`. W3C Web Machine Learning Community Group, Draft
   Community Group Report — a continuously updated editor's draft with no stable
-  publication date (retrieved 3 August 2026). Not a W3C Standard; not on the
-  Standards Track.
+  publication date (retrieved 17 August 2026). Not a W3C Standard; not on the
+  Standards Track. The `ModelContext` interface gained a specified
+  `executeTool()` method on 14 August 2026, revised on 17 August 2026 to take a
+  structured object rather than a JSON string; `RegisteredTool.inputSchema` was
+  retyped from `DOMString` to `object` in the same window.
 - **Code execution with MCP** — Building more efficient agents (Anthropic,
   Nov 2025)
 

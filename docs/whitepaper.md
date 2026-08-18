@@ -542,6 +542,21 @@ it's measurable:
   with expert trajectories nearly doubles a supervised 9B agent's success rate
   from 6.9% to 13.2% — reinforcing that screenshot-only grounding remains a weak
   substitute for structural signal (arXiv:2607.10079).
+- **Screenshots or Tools? (2026)**: The closest published probe of the UI ->
+  protocol handoff this framework projects. Running one identical hybrid GUI-MCP
+  harness on the OSWorld-MCP benchmark (309 tasks), it found that making MCP
+  tools available does not settle which way the effect goes: the same tools
+  improved a reasoning model by +4.0pp and degraded a non-reasoning model by
+  -5.9pp (5 runs each, both beyond 2 SE). The non-reasoning policy ignored,
+  misnamed, or falsely terminated around tools; the reasoning model avoided
+  those failures but still called a tool on only 55 of 309 tasks, 23.9% of the
+  tool-reachable ones — a shortfall the authors name the **adoption gap**. A
+  dense tool bonus raised spreadsheet adoption from 0.03 to 0.33 without
+  held-out accuracy following, which the authors summarise as behaviour being
+  steerable where competence is not. Dropping the screenshot made redundant by a
+  successful tool call, then retraining under that observation rule, reached
+  37.8% against 33.0% for the uncompressed operating point at 53% of the input
+  cost (arXiv:2608.03327).
 - **BenchJack (2026)**: Turned the evaluation lens on the benchmarks themselves.
   Applied to 10 popular agent benchmarks spanning software engineering, web
   navigation, desktop computing, and terminal operations, its automated
@@ -592,12 +607,21 @@ approach where UI structure allows discovery of robust API tools.
 > WeaveBench measures agents orchestrating GUI, CLI, and code operations across
 > long-horizon tasks on a desktop, whereas this table projects agents that
 > _discover_ a task through the UI and _execute_ it through a documented API or
-> MCP tool. But no benchmark yet isolates that second pattern, so the row rests
-> on inference rather than evidence. WeaveBench's second result is a caution
-> that applies to every figure cited in this section: its trajectory-aware judge
-> found that outcome-only grading substantially overestimates agent performance,
-> which means the published success rates the columns above are mapped from are
-> likely optimistic.
+> MCP tool. No benchmark yet isolates that second pattern exactly, so the row
+> still rests more on inference than on measurement — but it is no longer
+> unprobed. **Screenshots or Tools?** (arXiv:2608.03327) runs a hybrid GUI-MCP
+> harness on OSWorld-MCP in which agents may either act through screenshots or
+> call MCP tools, which is the same choice the Hybrid Agents row assumes gets
+> made in the protocol's favour. Its finding cuts against the optimism of that
+> row: identical tools helped a reasoning model (+4.0pp) and hurt a
+> non-reasoning one (-5.9pp), and even the reasoning model took the tool route
+> on only 23.9% of tool-reachable tasks. The projection should therefore be read
+> as conditional on adoption, not on availability — a well-formed Layer 4/5
+> surface bounds how well a hybrid agent _can_ do, not how well it _will_ do.
+> WeaveBench's second result is a caution that applies to every figure cited in
+> this section: its trajectory-aware judge found that outcome-only grading
+> substantially overestimates agent performance, which means the published
+> success rates the columns above are mapped from are likely optimistic.
 
 > **A second caution applies to the sources, not just the scores.** BenchJack
 > (arXiv:2605.12673) audited 10 popular agent benchmarks — including WebArena
@@ -2246,6 +2270,11 @@ resilient, semantic, structured, and protocol-aware.
 19. **MAG**: "A Web-Agent Benchmark and Harness for Multimodal Action and Guide
     Generation" — Gan, Wei, Liang, Cai, Zhang, Ni; arXiv:2607.10079 (11
     Jul 2026)
+20. **Screenshots or Tools?**: "Eliciting Tool Use and Managing Multimodal
+    Context in Hybrid GUI-MCP Computer-Use Agents" — Fan, Li, Ma, Tan, Huang,
+    Wu, Zhang, Shang, Chen; arXiv:2608.03327 (v1 4 Aug 2026, v2 6 Aug 2026).
+    Hybrid GUI-MCP harness on OSWorld-MCP (309 tasks); introduces the adoption
+    gap. Code: https://github.com/redai-infra/hybrid-routing-agent
 
 ### **Agent Protocols**
 
@@ -2262,11 +2291,20 @@ resilient, semantic, structured, and protocol-aware.
    commit, so it carries no stable publication date and should be cited by
    retrieval date rather than by the date shown. Exposes
    `document.modelContext`. Not a W3C Standard; not on the Standards Track.
-   (Retrieved 3 August 2026.)
-3. **Agent-to-Agent Protocol (A2A)**: https://a2a-protocol.org — released by
-   Google April 2025; governed by the Linux Foundation since June 2025.
-   Specification v1.0.0.
-4. **NLWeb**: https://github.com/nicholasgasior/nlweb — Microsoft, May 2025
+   (Retrieved 17 August 2026.) The `ModelContext` interface now specifies
+   `executeTool()` alongside `registerTool()` and `getTools()`, added 14 August
+   2026 and revised 17 August 2026 to accept a structured object rather than a
+   JSON string; `RegisteredTool.inputSchema` was retyped from `DOMString` to
+   `object` on 14 August 2026.
+3. **Agent-to-Agent Protocol (A2A)**: https://a2a-protocol.org — launched by
+   Google April 2025; the Linux Foundation announced A2A as the project's new
+   home on 23 June 2025. Specification v1.0.0 was released on 12 March 2026
+   under Linux Foundation governance — not by Google in 2025 — with v1.0.1
+   following on 28 May 2026. Releases:
+   https://github.com/a2aproject/A2A/releases
+4. **NLWeb**: https://github.com/nlweb-ai/NLWeb — Microsoft, May 2025. (The
+   previously cited `nicholasgasior/nlweb` URL returns HTTP 404; the project now
+   lives in the `nlweb-ai` organization, to which `microsoft/NLWeb` redirects.)
 5. **Code execution with MCP**:
    https://www.anthropic.com/engineering/code-execution-with-mcp — Anthropic,
    Nov 2025
