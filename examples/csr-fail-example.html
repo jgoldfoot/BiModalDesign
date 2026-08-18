@@ -78,7 +78,11 @@
   <div class="banner">
     <strong>⚠️ CSR-Only Example (FAILS FR-1)</strong><br>
     This page loads content entirely via JavaScript. AI agents using simple HTTP requests will see an empty page.
-    Test it: <code>node tools/validators/fr1-validator.js file:///path/to/this/file.html</code>
+    Note that this banner is static prose in the shell: a page can ship plenty of readable text and still fail FR-1,
+    because the product catalog below it only exists after the browser runs the script.
+    Test it (the validator fetches over HTTP, so serve the directory first):
+    <code>python3 -m http.server 8000 --directory examples</code>
+    then <code>node tools/validators/fr1-validator.js http://localhost:8000/csr-fail-example.html</code>
   </div>
 
   <!-- This is what AI agents see: just a loading spinner, no actual content -->

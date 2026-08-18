@@ -63,6 +63,124 @@ function fetchInitialPayload(url) {
   });
 }
 
+/**
+ * Element ids the major client-side frameworks mount into. A page whose primary
+ * content only exists inside one of these after hydration is invisible to the
+ * ~80% of agents that fetch over plain HTTP and never execute JavaScript.
+ */
+const SPA_MOUNT_IDS = ['root', 'app', '__next', '___gatsby', '__nuxt', 'svelte', 'q-app'];
+
+/** Minimum visible characters before a region counts as carrying real content. */
+const CONTENT_TEXT_MIN = 200;
+
+/**
+ * Remove everything an HTTP-only agent cannot read as content: comments, and the
+ * source of <script> and <style> elements.
+ *
+ * Stripping tags alone (`replace(/<[^>]*>/g, '')`) removes the tags but leaves
+ * inline CSS and JS behind, so a bare SPA shell with a stylesheet and a data
+ * blob measures as thousands of characters of "text".
+ */
+function stripNonRenderable(html) {
+  return html
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ');
+}
+
+/** Text a no-JS agent would actually read from the initial payload. */
+function extractVisibleText(html) {
+  return stripNonRenderable(html)
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Inner HTML of the first element carrying `id`, or null if there is none.
+ *
+ * Walks matching open/close tags so nested elements of the same name resolve
+ * correctly; a single regex cannot identify the right closing tag.
+ */
+function extractElementById(html, id) {
+  const escapedId = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const openTag = new RegExp(
+    `<([a-z][\\w-]*)\\b[^>]*\\sid\\s*=\\s*["']${escapedId}["'][^>]*>`,
+    'i'
+  );
+  const open = openTag.exec(html);
+
+  if (!open) {
+    return null;
+  }
+  if (open[0].endsWith('/>')) {
+    return '';
+  }
+
+  const innerStart = open.index + open[0].length;
+  const tagPattern = new RegExp(`<(/?)${open[1]}\\b[^>]*>`, 'gi');
+  tagPattern.lastIndex = innerStart;
+
+  let depth = 1;
+  let token = tagPattern.exec(html);
+
+  while (token !== null) {
+    if (!token[0].endsWith('/>')) {
+      depth += token[1] === '/' ? -1 : 1;
+      if (depth === 0) {
+        return html.slice(innerStart, token.index);
+      }
+    }
+    token = tagPattern.exec(html);
+  }
+
+  // Unclosed mount point: treat the rest of the document as its content.
+  return html.slice(innerStart);
+}
+
+/** The framework mount point this page uses, or null if it has none. */
+function findMountPoint(html) {
+  for (const id of SPA_MOUNT_IDS) {
+    const inner = extractElementById(html, id);
+    if (inner !== null) {
+      return { id, inner };
+    }
+  }
+  return null;
+}
+
+/**
+ * The unhydrated mount point of a client-rendered shell, or null if the payload
+ * is not one.
+ *
+ * The mount point has to be inspected, not merely detected: a server-rendered
+ * React page also ships <div id="root">, but with its markup already inside.
+ * An empty mount point is only excused when the page server-renders its content
+ * somewhere else, in a <main> or <article>.
+ *
+ * Prose found anywhere else on the page deliberately does not count. Banners,
+ * navigation, footers and marketing copy wrapped around an empty mount point are
+ * exactly the pattern FR-1 exists to catch, and treating them as content is what
+ * let real CSR pages score as compliant.
+ */
+function detectClientRenderedShell(rawHtml) {
+  const html = stripNonRenderable(rawHtml);
+  const mount = findMountPoint(html);
+
+  if (!mount) {
+    return null;
+  }
+  if (extractVisibleText(mount.inner).length >= CONTENT_TEXT_MIN) {
+    return null;
+  }
+
+  const outsideMount = mount.inner ? html.replace(mount.inner, ' ') : html;
+  const contentRegions = outsideMount.match(/<(main|article)\b[\s\S]*?<\/\1>/gi) || [];
+  const contentText = contentRegions.map(extractVisibleText).join(' ').trim();
+
+  return contentText.length >= CONTENT_TEXT_MIN ? null : mount;
+}
+
 function analyzePayload(response) {
   const results = {
     passed: [],
@@ -72,16 +190,18 @@ function analyzePayload(response) {
   };
 
   const body = response.body;
-  const bodyLower = body.toLowerCase();
+  // Structural checks run against markup only; script and style source is not
+  // content, and matching against it produces both false passes and false fails.
+  const markup = stripNonRenderable(body);
+  const markupLower = markup.toLowerCase();
+  const visibleText = extractVisibleText(body);
 
   // Critical checks
   const hasContent = body.length > 1000;
-  const hasSemanticHTML = /<(article|section|nav|main|header|footer)/.test(bodyLower);
-  const hasText = body.replace(/<[^>]*>/g, '').trim().length > 200;
-  const notSPA = !/<div[^>]*id=["']root["']/.test(bodyLower) || hasText;
-  const noJSRequired = !/loading|spinner|please enable javascript/i.test(
-    body.replace(/<script[^>]*>.*?<\/script>/gs, '')
-  );
+  const hasSemanticHTML = /<(article|section|nav|main|header|footer)/.test(markupLower);
+  const hasText = visibleText.length > CONTENT_TEXT_MIN;
+  const shellMount = detectClientRenderedShell(body);
+  const noJSRequired = !/\b(loading|spinner)\b|please enable javascript/i.test(visibleText);
 
   // FR-1: Initial payload must contain meaningful content
   if (hasText && hasContent) {
@@ -91,11 +211,11 @@ function analyzePayload(response) {
     results.failed.push('Initial payload lacks meaningful text content');
   }
 
-  if (notSPA) {
+  if (!shellMount) {
     results.passed.push('Content rendered server-side (not blank SPA shell)');
     results.score += 40;
   } else {
-    results.failed.push('Appears to be client-side only (empty #root div)');
+    results.failed.push(`Appears to be client-side only (empty #${shellMount.id} mount point)`);
   }
 
   if (hasSemanticHTML) {
@@ -113,14 +233,14 @@ function analyzePayload(response) {
   }
 
   // Additional checks
-  const hasMetadata = /<meta[^>]*property=["']og:/.test(bodyLower);
+  const hasMetadata = /<meta[^>]*property=["']og:/.test(markupLower);
   if (hasMetadata) {
     results.passed.push('Includes structured metadata (Open Graph)');
   } else {
     results.warnings.push('Missing structured metadata');
   }
 
-  const hasLinks = (body.match(/<a[^>]*href=/g) || []).length > 5;
+  const hasLinks = (markup.match(/<a[^>]*href=/g) || []).length > 5;
   if (hasLinks) {
     results.passed.push('Contains navigable links');
   } else {
@@ -226,4 +346,10 @@ module.exports = {
   COLORS,
   analyzePayload,
   fetchInitialPayload,
+  extractVisibleText,
+  extractElementById,
+  findMountPoint,
+  detectClientRenderedShell,
+  SPA_MOUNT_IDS,
+  CONTENT_TEXT_MIN,
 };
