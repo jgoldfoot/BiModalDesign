@@ -43,9 +43,8 @@ behavior to [joel@goldfoot.com](mailto:joel@goldfoot.com).
    ```bash
    git remote add upstream https://github.com/jgoldfoot/BiModalDesign.git
    ```
-4. **Install tool dependencies**:
+4. **Install dependencies** (from the repository root):
    ```bash
-   cd tools/validators
    npm install
    ```
 5. **Run tests** to ensure everything works:
@@ -122,12 +121,11 @@ We welcome many types of contributions:
 3. **Test your changes**:
 
    ```bash
-   # Run validation tool tests
-   cd tools/validators
+   # Run the test suite (from the repository root)
    npm test
 
    # Test on real websites
-   node fr1-checker.js https://example.com --verbose
+   node tools/validators/fr1-checker.js https://example.com --verbose
    ```
 
 4. **Commit with clear messages**:

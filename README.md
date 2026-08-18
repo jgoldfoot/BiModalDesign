@@ -350,8 +350,7 @@ code style.
 git clone https://github.com/jgoldfoot/BiModalDesign.git
 cd BiModalDesign
 
-# Install dependencies
-cd tools/validators
+# Install dependencies (package.json is at the repo root)
 npm install
 
 # Run tests

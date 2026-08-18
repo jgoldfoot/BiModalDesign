@@ -78,17 +78,20 @@ BiModalDesign/
 Before submitting any changes:
 
 ```bash
-cd tools/validators
+# Run from the repository root — package.json lives there
 npm install
 npm test
+```
 
-# Test that CSR example fails FR-1
-node fr1-validator.js ../../examples/csr-fail-example.html
-# Expected: FAIL
+The validator fetches over HTTP and takes an `http(s)` URL — it cannot read a
+local file path. To run it against the bundled examples, serve them first:
 
-# Test that SSR example passes FR-1
-node fr1-validator.js ../../examples/ssr-pass-example.html
-# Expected: PASS
+```bash
+python3 -m http.server 8000 --directory examples
+
+# In another shell:
+node tools/validators/fr1-validator.js http://localhost:8000/ssr-pass-example.html
+# Expected: PASS, 100/100
 ```
 
 ### 2. Adding New Examples
@@ -222,11 +225,12 @@ When generating docs:
 # Test validator tool
 node tools/validators/fr1-validator.js https://example.com
 
-# Test local files
-node tools/validators/fr1-validator.js examples/ssr-pass-example.html
+# Test the bundled examples (serve them first — the validator needs a URL)
+# python3 -m http.server 8000 --directory examples
+node tools/validators/fr1-validator.js http://localhost:8000/ssr-pass-example.html
 
-# Run test suite
-cd tools/validators && npm test
+# Run test suite (from the repository root)
+npm test
 ```
 
 ---
