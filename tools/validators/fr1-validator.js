@@ -76,6 +76,15 @@ const CONTENT_TEXT_MIN = 200;
 /** Elements whose children are raw text rather than markup. */
 const RAW_TEXT_ELEMENTS = ['script', 'style'];
 
+/**
+ * Patterns applied to one tag at a time. Anchored or short, so they cannot
+ * backtrack across the document the way `<meta[^>]*property=` does.
+ */
+const IS_META = /^<meta\b/i;
+const OG_PROPERTY = /\sproperty\s*=\s*["']og:/i;
+const IS_ANCHOR = /^<a\b/i;
+const HAS_HREF = /\shref\s*=/i;
+
 /** Cap on content regions inspected, so a hostile payload cannot go quadratic. */
 const MAX_CONTENT_REGIONS = 25;
 
@@ -178,62 +187,116 @@ function stripNonRenderable(html) {
   return out + html.slice(cursor);
 }
 
+/**
+ * Visit every tag in `html` from `from` onward, in linear time.
+ *
+ * Every regex of the shape `<tag[^>]*>` degrades to O(n^2) on a payload of
+ * unterminated `<tag`: each start position rescans to the end of the document
+ * before failing. Measured against `<meta` repeated 32,000 times, the Open
+ * Graph check alone took 5 seconds. A tool that fetches arbitrary URLs cannot
+ * carry that, so tags are located by scanning rather than by matching.
+ *
+ * `visit` receives the raw tag text and its bounds, and returns false to stop.
+ */
+function scanTags(html, visit, from) {
+  let cursor = from || 0;
+
+  while (cursor < html.length) {
+    const start = html.indexOf('<', cursor);
+
+    if (start === -1) {
+      return;
+    }
+
+    const close = html.indexOf('>', start + 1);
+
+    if (close === -1) {
+      return;
+    }
+    if (visit(html.slice(start, close + 1), start, close + 1) === false) {
+      return;
+    }
+
+    cursor = close + 1;
+  }
+}
+
+/** Lowercased element name of a raw tag, or '' if it does not name an element. */
+function tagName(raw) {
+  const match = /^<\/?([a-z][\w-]*)/i.exec(raw);
+  return match ? match[1].toLowerCase() : '';
+}
+
+const isClosingTag = (raw) => raw.startsWith('</');
+const isSelfClosing = (raw) => raw.endsWith('/>');
+
+/** Remove tags, leaving a space so adjacent elements do not run their text together. */
+function stripTags(html) {
+  let out = '';
+  let cursor = 0;
+
+  scanTags(html, (raw, start, end) => {
+    out += html.slice(cursor, start) + ' ';
+    cursor = end;
+  });
+
+  return out + html.slice(cursor);
+}
+
 /** Text a no-JS agent would actually read from the initial payload. */
 function extractVisibleText(html) {
-  return stripNonRenderable(html)
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  return stripTags(stripNonRenderable(html)).replace(/\s+/g, ' ').trim();
 }
 
 /**
  * Inner HTML of the element whose open tag ends at `innerStart`, located by
- * walking matching open/close tags of `tagName`. A single regex cannot identify
- * the right closing tag once elements of the same name nest.
+ * counting matching open and close tags of `name`, so that nested elements of
+ * the same name resolve to the correct closing tag.
  */
-function sliceElementContent(html, tagName, innerStart) {
-  const tagPattern = new RegExp(`<(/?)${tagName}\\b[^>]*>`, 'gi');
-  tagPattern.lastIndex = innerStart;
-
+function sliceElementContent(html, name, innerStart) {
   let depth = 1;
-  let token = tagPattern.exec(html);
+  let contentEnd = html.length;
 
-  while (token !== null) {
-    if (!token[0].endsWith('/>')) {
-      depth += token[1] === '/' ? -1 : 1;
-      if (depth === 0) {
-        return html.slice(innerStart, token.index);
+  scanTags(
+    html,
+    (raw, start) => {
+      if (isSelfClosing(raw) || tagName(raw) !== name) {
+        return true;
       }
-    }
-    token = tagPattern.exec(html);
-  }
 
-  // Unclosed element: treat the rest of the document as its content.
-  return html.slice(innerStart);
+      depth += isClosingTag(raw) ? -1 : 1;
+
+      if (depth === 0) {
+        contentEnd = start;
+        return false;
+      }
+      return true;
+    },
+    innerStart
+  );
+
+  // An unclosed element owns the rest of the document.
+  return html.slice(innerStart, contentEnd);
 }
 
 /**
  * Inner HTML of the first element carrying `id`, or null if there is none.
- *
- * Walks matching open/close tags so nested elements of the same name resolve
- * correctly; a single regex cannot identify the right closing tag.
  */
 function extractElementById(html, id) {
   const escapedId = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const openTag = new RegExp(
-    `<([a-z][\\w-]*)\\b[^>]*\\sid\\s*=\\s*["']${escapedId}["'][^>]*>`,
-    'i'
-  );
-  const open = openTag.exec(html);
+  const idPattern = new RegExp(`\\sid\\s*=\\s*["']${escapedId}["']`, 'i');
+  let inner = null;
 
-  if (!open) {
-    return null;
-  }
-  if (open[0].endsWith('/>')) {
-    return '';
-  }
+  scanTags(html, (raw, start, end) => {
+    if (isClosingTag(raw) || !idPattern.test(raw)) {
+      return true;
+    }
 
-  return sliceElementContent(html, open[1], open.index + open[0].length);
+    inner = isSelfClosing(raw) ? '' : sliceElementContent(html, tagName(raw), end);
+    return false;
+  });
+
+  return inner;
 }
 
 /** The framework mount point this page uses, or null if it has none. */
@@ -247,24 +310,40 @@ function findMountPoint(html) {
   return null;
 }
 
+/** Number of tags satisfying `matches`. */
+function countTags(html, matches) {
+  let count = 0;
+
+  scanTags(html, (raw) => {
+    if (matches(raw)) {
+      count += 1;
+    }
+  });
+
+  return count;
+}
+
 /**
  * Visible text the page server-renders inside <main> or <article> elements.
- *
- * Bounded by MAX_CONTENT_REGIONS: the lazy `<main>[\s\S]*?</main>` spelling is
- * quadratic on a payload full of unclosed landmarks, and this runs on whatever
- * a remote URL returns.
+ * Bounded by MAX_CONTENT_REGIONS so the work stays linear in the payload.
  */
 function serverRenderedContentText(html) {
-  const openPattern = /<(main|article)\b[^>]*>/gi;
   const collected = [];
-  let open = openPattern.exec(html);
 
-  while (open !== null && collected.length < MAX_CONTENT_REGIONS) {
-    const innerStart = open.index + open[0].length;
-    collected.push(extractVisibleText(sliceElementContent(html, open[1], innerStart)));
-    openPattern.lastIndex = innerStart;
-    open = openPattern.exec(html);
-  }
+  scanTags(html, (raw, start, end) => {
+    if (collected.length >= MAX_CONTENT_REGIONS) {
+      return false;
+    }
+
+    const name = tagName(raw);
+
+    if (isClosingTag(raw) || isSelfClosing(raw) || (name !== 'main' && name !== 'article')) {
+      return true;
+    }
+
+    collected.push(extractVisibleText(sliceElementContent(html, name, end)));
+    return true;
+  });
 
   return collected.join(' ').trim();
 }
@@ -351,14 +430,14 @@ function analyzePayload(response) {
   }
 
   // Additional checks
-  const hasMetadata = /<meta[^>]*property=["']og:/.test(markupLower);
+  const hasMetadata = countTags(markup, (raw) => IS_META.test(raw) && OG_PROPERTY.test(raw)) > 0;
   if (hasMetadata) {
     results.passed.push('Includes structured metadata (Open Graph)');
   } else {
     results.warnings.push('Missing structured metadata');
   }
 
-  const hasLinks = (markup.match(/<a[^>]*href=/g) || []).length > 5;
+  const hasLinks = countTags(markup, (raw) => IS_ANCHOR.test(raw) && HAS_HREF.test(raw)) > 5;
   if (hasLinks) {
     results.passed.push('Contains navigable links');
   } else {

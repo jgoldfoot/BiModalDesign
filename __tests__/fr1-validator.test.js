@@ -707,3 +707,38 @@ describe('hostile payloads', () => {
     expect(Number(process.hrtime.bigint() - started) / 1e6).toBeLessThan(1000);
   });
 });
+
+describe('linear-time scanning', () => {
+  const { analyzePayload: analyze } = require('../tools/validators/fr1-validator');
+
+  const millis = (fn) => {
+    const started = process.hrtime.bigint();
+    fn();
+    return Number(process.hrtime.bigint() - started) / 1e6;
+  };
+
+  beforeAll(() => {
+    extractVisibleText('<'.repeat(1000)); // warm up so the first case carries no JIT cost
+  });
+
+  // Every `<tag[^>]*>` regex rescans to the end of the document at each start
+  // position that fails, so a payload of unterminated tags costs O(n^2). Before
+  // these were replaced by a scan, 32k `<meta` took ~5s in the Open Graph check.
+  test.each([
+    ['unterminated tags', () => '<'.repeat(64000), (h) => extractVisibleText(h)],
+    ['unterminated <meta', () => '<meta'.repeat(64000), (h) => analyze({ body: h })],
+    ['unterminated <a', () => '<a'.repeat(64000), (h) => analyze({ body: h })],
+    ['unterminated comments', () => '<!--'.repeat(64000), (h) => extractVisibleText(h)],
+    ['unterminated <div', () => '<div'.repeat(64000), (h) => extractElementById(h, 'root')],
+  ])('stays fast on 64k %s', (_label, build, run) => {
+    expect(millis(() => run(build()))).toBeLessThan(500);
+  });
+
+  test('scales linearly rather than quadratically', () => {
+    const cost = (n) => millis(() => analyze({ body: '<meta'.repeat(n) }));
+
+    // Quadratic growth would be ~4x per doubling; allow generous headroom for
+    // a loaded CI runner while still failing if the old behaviour returns.
+    expect(cost(64000)).toBeLessThan(Math.max(cost(16000), 1) * 12);
+  });
+});
