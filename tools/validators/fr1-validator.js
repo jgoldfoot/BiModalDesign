@@ -73,6 +73,58 @@ const SPA_MOUNT_IDS = ['root', 'app', '__next', '___gatsby', '__nuxt', 'svelte',
 /** Minimum visible characters before a region counts as carrying real content. */
 const CONTENT_TEXT_MIN = 200;
 
+/** Elements whose children are raw text rather than markup. */
+const RAW_TEXT_ELEMENTS = ['script', 'style'];
+
+/** Cap on content regions inspected, so a hostile payload cannot go quadratic. */
+const MAX_CONTENT_REGIONS = 25;
+
+/**
+ * Index just past the comment opened at `start`. Browsers close a comment on
+ * `-->` and also on `--!>`, and treat `<!-->` as an empty one.
+ */
+function endOfComment(html, start) {
+  const plain = html.indexOf('-->', start + 2);
+  const bang = html.indexOf('--!>', start + 2);
+
+  if (plain === -1 && bang === -1) {
+    return html.length;
+  }
+  if (bang === -1 || (plain !== -1 && plain < bang)) {
+    return plain + 3;
+  }
+  return bang + 4;
+}
+
+/** Whether a tag for `name` starts at `index` (rather than a longer name). */
+function tagNameMatchesAt(lower, index, name) {
+  if (!lower.startsWith(name, index)) {
+    return false;
+  }
+  const next = lower[index + name.length];
+  return next === undefined || next === '>' || next === '/' || /\s/.test(next);
+}
+
+/**
+ * Index just past the closing tag of the raw-text element whose content starts
+ * at `from`. Accepts every closing spelling browsers accept, `</script >` and
+ * `</script foo="bar">` included.
+ */
+function endOfRawTextElement(html, lower, from, name) {
+  const needle = `</${name}`;
+  let at = lower.indexOf(needle, from);
+
+  while (at !== -1) {
+    if (tagNameMatchesAt(lower, at + 2, name)) {
+      const close = html.indexOf('>', at);
+      return close === -1 ? html.length : close + 1;
+    }
+    at = lower.indexOf(needle, at + needle.length);
+  }
+
+  return html.length;
+}
+
 /**
  * Remove everything an HTTP-only agent cannot read as content: comments, and the
  * source of <script> and <style> elements.
@@ -80,12 +132,50 @@ const CONTENT_TEXT_MIN = 200;
  * Stripping tags alone (`replace(/<[^>]*>/g, '')`) removes the tags but leaves
  * inline CSS and JS behind, so a bare SPA shell with a stylesheet and a data
  * blob measures as thousands of characters of "text".
+ *
+ * This scans left to right with indexOf rather than matching elements with
+ * regexes, because both obvious regexes are wrong for a validator pointed at
+ * arbitrary remote URLs:
+ *
+ * - `<!--[\s\S]*?-->` backtracks quadratically over a payload carrying many
+ *   unterminated `<!--`. 16k of them cost ~300ms, and the curve is O(n^2).
+ * - `<script\b[^>]*>[\s\S]*?<\/script>` misses `</script >`, a spelling
+ *   browsers honour, which leaks script source back into the visible-text
+ *   measurement and reopens the false pass this check exists to close.
  */
 function stripNonRenderable(html) {
-  return html
-    .replace(/<!--[\s\S]*?-->/g, ' ')
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ');
+  const lower = html.toLowerCase();
+  let out = '';
+  let cursor = 0;
+
+  while (cursor < html.length) {
+    const start = html.indexOf('<', cursor);
+
+    if (start === -1) {
+      break;
+    }
+
+    if (lower.startsWith('<!--', start)) {
+      out += html.slice(cursor, start) + ' ';
+      cursor = endOfComment(html, start);
+      continue;
+    }
+
+    const rawText = RAW_TEXT_ELEMENTS.find((name) => tagNameMatchesAt(lower, start + 1, name));
+
+    if (rawText) {
+      const openEnd = html.indexOf('>', start);
+      out += html.slice(cursor, start) + ' ';
+      cursor =
+        openEnd === -1 ? html.length : endOfRawTextElement(html, lower, openEnd + 1, rawText);
+      continue;
+    }
+
+    out += html.slice(cursor, start + 1);
+    cursor = start + 1;
+  }
+
+  return out + html.slice(cursor);
 }
 
 /** Text a no-JS agent would actually read from the initial payload. */
@@ -94,6 +184,32 @@ function extractVisibleText(html) {
     .replace(/<[^>]*>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+/**
+ * Inner HTML of the element whose open tag ends at `innerStart`, located by
+ * walking matching open/close tags of `tagName`. A single regex cannot identify
+ * the right closing tag once elements of the same name nest.
+ */
+function sliceElementContent(html, tagName, innerStart) {
+  const tagPattern = new RegExp(`<(/?)${tagName}\\b[^>]*>`, 'gi');
+  tagPattern.lastIndex = innerStart;
+
+  let depth = 1;
+  let token = tagPattern.exec(html);
+
+  while (token !== null) {
+    if (!token[0].endsWith('/>')) {
+      depth += token[1] === '/' ? -1 : 1;
+      if (depth === 0) {
+        return html.slice(innerStart, token.index);
+      }
+    }
+    token = tagPattern.exec(html);
+  }
+
+  // Unclosed element: treat the rest of the document as its content.
+  return html.slice(innerStart);
 }
 
 /**
@@ -117,25 +233,7 @@ function extractElementById(html, id) {
     return '';
   }
 
-  const innerStart = open.index + open[0].length;
-  const tagPattern = new RegExp(`<(/?)${open[1]}\\b[^>]*>`, 'gi');
-  tagPattern.lastIndex = innerStart;
-
-  let depth = 1;
-  let token = tagPattern.exec(html);
-
-  while (token !== null) {
-    if (!token[0].endsWith('/>')) {
-      depth += token[1] === '/' ? -1 : 1;
-      if (depth === 0) {
-        return html.slice(innerStart, token.index);
-      }
-    }
-    token = tagPattern.exec(html);
-  }
-
-  // Unclosed mount point: treat the rest of the document as its content.
-  return html.slice(innerStart);
+  return sliceElementContent(html, open[1], open.index + open[0].length);
 }
 
 /** The framework mount point this page uses, or null if it has none. */
@@ -147,6 +245,28 @@ function findMountPoint(html) {
     }
   }
   return null;
+}
+
+/**
+ * Visible text the page server-renders inside <main> or <article> elements.
+ *
+ * Bounded by MAX_CONTENT_REGIONS: the lazy `<main>[\s\S]*?</main>` spelling is
+ * quadratic on a payload full of unclosed landmarks, and this runs on whatever
+ * a remote URL returns.
+ */
+function serverRenderedContentText(html) {
+  const openPattern = /<(main|article)\b[^>]*>/gi;
+  const collected = [];
+  let open = openPattern.exec(html);
+
+  while (open !== null && collected.length < MAX_CONTENT_REGIONS) {
+    const innerStart = open.index + open[0].length;
+    collected.push(extractVisibleText(sliceElementContent(html, open[1], innerStart)));
+    openPattern.lastIndex = innerStart;
+    open = openPattern.exec(html);
+  }
+
+  return collected.join(' ').trim();
 }
 
 /**
@@ -175,10 +295,8 @@ function detectClientRenderedShell(rawHtml) {
   }
 
   const outsideMount = mount.inner ? html.replace(mount.inner, ' ') : html;
-  const contentRegions = outsideMount.match(/<(main|article)\b[\s\S]*?<\/\1>/gi) || [];
-  const contentText = contentRegions.map(extractVisibleText).join(' ').trim();
 
-  return contentText.length >= CONTENT_TEXT_MIN ? null : mount;
+  return serverRenderedContentText(outsideMount).length >= CONTENT_TEXT_MIN ? null : mount;
 }
 
 function analyzePayload(response) {

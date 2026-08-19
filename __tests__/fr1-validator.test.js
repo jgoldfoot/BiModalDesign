@@ -498,7 +498,7 @@ describe('extractVisibleText', () => {
       </html>
     `;
 
-    expect(html.replace(/<[^>]*>/g, '').trim().length).toBeGreaterThan(200);
+    expect(html.length).toBeGreaterThan(1000);
     expect(extractVisibleText(html)).toBe('Short.');
   });
 
@@ -653,5 +653,57 @@ describe('non-renderable source does not skew the checks', () => {
 
     expect(results.failed).toContain('Initial payload lacks meaningful text content');
     expect(results.failed).toContain('Appears to be client-side only (empty #root mount point)');
+  });
+});
+
+describe('hostile payloads', () => {
+  test('closing tags browsers accept do not leak script source', () => {
+    expect(extractVisibleText('<p>Hi</p><script>var secret = 1;</script >')).toBe('Hi');
+    expect(extractVisibleText('<p>Hi</p><script>var secret = 1;</script foo="bar">')).toBe('Hi');
+    expect(extractVisibleText('<p>Hi</p><SCRIPT>var secret = 1;</SCRIPT>')).toBe('Hi');
+    expect(extractVisibleText('<p>Hi</p><style>.a { color: red }</style >')).toBe('Hi');
+  });
+
+  test('a shell hiding its close tag as </script > is still caught', () => {
+    const blob = JSON.stringify(Array(60).fill('product name here'));
+    const html =
+      '<html><body><div id="root"></div>' +
+      `<script>window.__DATA__ = ${blob};</script ></body></html>`;
+    const results = analyzePayload({ body: html });
+
+    expect(results.failed).toContain('Initial payload lacks meaningful text content');
+    expect(results.failed).toContain('Appears to be client-side only (empty #root mount point)');
+  });
+
+  test('comments close on --!> and on an empty <!-->', () => {
+    expect(extractVisibleText('<p>A</p><!-- gone --!><p>B</p>')).toBe('A B');
+    expect(extractVisibleText('<p>A</p><!--><p>B</p>')).toBe('A B');
+  });
+
+  test('unterminated comments and script tags do not swallow earlier content', () => {
+    expect(extractVisibleText('<p>Visible</p><!-- never closed')).toBe('Visible');
+    expect(extractVisibleText('<p>Visible</p><script>never closed')).toBe('Visible');
+  });
+
+  test('stripping stays linear on adversarial input', () => {
+    const elapsed = (n) => {
+      const payload = '<!--'.repeat(n);
+      const started = process.hrtime.bigint();
+      extractVisibleText(payload);
+      return Number(process.hrtime.bigint() - started) / 1e6;
+    };
+
+    // The regex this replaced was quadratic: 16k unterminated comment openers
+    // cost ~300ms, and a megabyte of them would have hung the validator.
+    elapsed(1000); // warm up, so the first call does not carry JIT cost
+    expect(elapsed(64000)).toBeLessThan(250);
+  });
+
+  test('unclosed landmarks do not go quadratic', () => {
+    const html = `<div id="root"></div>${'<main>'.repeat(20000)}`;
+    const started = process.hrtime.bigint();
+
+    expect(detectClientRenderedShell(html)).toMatchObject({ id: 'root' });
+    expect(Number(process.hrtime.bigint() - started) / 1e6).toBeLessThan(1000);
   });
 });
