@@ -5,11 +5,16 @@
 
 const http = require('http');
 const https = require('https');
+const fs = require('fs');
+const path = require('path');
 const {
   fetchInitialPayload,
   analyzePayload,
   log,
   COLORS,
+  extractVisibleText,
+  extractElementById,
+  detectClientRenderedShell,
 } = require('../tools/validators/fr1-validator');
 
 jest.mock('http');
@@ -409,7 +414,7 @@ describe('analyzePayload', () => {
 
     expect(results.score).toBeLessThan(50);
     expect(results.failed).toContain('Initial payload lacks meaningful text content');
-    expect(results.failed).toContain('Appears to be client-side only (empty #root div)');
+    expect(results.failed).toContain('Appears to be client-side only (empty #root mount point)');
     expect(results.failed).toContain('Page shows loading states or requires JavaScript');
     expect(results.warnings).toContain('No semantic HTML5 elements detected');
     expect(results.warnings).toContain('Missing structured metadata');
@@ -444,5 +449,296 @@ describe('analyzePayload', () => {
     // Check warnings
     expect(results.warnings).toContain('Missing structured metadata');
     expect(results.warnings).toContain('Few or no links found in initial payload');
+  });
+});
+
+describe('bundled example fixtures', () => {
+  const readExample = (name) =>
+    fs.readFileSync(path.join(__dirname, '..', 'examples', name), 'utf8');
+
+  test('ssr-pass-example.html passes FR-1', () => {
+    const results = analyzePayload({ body: readExample('ssr-pass-example.html') });
+
+    expect(results.score).toBeGreaterThanOrEqual(70);
+    expect(results.passed).toContain('Initial payload contains text content');
+    expect(results.passed).toContain('Content rendered server-side (not blank SPA shell)');
+    expect(results.passed).toContain('Uses semantic HTML5 elements');
+    expect(results.passed).toContain('Core content accessible without JavaScript');
+    expect(results.failed).toEqual([]);
+  });
+
+  test('csr-fail-example.html fails FR-1', () => {
+    const results = analyzePayload({ body: readExample('csr-fail-example.html') });
+
+    expect(results.score).toBeLessThan(70);
+    expect(results.failed).toContain('Appears to be client-side only (empty #root mount point)');
+    expect(results.failed).toContain('Page shows loading states or requires JavaScript');
+    expect(results.passed).not.toContain('Content rendered server-side (not blank SPA shell)');
+  });
+
+  test('the CSR fixture fails specifically because its content is client-rendered', () => {
+    const html = readExample('csr-fail-example.html');
+
+    // The shell does ship prose, so a text-volume check alone clears it. Only
+    // inspecting the mount point separates it from a server-rendered page.
+    expect(extractVisibleText(html).length).toBeGreaterThan(200);
+    expect(detectClientRenderedShell(html)).toMatchObject({ id: 'root' });
+  });
+});
+
+describe('extractVisibleText', () => {
+  test('excludes script and style source', () => {
+    const html = `
+      <html>
+        <head><style>${'.a { color: red; padding: 10px; }'.repeat(40)}</style></head>
+        <body>
+          <p>Short.</p>
+          <script>const data = ${JSON.stringify(Array(40).fill('padding value'))};</script>
+        </body>
+      </html>
+    `;
+
+    expect(html.length).toBeGreaterThan(1000);
+    expect(extractVisibleText(html)).toBe('Short.');
+  });
+
+  test('excludes HTML comments', () => {
+    expect(extractVisibleText('<p>Visible</p><!-- hidden note -->')).toBe('Visible');
+  });
+
+  test('collapses whitespace between elements', () => {
+    expect(extractVisibleText('<h1>Title</h1>\n\n   <p>Body</p>')).toBe('Title Body');
+  });
+});
+
+describe('extractElementById', () => {
+  test('returns inner HTML for a simple element', () => {
+    expect(extractElementById('<div id="root"><span>Hi</span></div>', 'root')).toBe(
+      '<span>Hi</span>'
+    );
+  });
+
+  test('resolves the correct closing tag when same-name elements nest', () => {
+    const html = '<div id="root"><div><div>deep</div></div></div><div>sibling</div>';
+
+    expect(extractElementById(html, 'root')).toBe('<div><div>deep</div></div>');
+  });
+
+  test('returns null when the id is absent', () => {
+    expect(extractElementById('<div id="other"></div>', 'root')).toBeNull();
+  });
+
+  test('does not match a substring attribute such as data-id', () => {
+    expect(extractElementById('<div data-id="root">x</div>', 'root')).toBeNull();
+  });
+
+  test('handles a self-closing element', () => {
+    expect(extractElementById('<my-app id="app" />', 'app')).toBe('');
+  });
+});
+
+describe('client-side shell detection', () => {
+  const PROSE =
+    'Our platform helps teams move faster with tooling that just works, trusted by ' +
+    'thousands of companies worldwide every single day. ';
+  const pad = (html) => html + '<!-- ' + 'A'.repeat(1200) + ' -->';
+
+  test('flags an empty mount point even when the shell ships marketing prose', () => {
+    const html = pad(`
+      <html><body>
+        <section class="hero"><h1>Acme</h1><p>${PROSE.repeat(4)}</p></section>
+        <div id="root"><div class="skeleton"></div></div>
+        <script src="/app.js"></script>
+      </body></html>
+    `);
+    const results = analyzePayload({ body: html });
+
+    expect(detectClientRenderedShell(html)).toMatchObject({ id: 'root' });
+    expect(results.score).toBeLessThan(70);
+    expect(results.failed).toContain('Appears to be client-side only (empty #root mount point)');
+  });
+
+  test('does not flag a server-rendered page that hydrates into #root', () => {
+    const html = pad(`
+      <html><body>
+        <div id="root"><main><h1>Docs</h1><p>${PROSE.repeat(4)}</p></main></div>
+        <script src="/bundle.js"></script>
+      </body></html>
+    `);
+    const results = analyzePayload({ body: html });
+
+    expect(detectClientRenderedShell(html)).toBeNull();
+    expect(results.score).toBeGreaterThanOrEqual(70);
+    expect(results.passed).toContain('Content rendered server-side (not blank SPA shell)');
+  });
+
+  test('does not flag an interactive island beside server-rendered content', () => {
+    const html = pad(`
+      <html><body>
+        <main><h1>Post</h1><p>${PROSE.repeat(4)}</p></main>
+        <div id="app"></div>
+        <script src="/island.js"></script>
+      </body></html>
+    `);
+
+    expect(detectClientRenderedShell(html)).toBeNull();
+    expect(analyzePayload({ body: html }).score).toBeGreaterThanOrEqual(70);
+  });
+
+  test.each([
+    ['app', '<div id="app"></div>'],
+    ['__next', '<div id="__next"></div>'],
+    ['___gatsby', '<div id="___gatsby"></div>'],
+    ['__nuxt', '<div id="__nuxt"></div>'],
+  ])('recognises the #%s mount point', (id, mountMarkup) => {
+    const html = pad(`<html><body>${mountMarkup}<script src="/app.js"></script></body></html>`);
+
+    expect(detectClientRenderedShell(html)).toMatchObject({ id });
+    expect(analyzePayload({ body: html }).score).toBeLessThan(70);
+  });
+
+  test('a client-rendered shell cannot reach the FR-1 pass threshold', () => {
+    // The other four checks total 60 points, so failing the server-rendering
+    // check is on its own disqualifying. This is FR-1's core claim.
+    const html = pad(`
+      <html><head><meta property="og:title" content="Acme" /></head><body>
+        <header><nav>
+          <a href="/a">A</a><a href="/b">B</a><a href="/c">C</a>
+          <a href="/d">D</a><a href="/e">E</a><a href="/f">F</a>
+        </nav></header>
+        <section><p>${PROSE.repeat(4)}</p></section>
+        <div id="root"></div>
+        <footer><p>${PROSE}</p></footer>
+        <script src="/app.js"></script>
+      </body></html>
+    `);
+    const results = analyzePayload({ body: html });
+
+    expect(results.passed).toContain('Initial payload contains text content');
+    expect(results.passed).toContain('Uses semantic HTML5 elements');
+    expect(results.passed).toContain('Core content accessible without JavaScript');
+    expect(results.score).toBe(60);
+    expect(results.score).toBeLessThan(70);
+  });
+});
+
+describe('non-renderable source does not skew the checks', () => {
+  test('a CSS class named .loading does not fail the no-JavaScript check', () => {
+    const html = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head><style>.loading { display: none; } .spinner { opacity: 0; }</style></head>
+      <body>
+        <main>
+          <h1>Server-rendered article</h1>
+          <p>${'This page is fully server-rendered and needs no JavaScript at all. '.repeat(10)}</p>
+        </main>
+      </body>
+      </html>
+    `;
+    const results = analyzePayload({ body: html + '<!-- ' + 'A'.repeat(1000) + ' -->' });
+
+    expect(results.passed).toContain('Core content accessible without JavaScript');
+    expect(results.failed).toEqual([]);
+  });
+
+  test('an inline data blob does not count as payload text', () => {
+    const html = `
+      <html><body>
+        <div id="root"></div>
+        <script>window.__DATA__ = ${JSON.stringify(Array(60).fill('product name here'))};</script>
+      </body></html>
+    `;
+    const results = analyzePayload({ body: html });
+
+    expect(results.failed).toContain('Initial payload lacks meaningful text content');
+    expect(results.failed).toContain('Appears to be client-side only (empty #root mount point)');
+  });
+});
+
+describe('hostile payloads', () => {
+  test('closing tags browsers accept do not leak script source', () => {
+    expect(extractVisibleText('<p>Hi</p><script>var secret = 1;</script >')).toBe('Hi');
+    expect(extractVisibleText('<p>Hi</p><script>var secret = 1;</script foo="bar">')).toBe('Hi');
+    expect(extractVisibleText('<p>Hi</p><SCRIPT>var secret = 1;</SCRIPT>')).toBe('Hi');
+    expect(extractVisibleText('<p>Hi</p><style>.a { color: red }</style >')).toBe('Hi');
+  });
+
+  test('a shell hiding its close tag as </script > is still caught', () => {
+    const blob = JSON.stringify(Array(60).fill('product name here'));
+    const html =
+      '<html><body><div id="root"></div>' +
+      `<script>window.__DATA__ = ${blob};</script ></body></html>`;
+    const results = analyzePayload({ body: html });
+
+    expect(results.failed).toContain('Initial payload lacks meaningful text content');
+    expect(results.failed).toContain('Appears to be client-side only (empty #root mount point)');
+  });
+
+  test('comments close on --!> and on an empty <!-->', () => {
+    expect(extractVisibleText('<p>A</p><!-- gone --!><p>B</p>')).toBe('A B');
+    expect(extractVisibleText('<p>A</p><!--><p>B</p>')).toBe('A B');
+  });
+
+  test('unterminated comments and script tags do not swallow earlier content', () => {
+    expect(extractVisibleText('<p>Visible</p><!-- never closed')).toBe('Visible');
+    expect(extractVisibleText('<p>Visible</p><script>never closed')).toBe('Visible');
+  });
+
+  test('stripping stays linear on adversarial input', () => {
+    const elapsed = (n) => {
+      const payload = '<!--'.repeat(n);
+      const started = process.hrtime.bigint();
+      extractVisibleText(payload);
+      return Number(process.hrtime.bigint() - started) / 1e6;
+    };
+
+    // The regex this replaced was quadratic: 16k unterminated comment openers
+    // cost ~300ms, and a megabyte of them would have hung the validator.
+    elapsed(1000); // warm up, so the first call does not carry JIT cost
+    expect(elapsed(64000)).toBeLessThan(250);
+  });
+
+  test('unclosed landmarks do not go quadratic', () => {
+    const html = `<div id="root"></div>${'<main>'.repeat(20000)}`;
+    const started = process.hrtime.bigint();
+
+    expect(detectClientRenderedShell(html)).toMatchObject({ id: 'root' });
+    expect(Number(process.hrtime.bigint() - started) / 1e6).toBeLessThan(1000);
+  });
+});
+
+describe('linear-time scanning', () => {
+  const { analyzePayload: analyze } = require('../tools/validators/fr1-validator');
+
+  const millis = (fn) => {
+    const started = process.hrtime.bigint();
+    fn();
+    return Number(process.hrtime.bigint() - started) / 1e6;
+  };
+
+  beforeAll(() => {
+    extractVisibleText('<'.repeat(1000)); // warm up so the first case carries no JIT cost
+  });
+
+  // Every `<tag[^>]*>` regex rescans to the end of the document at each start
+  // position that fails, so a payload of unterminated tags costs O(n^2). Before
+  // these were replaced by a scan, 32k `<meta` took ~5s in the Open Graph check.
+  test.each([
+    ['unterminated tags', () => '<'.repeat(64000), (h) => extractVisibleText(h)],
+    ['unterminated <meta', () => '<meta'.repeat(64000), (h) => analyze({ body: h })],
+    ['unterminated <a', () => '<a'.repeat(64000), (h) => analyze({ body: h })],
+    ['unterminated comments', () => '<!--'.repeat(64000), (h) => extractVisibleText(h)],
+    ['unterminated <div', () => '<div'.repeat(64000), (h) => extractElementById(h, 'root')],
+  ])('stays fast on 64k %s', (_label, build, run) => {
+    expect(millis(() => run(build()))).toBeLessThan(500);
+  });
+
+  test('scales linearly rather than quadratically', () => {
+    const cost = (n) => millis(() => analyze({ body: '<meta'.repeat(n) }));
+
+    // Quadratic growth would be ~4x per doubling; allow generous headroom for
+    // a loaded CI runner while still failing if the old behaviour returns.
+    expect(cost(64000)).toBeLessThan(Math.max(cost(16000), 1) * 12);
   });
 });
