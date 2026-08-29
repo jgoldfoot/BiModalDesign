@@ -92,7 +92,13 @@ python3 -m http.server 8000 --directory examples
 # In another shell:
 node tools/validators/fr1-validator.js http://localhost:8000/ssr-pass-example.html
 # Expected: PASS, 100/100
+
+node tools/validators/fr1-validator.js http://localhost:8000/csr-fail-example.html
+# Expected: FAIL, 30/100
 ```
+
+Both expectations are asserted in `__tests__/fr1-validator.test.js`, so
+`npm test` catches a fixture or validator that stops matching them.
 
 ### 2. Adding New Examples
 
