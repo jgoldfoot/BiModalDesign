@@ -145,6 +145,21 @@ merely possible.
   (2026) adds a fresh data point: evaluated on rendered screenshots rather than
   DOM or accessibility trees, the strongest model completes fewer than 40% of
   tasks.
+- **Semantic structure is a large lever on some agents, not a uniform one.**
+  **ComponentBench** (2026) instruments the middle layer between long-horizon
+  workflows and atomic grounding tests: 97 canonical UI components instantiated
+  as **2,910 verified tasks**, each with a human reference trajectory. Within a
+  single harness, **GPT-5 mini falls from 83.1% with accessibility-tree
+  observations to 48.9% with coordinate-only pixel control** — the sharpest
+  published measurement of what Layer 2 is worth. But the same paper states that
+  "the benefit of structured aids is model-dependent", and for two of six models
+  (GPT-5.4, GPT-5.4 mini) the ordering **reverses**, with pixel control beating
+  Set-of-Mark. The defensible form of the Layer 2 claim is that structure
+  removes a failure mode for the agents that consume it — not that it lifts
+  every agent's score. Difficulty also inverts relative to humans: component
+  families run from Command & Navigation at **91.6%** down to Drag/Drop at
+  **47.7%**, and the fastest configuration still takes **3.7x** as long as the
+  matched human reference (arXiv:2608.18307).
 - **Long-horizon orchestration remains unsolved, and reported scores may be
   optimistic.** On **WeaveBench** (2026), which requires agents to combine GUI,
   CLI, and code operations within a single trajectory, the best frontier
@@ -452,7 +467,25 @@ npm test
   Standards Track. The `ModelContext` interface gained a specified
   `executeTool()` method on 14 August 2026, revised on 17 August 2026 to take a
   structured object rather than a JSON string; `RegisteredTool.inputSchema` was
-  retyped from `DOMString` to `object` in the same window.
+  retyped from `DOMString` to `object` in the same window. On **19 August 2026**
+  the draft gained **`AbortSignal` integration for tool execution** (PR #247)
+  and specified that **in-flight executions are preserved after unregistration**
+  (PR #248) — the cancellation and teardown semantics a page needs before
+  exposing a long-running tool to an agent. (Retrieved 24 August 2026; draft
+  then displayed 19 August 2026.)
+- **ComponentBench** — "Diagnosing Component-Level Failures in Computer-Use
+  Agents" — Guan, Lin, Cheng-Yue, Wang, Zhou (arXiv:2608.18307, 18 August 2026).
+  97 canonical UI components as 2,910 programmatically verified tasks with human
+  reference trajectories. GPT-5 mini scores 83.1% on accessibility-tree
+  observations vs 48.9% on coordinate-only pixel control; the paper reports the
+  benefit of structured aids as model-dependent, reversing for GPT-5.4 and
+  GPT-5.4 mini.
+- **MCP Roadmap** — Model Context Protocol blog, 22 August 2026. Names a
+  **progressive discovery** effort so "a server can offer a small entry point
+  and reveal more of its catalog as the conversation narrows", plus a single
+  standardized contract for `tools/call` result forms. Both target the
+  discoverability half of the adoption gap. Tasks moved into an official
+  extension (SEP-2663). https://blog.modelcontextprotocol.io/posts/mcp-roadmap/
 - **Code execution with MCP** — Building more efficient agents (Anthropic,
   Nov 2025)
 
