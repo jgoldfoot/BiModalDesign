@@ -542,6 +542,26 @@ it's measurable:
   with expert trajectories nearly doubles a supervised 9B agent's success rate
   from 6.9% to 13.2% — reinforcing that screenshot-only grounding remains a weak
   substitute for structural signal (arXiv:2607.10079).
+- **GUI-Primitives (2026)**: Isolates _which_ half of screenshot grounding
+  fails. Its 994 contrastive instruction pairs hold the screenshot and the
+  anchor element fixed and vary only the spatial relation, so the correct target
+  moves between two designated candidates. Nineteen vision-language models reach
+  at most 32% strict point-in-box accuracy. Decomposing the errors, predictions
+  fall outside both candidate regions on 60-92% of items; conditional on landing
+  inside a candidate, target selection reaches 0.82-0.90 for horizontal
+  position, vertical position, proximity, and list ordinal, and is
+  indistinguishable from chance only for containment and occlusion. The failure
+  is therefore predominantly candidate localization rather than relation
+  understanding. Marking the two designated candidates raises selection accuracy
+  by 35-57 percentage points, which the authors explicitly frame as "an upper
+  bound on candidate discrimination rather than a deployable method"
+  (arXiv:2608.21832; EMNLP 2026 Main). Two cautions before this is read as a
+  Layer 2 result: the paper makes no claim about accessibility trees, the DOM,
+  or structured HTML, and the marking condition is an oracle. What it supports
+  is the weaker, defensible statement this framework already makes — an agent
+  that must infer the addressable element set from pixels is spending most of
+  its error budget there, and any layer that supplies that set directly is
+  attacking the dominant failure mode.
 - **Screenshots or Tools? (2026)**: The closest published probe of the UI ->
   protocol handoff this framework projects. Running one identical hybrid GUI-MCP
   harness on the OSWorld-MCP benchmark (309 tasks), it found that making MCP
@@ -557,6 +577,25 @@ it's measurable:
   successful tool call, then retraining under that observation rule, reached
   37.8% against 33.0% for the uncompressed operating point at 53% of the input
   cost (arXiv:2608.03327).
+- **SCOUT (2026)**: The adoption gap treated as an engineering problem in
+  production rather than a finding. Deployed at PayPal against a catalog of
+  2,000+ indexed tools, SCOUT stops returning every tool schema on `tools/list`
+  and instead exposes two synthetic MCP meta-tools, `tool_search` and
+  `execute_tool`: the agent retrieves the schemas relevant to the current step
+  through hybrid retrieval (BM25 sparse matching fused with dense vector search
+  by Reciprocal Rank Fusion), then routes the invocation. Reported effect on
+  context: MCP tool-token consumption falls from 140.2k tokens (70.1% of
+  context) to 1.3k tokens (0.8%), a 99% reduction. Reported retrieval quality on
+  the authors' own 49-query benchmark (45 evaluable) is Hit@1 84.8% (38/45),
+  Hit@5 95.6% (43/45), and MRR 0.821 (arXiv:2608.23992). The result should be
+  read for what it measures: context cost and retrieval quality, with no
+  baseline comparison against full-catalog exposure and no end-to-end agent
+  task-success rate. Its relevance to Layer 5 is structural rather than
+  numerical. **Screenshots or Tools?** established that publishing tools does
+  not make agents use them; SCOUT is a production instance of the corrective
+  this framework names — making the tool route cheap to find and cheap to carry
+  — and it converges with the progressive-discovery direction the MCP roadmap
+  set out in August 2026.
 - **BenchJack (2026)**: Turned the evaluation lens on the benchmarks themselves.
   Applied to 10 popular agent benchmarks spanning software engineering, web
   navigation, desktop computing, and terminal operations, its automated
@@ -1128,7 +1167,12 @@ regenerated on each commit, so it has no stable publication date; cite it by
 retrieval date. It exposes a `ModelContext` object to pages via
 `document.modelContext`, through which a site registers tools for an agent
 operating in the browser. Note that it is **not** a W3C Standard and is not on
-the W3C Standards Track; treat it as incubation-stage. With that caveat,
+the W3C Standards Track; treat it as incubation-stage. Incubation is not the
+same as inactivity: as of the 26 August 2026 draft, the specification
+repository's own implementation-status page records origin trials live in Chrome
+149 and Edge 150, experimental support in Brave's Leo AI chat,
+standards-positions entries for Firefox and Safari, and ChatGPT Desktop — the
+first non-browser client listed — added on 26 August 2026. With that caveat,
 bridging the web (Layers 1-3) with protocols (Layer 5) natively in the browser
 is critical. Websites should announce their MCP servers directly in the DOM
 using standard HTML tags:
@@ -2275,6 +2319,17 @@ resilient, semantic, structured, and protocol-aware.
     Wu, Zhang, Shang, Chen; arXiv:2608.03327 (v1 4 Aug 2026, v2 6 Aug 2026).
     Hybrid GUI-MCP harness on OSWorld-MCP (309 tasks); introduces the adoption
     gap. Code: https://github.com/redai-infra/hybrid-routing-agent
+21. **GUI-Primitives**: "Diagnosing Spatial Reasoning Failures in
+    Vision-Language GUI Grounding" — Jahin, Parvez; arXiv:2608.21832 (v1 22 Aug
+    2026, v2 27 Aug 2026); accepted to EMNLP 2026 Main Conference. 994
+    contrastive instruction pairs over seven spatial relations; 19
+    vision-language models reach at most 32% strict point-in-box accuracy.
+22. **SCOUT**: "Hybrid Semantic Tool Discovery for Enterprise MCP Gateway:
+    Architecture and Implementation" — Saha, Wang, Manoharan; arXiv:2608.23992
+    (25 Aug 2026). Two MCP meta-tools (`tool_search`, `execute_tool`) replace
+    full-catalog `tools/list` exposure; in production at PayPal over 2,000+
+    indexed tools, tool-token consumption falls from 140.2k (70.1% of context)
+    to 1.3k (0.8%).
 
 ### **Agent Protocols**
 
@@ -2291,11 +2346,17 @@ resilient, semantic, structured, and protocol-aware.
    commit, so it carries no stable publication date and should be cited by
    retrieval date rather than by the date shown. Exposes
    `document.modelContext`. Not a W3C Standard; not on the Standards Track.
-   (Retrieved 17 August 2026.) The `ModelContext` interface now specifies
-   `executeTool()` alongside `registerTool()` and `getTools()`, added 14 August
-   2026 and revised 17 August 2026 to accept a structured object rather than a
-   JSON string; `RegisteredTool.inputSchema` was retyped from `DOMString` to
-   `object` on 14 August 2026.
+   (Header date 26 August 2026; retrieved 31 August 2026.) The `ModelContext`
+   interface now specifies `executeTool()` alongside `registerTool()` and
+   `getTools()`, added 14 August 2026 and revised 17 August 2026 to accept a
+   structured object rather than a JSON string; `RegisteredTool.inputSchema` was
+   retyped from `DOMString` to `object` on 14 August 2026. On 19 August 2026 the
+   draft specified `AbortSignal` integration for tool execution and preserved
+   in-flight executions after unregistration (PRs #247, #248). Implementation
+   status per the repository's `implementation-status.md` as of 26 August 2026:
+   Chrome 149 and Edge 150 origin trials, Brave Leo AI chat experimental,
+   ChatGPT Desktop listed as supported (added 26 August 2026), Firefox and
+   Safari standards-positions entries only.
 3. **Agent-to-Agent Protocol (A2A)**: https://a2a-protocol.org — launched by
    Google April 2025; the Linux Foundation announced A2A as the project's new
    home on 23 June 2025. Specification v1.0.0 was released on 12 March 2026
