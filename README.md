@@ -145,6 +145,21 @@ merely possible.
   (2026) adds a fresh data point: evaluated on rendered screenshots rather than
   DOM or accessibility trees, the strongest model completes fewer than 40% of
   tasks.
+- **Where screenshot grounding actually breaks is _finding_ the element, not
+  understanding the instruction.** **GUI-Primitives** (2026, EMNLP Main) holds
+  the screenshot and anchor fixed across 994 contrastive instruction pairs and
+  varies only the spatial relation. Nineteen vision-language models reach at
+  most 32% strict point-in-box accuracy, and predictions land outside _both_
+  candidate regions on 60-92% of items; conditional on landing inside one,
+  target selection is 0.82-0.90 for horizontal position, vertical position,
+  proximity, and list ordinal. Marking the two candidates raises selection
+  accuracy by **35-57 percentage points** — which the authors are careful to
+  call "an upper bound on candidate discrimination rather than a deployable
+  method" (arXiv:2608.21832). The paper makes no claim about accessibility trees
+  or the DOM. What it establishes is narrower and still useful to Layer 2: the
+  dominant failure is candidate localization, so the value of handing an agent
+  an explicit, addressable element set is bounded well above what pixels alone
+  deliver.
 - **Long-horizon orchestration remains unsolved, and reported scores may be
   optimistic.** On **WeaveBench** (2026), which requires agents to combine GUI,
   CLI, and code operations within a single trajectory, the best frontier
@@ -163,6 +178,20 @@ merely possible.
   BiModal Design this sharpens what Layer 5 has to deliver: publishing tools is
   the precondition, but discoverability and an obviously cheaper tool route are
   what convert them into use.
+- **Production systems are now engineering that discoverability directly.**
+  **SCOUT** (2026), running in production at PayPal over a catalog of 2,000+
+  indexed tools, stops returning the full catalog on `tools/list` and instead
+  surfaces two meta-tools — `tool_search` and `execute_tool` — so an agent
+  retrieves only the schemas relevant to the current step. Reported effect: MCP
+  tool-token consumption falls from **140.2k tokens (70.1% of context) to 1.3k
+  (0.8%)**, a 99% reduction, with retrieval quality of Hit@1 84.8%, Hit@5 95.6%,
+  and MRR 0.821 on the authors' own 49-query benchmark (45 evaluable)
+  (arXiv:2608.23992). Read this as a **cost-and-discoverability** result, not a
+  task-success one: the paper reports no baseline comparison against
+  full-catalog exposure and no end-to-end agent success rate. It matters here
+  because it is the same move the framework argues for at Layer 5 — make the
+  tool route cheap and findable — implemented at enterprise scale rather than
+  proposed.
 - **The source benchmarks have themselves been shown to be gameable.**
   **BenchJack** (2026) audited 10 popular agent benchmarks spanning software
   engineering, web navigation, desktop computing, and terminal operations, and
@@ -423,6 +452,13 @@ npm test
   Generation" — screenshot-grounded evaluation via Set-of-Mark and pixel
   coordinates; strongest model completes fewer than 40% of tasks
   (arXiv:2607.10079, 2026)
+- **GUI-Primitives** — "Diagnosing Spatial Reasoning Failures in Vision-Language
+  GUI Grounding" — Jahin, Parvez (arXiv:2608.21832, v1 22 Aug 2026, v2 27 Aug
+  2026; accepted to EMNLP 2026 Main Conference). 994 contrastive instruction
+  pairs over seven spatial relations; 19 vision-language models reach at most
+  32% strict point-in-box accuracy, predictions fall outside both candidates on
+  60-92% of items, and marking the candidates raises selection accuracy by
+  35-57pp as an upper bound rather than a deployable method.
 - **Screenshots or Tools?** — "Eliciting Tool Use and Managing Multimodal
   Context in Hybrid GUI-MCP Computer-Use Agents" — Fan, Li, Ma, Tan, Huang, Wu,
   Zhang, Shang, Chen (arXiv:2608.03327, v1 4 Aug 2026, v2 6 Aug 2026). One
@@ -430,6 +466,15 @@ npm test
   reasoning model +4.0pp and a non-reasoning model -5.9pp; the reasoning model
   calls a tool on 55/309 tasks (23.9% of tool-reachable ones) — the **adoption
   gap**.
+- **SCOUT** — "Hybrid Semantic Tool Discovery for Enterprise MCP Gateway:
+  Architecture and Implementation" — Saha, Wang, Manoharan (arXiv:2608.23992, 25
+  Aug 2026). Selective Context Optimization for Universal Tooling: two MCP
+  meta-tools (`tool_search`, `execute_tool`) replace full-catalog `tools/list`
+  exposure, using BM25 + dense retrieval fused by Reciprocal Rank Fusion. In
+  production at PayPal over 2,000+ indexed tools, MCP tool-token consumption
+  drops from 140.2k (70.1% of context) to 1.3k (0.8%); Hit@1 84.8%, Hit@5 95.6%,
+  MRR 0.821 on a 49-query internal benchmark. No baseline comparison and no
+  end-to-end task-success measurement is reported.
 - **BenchJack** — "Do Androids Dream of Breaking the Game? Systematically
   Auditing AI Agent Benchmarks with BenchJack" — Wang et al., UC Berkeley
   (arXiv:2605.12673, May 2026). An automated red-teaming system for benchmark
@@ -448,11 +493,20 @@ npm test
 - **WebMCP** — Browser API letting a page register tools for in-browser agents
   via `document.modelContext`. W3C Web Machine Learning Community Group, Draft
   Community Group Report — a continuously updated editor's draft with no stable
-  publication date (retrieved 17 August 2026). Not a W3C Standard; not on the
-  Standards Track. The `ModelContext` interface gained a specified
-  `executeTool()` method on 14 August 2026, revised on 17 August 2026 to take a
-  structured object rather than a JSON string; `RegisteredTool.inputSchema` was
-  retyped from `DOMString` to `object` in the same window.
+  publication date; the header read **26 August 2026** when retrieved on 31
+  August 2026. Not a W3C Standard; not on the Standards Track. The
+  `ModelContext` interface gained a specified `executeTool()` method on 14
+  August 2026, revised on 17 August 2026 to take a structured object rather than
+  a JSON string; `RegisteredTool.inputSchema` was retyped from `DOMString` to
+  `object` in the same window. On 19 August 2026 the draft specified
+  `AbortSignal` integration for tool execution and preserved in-flight
+  executions after unregistration (PRs #247, #248). **Implementation status as
+  of 26 August 2026** (per the spec repository's own `implementation-status.md`,
+  which is the source for these): origin trials live in **Chrome 149** and
+  **Edge 150**; experimental support in Brave's Leo AI chat; **ChatGPT Desktop**
+  listed as supporting WebMCP — the first non-browser client on the page, added
+  26 August 2026 in a pull request from an OpenAI-affiliated author and merged
+  by a spec editor. Firefox and Safari have standards-positions entries only.
 - **Code execution with MCP** — Building more efficient agents (Anthropic,
   Nov 2025)
 
