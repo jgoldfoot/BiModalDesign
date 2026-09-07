@@ -542,6 +542,26 @@ it's measurable:
   with expert trajectories nearly doubles a supervised 9B agent's success rate
   from 6.9% to 13.2% — reinforcing that screenshot-only grounding remains a weak
   substitute for structural signal (arXiv:2607.10079).
+- **ComponentBench (2026)**: Instruments the layer between long-horizon workflow
+  benchmarks and atomic grounding tests — realistic component-centered
+  interactions. A library-agnostic ontology of 97 canonical UI components is
+  instantiated as 2,910 programmatically verified tasks across widely used
+  component libraries, each paired with a cleaned human reference trajectory so
+  that interaction efficiency is scored alongside task success. Two results bear
+  directly on Layer 2. First, the observation space can dominate the model:
+  GPT-5 mini falls from 83.1% with accessibility-tree observations to 48.9% with
+  coordinate-only pixel control, within one harness on identical tasks. Second —
+  and this is the part that constrains the framework's claim — the paper reports
+  that "the benefit of structured aids is model-dependent", and for two of the
+  six models evaluated in both Set-of-Mark and pixel modes (GPT-5.4 and GPT-5.4
+  mini) the ordering reverses and pixel control outperforms Set-of-Mark.
+  Semantic structure is therefore a large lever on some agents rather than a
+  uniform one, and the honest form of the Layer 2 claim is that structure
+  removes a failure mode for the agents that consume it, not that it raises
+  every agent's score. Difficulty also inverts relative to humans: component
+  families span Command & Navigation at 91.6% average down to Drag/Drop at
+  47.7%, and even the fastest configuration takes 3.7x as long as the matched
+  human reference (arXiv:2608.18307).
 - **Screenshots or Tools? (2026)**: The closest published probe of the UI ->
   protocol handoff this framework projects. Running one identical hybrid GUI-MCP
   harness on the OSWorld-MCP benchmark (309 tasks), it found that making MCP
@@ -2275,6 +2295,11 @@ resilient, semantic, structured, and protocol-aware.
     Wu, Zhang, Shang, Chen; arXiv:2608.03327 (v1 4 Aug 2026, v2 6 Aug 2026).
     Hybrid GUI-MCP harness on OSWorld-MCP (309 tasks); introduces the adoption
     gap. Code: https://github.com/redai-infra/hybrid-routing-agent
+21. **ComponentBench**: "Diagnosing Component-Level Failures in Computer-Use
+    Agents" — Guan, Lin, Cheng-Yue, Wang, Zhou; arXiv:2608.18307 (v1 18 Aug
+    2026). 97 canonical UI components, 2,910 verified tasks, human reference
+    trajectories; reports that the benefit of structured observations is
+    model-dependent.
 
 ### **Agent Protocols**
 
@@ -2291,11 +2316,16 @@ resilient, semantic, structured, and protocol-aware.
    commit, so it carries no stable publication date and should be cited by
    retrieval date rather than by the date shown. Exposes
    `document.modelContext`. Not a W3C Standard; not on the Standards Track.
-   (Retrieved 17 August 2026.) The `ModelContext` interface now specifies
-   `executeTool()` alongside `registerTool()` and `getTools()`, added 14 August
-   2026 and revised 17 August 2026 to accept a structured object rather than a
-   JSON string; `RegisteredTool.inputSchema` was retyped from `DOMString` to
-   `object` on 14 August 2026.
+   (Retrieved 24 August 2026; the draft then displayed 19 August 2026.) The
+   `ModelContext` interface specifies `executeTool()` alongside `registerTool()`
+   and `getTools()`, added 14 August 2026 and revised 17 August 2026 to accept a
+   structured object rather than a JSON string; `RegisteredTool.inputSchema` was
+   retyped from `DOMString` to `object` on 14 August 2026. On 19 August 2026 the
+   draft gained `AbortSignal` integration for tool execution (PR #247) and
+   specified that in-flight executions are preserved after a tool is
+   unregistered (PR #248) — cancellation and teardown semantics, which are the
+   properties a page needs before it can safely expose a long-running Layer 5
+   tool to an agent.
 3. **Agent-to-Agent Protocol (A2A)**: https://a2a-protocol.org — launched by
    Google April 2025; the Linux Foundation announced A2A as the project's new
    home on 23 June 2025. Specification v1.0.0 was released on 12 March 2026
