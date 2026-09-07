@@ -207,6 +207,31 @@ merely possible.
   because it is the same move the framework argues for at Layer 5 — make the
   tool route cheap and findable — implemented at enterprise scale rather than
   proposed.
+- **A populated accessibility tree is the floor, not the finish line.** A
+  three-week deployment study put a screen-reader-accessible computer-use agent
+  in front of **8 blind users**, collecting **1,258 real commands across 12
+  desktop applications**; every model received both screenshots **and** UI trees
+  carrying control roles and hierarchy. The strongest, GPT-5, succeeded on
+  **52.5%** (95% CI 49.8-55.3), ahead of Claude Sonnet 48.5%, Gemini 2.5 CU
+  43.9%, UI-TARS 39.8% and Qwen3-VL 37.9%. The failure classes the authors name
+  are grounding, planning, constraint-tracking and termination
+  (arXiv:2609.00524). **The study does not compare agents with and without
+  accessibility metadata**, so it is not a measurement of Layer 2's benefit.
+  What it does establish is the boundary of this framework's own claim:
+  supplying a well-formed AOM removes a class of failure, and about half of real
+  user commands still fail for reasons no structural layer reaches.
+- **The adoption gap is partly trainable, which bounds what interface design
+  alone can fix.** **CUA-Universe** (2026) turned 16 real desktop applications
+  into hybrid GUI+CLI environments and post-trained a 9B model on the harvested
+  trajectories. Against its own GUI-only operating point that model rises from
+  **23.4% to 40.2%** success on OSWorld (+16.8 pts); against the untuned base
+  model it lifts OSWorld-MCP from **20.90% to 28.69%** (+7.79 pts) while cutting
+  steps 27% and tokens 30% (arXiv:2609.05374). **The paper makes no claim about
+  interface or website design** — it is an agent-training result, recorded here
+  because it cuts both ways for Layer 5. An agent can be taught to prefer the
+  cheaper non-GUI route, so adoption is not solely the interface's problem; and
+  28.69% absolute on OSWorld-MCP says the remaining ceiling sits somewhere other
+  than tool availability.
 - **The source benchmarks have themselves been shown to be gameable.**
   **BenchJack** (2026) audited 10 popular agent benchmarks spanning software
   engineering, web navigation, desktop computing, and terminal operations, and
@@ -507,23 +532,28 @@ npm test
   Windows UI Automation with vision (Microsoft, 2025)
 - **WebMCP** — Browser API letting a page register tools for in-browser agents
   via `document.modelContext`. W3C Web Machine Learning Community Group, Draft
-  Community Group Report — a continuously updated editor's draft with no stable
-  publication date; the header read **26 August 2026** when retrieved on 31
-  August 2026. Not a W3C Standard; not on the Standards Track. The
-  `ModelContext` interface gained a specified `executeTool()` method on 14
-  August 2026, revised on 17 August 2026 to take a structured object rather than
-  a JSON string; `RegisteredTool.inputSchema` was retyped from `DOMString` to
-  `object` in the same window. On 19 August 2026 the draft specified
-  `AbortSignal` integration for tool execution and preserved in-flight
-  executions after unregistration (PRs #247, #248) — the cancellation and
-  teardown semantics a page needs before exposing a long-running tool to an
-  agent. **Implementation status as of 26 August 2026** (per the spec
-  repository's own `implementation-status.md`, which is the source for these):
-  origin trials live in **Chrome 149** and **Edge 150**; experimental support in
-  Brave's Leo AI chat; **ChatGPT Desktop** listed as supporting WebMCP — the
-  first non-browser client on the page, added 26 August 2026 in a pull request
-  from an OpenAI-affiliated author and merged by a spec editor. Firefox and
-  Safari have standards-positions entries only.
+  Community Group Report — a continuously updated editor's draft, so it is cited
+  by retrieval date rather than by the date in its header (retrieved 7 September
+  2026; header then read 4 September 2026). Not a W3C Standard; not on the
+  Standards Track. The `ModelContext` interface gained a specified
+  `executeTool()` method on 14 August 2026, revised on 17 August 2026 to take a
+  structured object rather than a JSON string; `RegisteredTool.inputSchema` was
+  retyped from `DOMString` to `object` in the same window. On 19 August 2026 the
+  draft specified `AbortSignal` integration for tool execution and preserved
+  in-flight executions after unregistration (PRs #247, #248) — the cancellation
+  and teardown semantics a page needs before exposing a long-running tool to an
+  agent. On **3 September 2026** `ToolAnnotations` gained
+  **`consequentialHint`** — "If true, indicates that executing the tool will
+  result in consequential actions that are significant, real-world, or
+  non-reversible, ex: booking a flight, transferring money" — joining
+  `readOnlyHint` and `untrustedContentHint`. **Implementation status as
+  re-checked on 7 September 2026** (per the spec repository's own
+  `implementation-status.md`, which is the source for these): origin trials live
+  in **Chrome 149** and **Edge 150**; experimental support in Brave's Leo AI
+  chat; **ChatGPT Desktop** listed as supporting WebMCP — the first non-browser
+  client on the page, added 26 August 2026 in a pull request from an
+  OpenAI-affiliated author and merged by a spec editor. Firefox and Safari have
+  standards-positions entries only.
 - **ComponentBench** — "Diagnosing Component-Level Failures in Computer-Use
   Agents" — Guan, Lin, Cheng-Yue, Wang, Zhou (arXiv:2608.18307, 18 August 2026).
   97 canonical UI components as 2,910 programmatically verified tasks with human
@@ -537,6 +567,20 @@ npm test
   standardized contract for `tools/call` result forms. Both target the
   discoverability half of the adoption gap. Tasks moved into an official
   extension (SEP-2663). https://blog.modelcontextprotocol.io/posts/mcp-roadmap/
+- **Computer-Use Agents for Blind Users** — "Are We There Yet? Assessing
+  Computer-Use Agents for Blind Users' Accessible Interaction with Desktop
+  Applications" — Kodandaram, Padma Reddy, Bi, Zhou, Ramakrishnan, Ashok
+  (arXiv:2609.00524, 1 September 2026). Three-week diary study, 8 blind
+  screen-reader users, 1,258 commands across 12 desktop applications, all models
+  given screenshots and UI trees. GPT-5 52.5% (95% CI 49.8-55.3), Claude Sonnet
+  48.5%, Gemini 2.5 CU 43.9%, UI-TARS 39.8%, Qwen3-VL 37.9%. No with/without
+  accessibility-metadata comparison is made.
+- **CUA-Universe** — "A Scalable and Dynamic Environment for Hybrid GUI+CLI
+  Agents" — Shi, Wang, Fang, Liang, Jin, Zhao, Liu, Chen, Wang
+  (arXiv:2609.05374, 4 September 2026). Environment-to-data pipeline over 16
+  desktop applications; a post-trained 9B model reaches 40.2% on OSWorld against
+  its own GUI-only 23.4%, and 28.69% on OSWorld-MCP against the untuned base
+  model's 20.90%. An agent-training result; makes no interface-design claim.
 - **Code execution with MCP** — Building more efficient agents (Anthropic,
   Nov 2025)
 

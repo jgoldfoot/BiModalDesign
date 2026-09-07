@@ -318,6 +318,23 @@ Furthermore, insights from **VisualWebArena** demonstrate that pure visual
 reasoning frequently fails in complex interfaces without strong textual and
 structural grounding. Layer 2 provides this essential grounding.
 
+**A populated AOM is the floor, not the finish line.** A three-week deployment
+study of a screen-reader-accessible computer-use agent — 8 blind users, 1,258
+real commands across 12 desktop applications, every model supplied with both
+screenshots and UI trees carrying control roles and hierarchy — found the
+strongest model, GPT-5, succeeding on only 52.5% of commands (95% CI 49.8-55.3),
+followed by Claude Sonnet at 48.5%, Gemini 2.5 CU at 43.9%, UI-TARS at 39.8% and
+Qwen3-VL at 37.9%. The failure classes the authors identify are grounding,
+planning, constraint-tracking and termination (arXiv:2609.00524). Two things
+follow, and the second constrains the first. The study makes **no** comparison
+between agents with and without accessibility metadata, so it is not a
+measurement of what Layer 2 buys; nothing here should be read as quantifying
+this layer's contribution. What it does bound is the claim above: a well-formed
+AOM supplies reliable interaction targets, and roughly half of real user
+commands still fail for reasons that live in the agent's planning and
+termination behaviour rather than in the interface's semantics. Layer 2 removes
+a class of failure. It does not remove the rest.
+
 As modern interfaces increasingly rely on Web Components, the encapsulation
 provided by the Shadow DOM creates a new challenge: it hides critical state and
 semantic information from the AOM. To solve this, developers must use the
@@ -616,6 +633,21 @@ it's measurable:
   this framework names — making the tool route cheap to find and cheap to carry
   — and it converges with the progressive-discovery direction the MCP roadmap
   set out in August 2026.
+- **CUA-Universe (2026)**: The complement to the previous entry, and a check on
+  reading the adoption gap as purely an interface problem. Its App-Forge
+  pipeline turns 16 real desktop applications into reproducible hybrid GUI+CLI
+  environments, Task-Weave synthesizes hybrid tasks over them, and Path-Steer
+  harvests verified efficient trajectories for post-training. A 9B model trained
+  on that data reaches 40.2% success on OSWorld against its own GUI-only
+  operating point of 23.4% (+16.8 pts), and 28.69% on OSWorld-MCP against the
+  untuned base model's 20.90% (+7.79 pts), with 27% fewer steps and 30% fewer
+  tokens (arXiv:2609.05374). The paper makes **no claim about interface or
+  website design** — it is an agent-training result, and is cited here only for
+  what it implies about Layer 5's boundary. An agent can be taught to route
+  around the GUI when a cheaper surface exists, which means tool adoption is not
+  the interface's problem alone; and 28.69% in absolute terms says that once
+  adoption is trained in, the binding constraint has moved somewhere other than
+  tool availability.
 - **BenchJack (2026)**: Turned the evaluation lens on the benchmarks themselves.
   Applied to 10 popular agent benchmarks spanning software engineering, web
   navigation, desktop computing, and terminal operations, its automated
@@ -2355,6 +2387,20 @@ resilient, semantic, structured, and protocol-aware.
     full-catalog `tools/list` exposure; in production at PayPal over 2,000+
     indexed tools, tool-token consumption falls from 140.2k (70.1% of context)
     to 1.3k (0.8%).
+24. **Computer-Use Agents for Blind Users**: "Are We There Yet? Assessing
+    Computer-Use Agents for Blind Users' Accessible Interaction with Desktop
+    Applications" — Kodandaram, Padma Reddy, Bi, Zhou, Ramakrishnan, Ashok;
+    arXiv:2609.00524 (v1, 1 September 2026). Three-week IRB-approved diary study
+    with 8 blind screen-reader users; 1,258 commands across 12 desktop
+    applications; all models supplied with screenshots and UI trees. GPT-5 52.5%
+    (95% CI 49.8-55.3), Claude Sonnet 48.5%, Gemini 2.5 CU 43.9%, UI-TARS 39.8%,
+    Qwen3-VL 37.9%. No with/without accessibility-metadata comparison is made.
+25. **CUA-Universe**: "A Scalable and Dynamic Environment for Hybrid GUI+CLI
+    Agents" — Shi, Wang, Fang, Liang, Jin, Zhao, Liu, Chen, Wang;
+    arXiv:2609.05374 (v1, 4 September 2026). 16 desktop applications; a
+    post-trained 9B model reaches 40.2% on OSWorld against its own GUI-only
+    23.4%, and 28.69% on OSWorld-MCP against the untuned base model's 20.90%. An
+    agent-training result; the paper makes no interface-design claim.
 
 ### **Agent Protocols**
 
@@ -2371,19 +2417,26 @@ resilient, semantic, structured, and protocol-aware.
    commit, so it carries no stable publication date and should be cited by
    retrieval date rather than by the date shown. Exposes
    `document.modelContext`. Not a W3C Standard; not on the Standards Track.
-   (Header date 26 August 2026; retrieved 31 August 2026.) The `ModelContext`
-   interface now specifies `executeTool()` alongside `registerTool()` and
-   `getTools()`, added 14 August 2026 and revised 17 August 2026 to accept a
-   structured object rather than a JSON string; `RegisteredTool.inputSchema` was
-   retyped from `DOMString` to `object` on 14 August 2026. On 19 August 2026 the
-   draft specified `AbortSignal` integration for tool execution and preserved
-   in-flight executions after unregistration (PRs #247, #248) — cancellation and
-   teardown semantics, which are the properties a page needs before it can
-   safely expose a long-running Layer 5 tool to an agent. Implementation status
-   per the repository's `implementation-status.md` as of 26 August 2026: Chrome
+   (Retrieved 7 September 2026; the header then read 4 September 2026.) The
+   `ModelContext` interface now specifies `executeTool()` alongside
+   `registerTool()` and `getTools()`, added 14 August 2026 and revised 17 August
+   2026 to accept a structured object rather than a JSON string;
+   `RegisteredTool.inputSchema` was retyped from `DOMString` to `object` on 14
+   August 2026. On 19 August 2026 the draft specified `AbortSignal` integration
+   for tool execution and preserved in-flight executions after unregistration
+   (PRs #247, #248) — cancellation and teardown semantics, which are the
+   properties a page needs before it can safely expose a long-running Layer 5
+   tool to an agent. On 3 September 2026 `ToolAnnotations` gained
+   `consequentialHint`, defined as "If true, indicates that executing the tool
+   will result in consequential actions that are significant, real-world, or
+   non-reversible, ex: booking a flight, transferring money", joining
+   `readOnlyHint` and `untrustedContentHint`. Implementation status per the
+   repository's `implementation-status.md`, re-checked 7 September 2026: Chrome
    149 and Edge 150 origin trials, Brave Leo AI chat experimental, ChatGPT
-   Desktop listed as supported (added 26 August 2026), Firefox and Safari
-   standards-positions entries only.
+   Desktop listed as supported (added 26 August 2026, the first non-browser
+   client), Firefox and Safari standards-positions entries only. The
+   repository's README lists headless task completion as a goal and fully
+   autonomous browser-less workflows as a non-goal.
 3. **Agent-to-Agent Protocol (A2A)**: https://a2a-protocol.org — launched by
    Google April 2025; the Linux Foundation announced A2A as the project's new
    home on 23 June 2025. Specification v1.0.0 was released on 12 March 2026
