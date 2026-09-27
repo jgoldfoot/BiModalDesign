@@ -648,6 +648,22 @@ it's measurable:
   the interface's problem alone; and 28.69% in absolute terms says that once
   adoption is trained in, the binding constraint has moved somewhere other than
   tool availability.
+- **Affora (2026)**: The nearest published analogue to this framework's own
+  thesis — a design system for one interface read by two kinds of reader — and
+  the first head-to-head test of semantic annotation against alternatives. On
+  its primary comparison set, ARIA and structured-data augmentation left
+  completion flat (46/60 at baseline, 45/60 augmented; 28/33 and 29/33 on the
+  harder set), while Affora's rewrites of the shared interface and an `agent.md`
+  instruction file each reached 60/60. A WebMCP-style condition reached 55/55 on
+  a separately scoped action set the author does not treat as a matched
+  comparison. On independent interfaces, gains tracked the presence of the
+  deficit a rule addresses: rewriting already-sound components produced no
+  improvement (arXiv:2609.19125). The author evaluated small and mid-tier models
+  only. The lesson for Layer 2 is a limit rather than a refutation: attributes
+  that restate what a control already declares add little; what moved agents was
+  making required information and actions present in a representation they
+  consume. That is consistent with treating Layer 2 as necessary but not
+  sufficient, and it is not a measurement of BiModal Design.
 - **BenchJack (2026)**: Turned the evaluation lens on the benchmarks themselves.
   Applied to 10 popular agent benchmarks spanning software engineering, web
   navigation, desktop computing, and terminal operations, its automated
@@ -1400,7 +1416,13 @@ The OSWorld benchmark has tracked the rapid advancement of Computing User Agents
 (CUAs). At the original OSWorld 1.0 release, the best model completed 12.24% of
 tasks against a human baseline of 72.36%. Frontier scores climbed steeply from
 there — steeply enough that OSWorld 1.0 is now superseded: on 2026-06-26 the
-maintainers directed users to **OSWorld 2.0** as the current version.
+maintainers directed users to **OSWorld 2.0** as the current version. The
+maintainers' OSWorld-Verified results file (last modified 7 August 2026) shows
+how far: the highest entry scores 90.19% (an agentic framework) and the highest
+general model 85.96%, both above the 72.36% human baseline reported for the
+original task set — a comparison to read loosely, since that baseline predates
+the Verified revision. None of the fifteen highest entries lists the
+accessibility tree as an additional input.
 
 That successor complicates any straight-line projection toward "solved" UI
 execution. OSWorld 2.0 comprises 108 long-horizon workflows that take human
@@ -1459,8 +1481,9 @@ fallback, not the primary design target.
 
 Recent developments with systems like OpenAI Operator and Google Project Mariner
 have demonstrated highly capable, hybrid vision-and-semantic agents. Operator
-achieves an 87% success rate on WebVoyager and leads in benchmarks with scores
-of 58.1% on WebArena and 38.1% on OSWorld.
+was reported at an 87% success rate on WebVoyager, 58.1% on WebArena and 38.1%
+on OSWorld. Those were leading figures when published; they no longer are. On
+OSWorld-Verified the highest entries now exceed 80% (see §9.1).
 
 Project Mariner introduces advanced capabilities, achieving high scores of 84.0%
 on ScreenSpot and 83.5% on WebVoyager. This highlights the necessity of
@@ -1689,6 +1712,12 @@ explicit content policies:
   content without bias or manipulation
 - **Deceptive markup**: Never use semantic structure to mislead agents (e.g.,
   marking promotional content as editorial)
+- **Choice architecture**: Nudges act on agents too. In a randomized
+  online-shopping experiment with 3,600 agents across six models, agents were
+  susceptible to both default and social-influence nudges, and more reasoning
+  lowered the first while raising the second (arXiv:2609.19843). Defaults,
+  scarcity cues and social proof in a BiModal interface steer both readers and
+  should be held to the same standard for both
 
 ### **11.5 Regulatory Landscape**
 
@@ -1707,6 +1736,10 @@ explicit content policies:
   WCAG-EM audit can treat it as the procedural companion to a BiModal Design
   Layer 2 assessment, though it evaluates human accessibility conformance and
   does not assess Layers 1 or 3-5
+- **WCAG 3.0**: A new Working Draft was published on 10 September 2026, the
+  first since 3 March 2026; it "includes all requirements that have reached the
+  developing status." It remains a draft, not a Recommendation. Layer 2
+  continues to target WCAG 2.2
 
 ### **11.6 Human-in-the-Loop (HITL) for Tool-Agent-User Interaction (τ-bench)**
 
@@ -2346,7 +2379,8 @@ resilient, semantic, structured, and protocol-aware.
 9. **OpAgent**: "Operator Agent for Web Navigation" — Guo, Yang, Yang et al.,
    71.6% on WebArena (arXiv:2602.13559, 14 February 2026)
 10. **Operator**: OpenAI's Computer-Using Agent (87% on WebVoyager, 58.1% on
-    WebArena, 38.1% on OSWorld)
+    WebArena, 38.1% on OSWorld, as reported by OpenAI; no longer the OSWorld
+    leader — see OSWorld-Verified below)
 11. **Project Mariner**: Google's agent featuring "Teach & Repeat" capabilities,
     achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)
 12. **ScreenSpot**: Benchmark for spatial and visual understanding in GUIs
@@ -2401,6 +2435,18 @@ resilient, semantic, structured, and protocol-aware.
     post-trained 9B model reaches 40.2% on OSWorld against its own GUI-only
     23.4%, and 28.69% on OSWorld-MCP against the untuned base model's 20.90%. An
     agent-training result; the paper makes no interface-design claim.
+26. **Affora**: "Affora: A Design System for Agent-Friendly Interfaces" — Jin
+    Gao; arXiv:2609.19125 (v1, 16 September 2026). Primary set: baseline 46/60,
+    ARIA and structured data 45/60, `agent.md` 60/60, Affora 60/60. Small and
+    mid-tier models only.
+27. **Nudge susceptibility in GUI agents**: "A Dual-Process Perspective on Nudge
+    Susceptibility in LLM-Based GUI Agents" — Halimeh, Kaltenpoth, Bösch,
+    Müller; arXiv:2609.19843 (v1, 17 September 2026). 3,600 agents, 21,600
+    simulations, six models from three providers.
+28. **OSWorld-Verified results**: OSWorld maintainers' results file,
+    https://osworld-v1.xlang.ai/static/data/osworld_verified_results.xlsx (last
+    modified 7 August 2026). Highest entry 90.19% (agentic framework); highest
+    general model 85.96% (`claude-fable-5[1m]`); `claude-opus-5[1m]` 83.39%.
 
 ### **Agent Protocols**
 
@@ -2410,17 +2456,24 @@ resilient, semantic, structured, and protocol-aware.
    Round-Trip Requests (MRTR), cacheable list results, header-based routing,
    Extensions framework, Tasks and MCP Apps extensions, authorization hardening,
    formal feature lifecycle and deprecation policy. Changelog:
-   https://modelcontextprotocol.io/specification/2026-07-28/changelog
+   https://modelcontextprotocol.io/specification/2026-07-28/changelog. The
+   Skills Extension (SEP-2640, `io.modelcontextprotocol/skills`) reached Final
+   on 13 September 2026: Agent Skills served over the Resources primitive under
+   a `skill://` convention, with `skills/list` and `skills/get`, and the skill
+   format and its progressive-disclosure model delegated to the Agent Skills
+   specification. It is the protocol-level form of the progressive discovery the
+   MCP roadmap describes. SDK implementations were still open at merge.
 2. **WebMCP**: https://webmachinelearning.github.io/webmcp/ — W3C Web Machine
    Learning Community Group. Continuously updated editor's draft published as a
    Draft Community Group Report; the document header is regenerated on each
    commit, so it carries no stable publication date and should be cited by
    retrieval date rather than by the date shown. Exposes
    `document.modelContext`. Not a W3C Standard; not on the Standards Track.
-   (Retrieved 7 September 2026; the header then read 4 September 2026.) The
+   (Retrieved 27 September 2026; the header then read 26 September 2026.) The
    `ModelContext` interface now specifies `executeTool()` alongside
    `registerTool()` and `getTools()`, added 14 August 2026 and revised 17 August
-   2026 to accept a structured object rather than a JSON string;
+   2026 to accept a structured object rather than a JSON string, and retyped on
+   10 September 2026 so that `inputObject` is `any` (PR #251);
    `RegisteredTool.inputSchema` was retyped from `DOMString` to `object` on 14
    August 2026. On 19 August 2026 the draft specified `AbortSignal` integration
    for tool execution and preserved in-flight executions after unregistration
@@ -2430,13 +2483,22 @@ resilient, semantic, structured, and protocol-aware.
    `consequentialHint`, defined as "If true, indicates that executing the tool
    will result in consequential actions that are significant, real-world, or
    non-reversible, ex: booking a flight, transferring money", joining
-   `readOnlyHint` and `untrustedContentHint`. Implementation status per the
-   repository's `implementation-status.md`, re-checked 7 September 2026: Chrome
-   149 and Edge 150 origin trials, Brave Leo AI chat experimental, ChatGPT
-   Desktop listed as supported (added 26 August 2026, the first non-browser
-   client), Firefox and Safari standards-positions entries only. The
-   repository's README lists headless task completion as a goal and fully
-   autonomous browser-less workflows as a non-goal.
+   `readOnlyHint` and `untrustedContentHint`. On 17 September 2026
+   `ToolAnnotations` gained a `debugging` member ("If true, indicates that the
+   tool is intended for debugging and developer tooling rather than end-user
+   interactions"), and `ModelContext` gained `toolactivated` and `toolcancel`
+   events (PRs #253, #245). On 15 September 2026 the Security and Privacy
+   Considerations listed `Permissions-Policy: tools=()` as the first mitigation:
+   the API is gated behind the policy-controlled feature `tools` (default
+   allowlist `'self'`), and an empty allowlist disables it for the document and
+   every descendant frame before script runs (PR #275). Implementation status
+   per the repository's `implementation-status.md`, re-checked 27 September 2026
+   and unchanged since 7 September: Chrome 149 and Edge 150 origin trials, Brave
+   Leo AI chat experimental, ChatGPT Desktop listed as supported (added 26
+   August 2026, the first non-browser client), Firefox and Safari
+   standards-positions entries only. The repository's README lists headless task
+   completion as a goal and fully autonomous browser-less workflows as a
+   non-goal.
 3. **Agent-to-Agent Protocol (A2A)**: https://a2a-protocol.org — launched by
    Google April 2025; the Linux Foundation announced A2A as the project's new
    home on 23 June 2025. Specification v1.0.0 was released on 12 March 2026
@@ -2467,6 +2529,8 @@ resilient, semantic, structured, and protocol-aware.
 4. **WCAG 2.2**: https://www.w3.org/TR/WCAG22/
 5. **WCAG-EM 2.0**: https://www.w3.org/TR/wcag-em-2/ — W3C Group Note, 23 July
    2026
+6. **WCAG 3.0**: https://www.w3.org/TR/2026/WD-wcag-3.0-20260910/ — W3C Working
+   Draft, 10 September 2026 (not a Recommendation)
 
 ### **BiModal Design Resources**
 

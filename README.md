@@ -232,6 +232,30 @@ merely possible.
   cheaper non-GUI route, so adoption is not solely the interface's problem; and
   28.69% absolute on OSWorld-MCP says the remaining ceiling sits somewhere other
   than tool availability.
+- **In the one study that tested it head-to-head, semantic markup alone did not
+  move agents — making the needed meaning consumable did.** **Affora** (2026) is
+  a design system for interfaces read by both people and computer-use agents. On
+  its primary comparison set, adding ARIA and structured data to the existing
+  interface left completion flat — **46/60 (77%) at baseline, 45/60 (75%) with
+  ARIA and structured data** — while Affora's rewrites of the shared interface
+  and an `agent.md` instruction file each reached **60/60 (100%)**. A
+  WebMCP-style tool condition reached 55/55 on a separately scoped action set
+  that the author states is not a matched comparison (arXiv:2609.19125). Read it
+  narrowly: the author evaluated small and mid-tier models, not frontier ones;
+  the interfaces were administrative and commerce apps; and gains appeared
+  "where Affora addresses existing deficits, but limited effects where those
+  deficits are absent or outside its coverage." For BiModal Design it is a
+  caution against treating Layer 2 annotations as sufficient on their own, and
+  support for the framework's premise that one interface can serve two readers
+  without a separate agent-only surface. It is not a test of BiModal Design.
+- **Interfaces steer agents the way they steer people.** A randomized
+  online-shopping experiment ran **3,600 agents (21,600 simulations) across six
+  models from three providers** and found them susceptible to both a default
+  nudge and a social-influence nudge. Turning up reasoning cut susceptibility to
+  the default nudge but **raised** it to the social-influence nudge — reasoning
+  redirected, rather than removed, the effect of choice architecture
+  (arXiv:2609.19843). Deceptive patterns are therefore not a human-only concern:
+  an interface built for both modes steers both.
 - **The source benchmarks have themselves been shown to be gameable.**
   **BenchJack** (2026) audited 10 popular agent benchmarks spanning software
   engineering, web navigation, desktop computing, and terminal operations, and
@@ -524,7 +548,8 @@ npm test
 - **OpAgent** — "Operator Agent for Web Navigation" achieving 71.6% on WebArena
   (arXiv:2602.13559)
 - **Operator** — OpenAI's Computer-Using Agent (87% on WebVoyager, 58.1% on
-  WebArena, 38.1% on OSWorld)
+  WebArena, 38.1% on OSWorld, as reported by OpenAI). No longer the OSWorld
+  leader; see OSWorld-Verified below.
 - **Project Mariner** — Google's agent featuring "Teach & Repeat" capabilities,
   achieving 84.0% on ScreenSpot and 83.5% on WebVoyager (Google, 2025)
 - **ScreenSpot** — Benchmark for spatial and visual understanding in GUIs
@@ -533,27 +558,37 @@ npm test
 - **WebMCP** — Browser API letting a page register tools for in-browser agents
   via `document.modelContext`. W3C Web Machine Learning Community Group, Draft
   Community Group Report — a continuously updated editor's draft, so it is cited
-  by retrieval date rather than by the date in its header (retrieved 7 September
-  2026; header then read 4 September 2026). Not a W3C Standard; not on the
-  Standards Track. The `ModelContext` interface gained a specified
+  by retrieval date rather than by the date in its header (retrieved 27
+  September 2026; header then read 26 September 2026). Not a W3C Standard; not
+  on the Standards Track. The `ModelContext` interface gained a specified
   `executeTool()` method on 14 August 2026, revised on 17 August 2026 to take a
-  structured object rather than a JSON string; `RegisteredTool.inputSchema` was
-  retyped from `DOMString` to `object` in the same window. On 19 August 2026 the
-  draft specified `AbortSignal` integration for tool execution and preserved
-  in-flight executions after unregistration (PRs #247, #248) — the cancellation
-  and teardown semantics a page needs before exposing a long-running tool to an
-  agent. On **3 September 2026** `ToolAnnotations` gained
-  **`consequentialHint`** — "If true, indicates that executing the tool will
-  result in consequential actions that are significant, real-world, or
-  non-reversible, ex: booking a flight, transferring money" — joining
-  `readOnlyHint` and `untrustedContentHint`. **Implementation status as
-  re-checked on 7 September 2026** (per the spec repository's own
-  `implementation-status.md`, which is the source for these): origin trials live
-  in **Chrome 149** and **Edge 150**; experimental support in Brave's Leo AI
-  chat; **ChatGPT Desktop** listed as supporting WebMCP — the first non-browser
-  client on the page, added 26 August 2026 in a pull request from an
-  OpenAI-affiliated author and merged by a spec editor. Firefox and Safari have
-  standards-positions entries only.
+  structured object rather than a JSON string, and retyped again on 10 September
+  2026 so that `inputObject` is `any` rather than `object` (PR #251);
+  `RegisteredTool.inputSchema` was retyped from `DOMString` to `object` in the
+  August window. On 19 August 2026 the draft specified `AbortSignal` integration
+  for tool execution and preserved in-flight executions after unregistration
+  (PRs #247, #248) — the cancellation and teardown semantics a page needs before
+  exposing a long-running tool to an agent. On **3 September 2026**
+  `ToolAnnotations` gained **`consequentialHint`** — "If true, indicates that
+  executing the tool will result in consequential actions that are significant,
+  real-world, or non-reversible, ex: booking a flight, transferring money" —
+  joining `readOnlyHint` and `untrustedContentHint`. On **17 September 2026**
+  `ToolAnnotations` gained a fourth member, **`debugging`** — "If true,
+  indicates that the tool is intended for debugging and developer tooling rather
+  than end-user interactions" — and `ModelContext` gained **`toolactivated`**
+  and **`toolcancel`** events, fired when a tool's execution begins and when it
+  is cancelled (PRs #253, #245). On **15 September 2026** the spec's first
+  listed security mitigation became **`Permissions-Policy: tools=()`**: the API
+  is gated behind the policy-controlled feature `tools` (default allowlist
+  `'self'`), and an empty allowlist disables WebMCP for the document and every
+  descendant frame, enforced "before script runs on the page" (PR #275).
+  **Implementation status as re-checked on 27 September 2026** (unchanged since
+  7 September) (per the spec repository's own `implementation-status.md`, which
+  is the source for these): origin trials live in **Chrome 149** and **Edge
+  150**; experimental support in Brave's Leo AI chat; **ChatGPT Desktop** listed
+  as supporting WebMCP — the first non-browser client on the page, added 26
+  August 2026 in a pull request from an OpenAI-affiliated author and merged by a
+  spec editor. Firefox and Safari have standards-positions entries only.
 - **ComponentBench** — "Diagnosing Component-Level Failures in Computer-Use
   Agents" — Guan, Lin, Cheng-Yue, Wang, Zhou (arXiv:2608.18307, 18 August 2026).
   97 canonical UI components as 2,910 programmatically verified tasks with human
@@ -581,6 +616,31 @@ npm test
   desktop applications; a post-trained 9B model reaches 40.2% on OSWorld against
   its own GUI-only 23.4%, and 28.69% on OSWorld-MCP against the untuned base
   model's 20.90%. An agent-training result; makes no interface-design claim.
+- **Affora** — "Affora: A Design System for Agent-Friendly Interfaces" — Jin Gao
+  (arXiv:2609.19125, 16 September 2026). Three controlled studies plus
+  evaluation on WebArena's Magento storefront, WebShop, and four independently
+  authored applications. Primary set: baseline 46/60, ARIA and structured data
+  45/60, `agent.md` 60/60, Affora 60/60. Small and mid-tier models only.
+- **Nudge susceptibility in GUI agents** — "A Dual-Process Perspective on Nudge
+  Susceptibility in LLM-Based GUI Agents" — Halimeh, Kaltenpoth, Bösch, Müller
+  (arXiv:2609.19843, 17 September 2026). 3,600 agents, 21,600 simulations, six
+  models (GPT-5.4 and -mini, Gemini 3.5 Flash and 3.1 Flash Lite, Claude Sonnet
+  4.6 and Haiku 4.5). Reasoning lowered susceptibility to default nudges and
+  raised it to social-influence nudges.
+- **OSWorld-Verified results** — the OSWorld maintainers' results file behind
+  the leaderboard at osworld-v1.xlang.ai
+  (`static/data/osworld_verified_results.xlsx`, last modified 7 August 2026).
+  Highest entry 90.19% (Intelligence-Indeed Agent, an agentic framework, 25 July
+  2026); highest general model 85.96% (`claude-fable-5[1m]`, 1 August 2026),
+  then `claude-opus-5[1m]` at 83.39%. None of the fifteen highest entries lists
+  the accessibility tree as an additional input.
+- **MCP Skills Extension (SEP-2640)** — Final, merged 13 September 2026;
+  extension identifier `io.modelcontextprotocol/skills`. Serves Agent Skills
+  over the existing Resources primitive under a `skill://` URI convention, with
+  `skills/list` and `skills/get` methods; the skill format and its progressive
+  disclosure model are delegated to the Agent Skills specification. SDK
+  implementation PRs remained open at merge.
+  https://modelcontextprotocol.io/seps/2640-skills-extension
 - **Code execution with MCP** — Building more efficient agents (Anthropic,
   Nov 2025)
 
