@@ -660,6 +660,25 @@ it's measurable:
   this section is methodological rather than numerical: agent success rates
   should be read as directional evidence, and evaluation pipelines need an
   adversarial mindset (arXiv:2605.12673).
+- **AX is the New AEO (2026)**: The largest field study so far of whether a
+  site's readability to agents changes what agents say about it. Across 37,927
+  agent journeys over 1,056 real businesses and four independent agent harnesses,
+  with businesses matched on fame, prior model knowledge, and two
+  answer-engine-optimization proxies, those scored agent-ready were clearly
+  recommended 20% of the time against 11% for those that were not, or 1.9x.
+  Holding business, harness, and question fixed, answers built from the site got
+  48.3% of the asked facts right against 34.3% for answers built from elsewhere
+  on the web (p<0.0001), and the dominant failure was omission rather than
+  fabrication (arXiv:2609.34951). Three cautions limit what it supports. It is
+  correlational: the authors name content depth as an unmatched confounder and
+  say an intervention study "would settle it." Agent-readiness is scored by the
+  authors' own proprietary ranker, a composite of signals (content that survives
+  a fetch without JavaScript, structured data and entity linking,
+  machine-readable entry points such as `llms.txt`, and bot controls that admit
+  user-triggered agents), and no single signal's effect is reported separately.
+  All four authors work for the company that sells that ranker. It is therefore
+  directional evidence for Layers 1 and 3 taken together, not a measurement of
+  any one layer and not a test of BiModal Design.
 
 ### **5.2 Performance Gaps by Agent Type**
 
@@ -1232,6 +1251,25 @@ using standard HTML tags:
 This serves as a bridge, allowing Level 2 Agentic Browsers and Level 3
 Computer-Use agents to discover the server and seamlessly upgrade from
 visual/DOM navigation to deterministic tool invocation.
+
+**Standardized MCP Server Discovery (Server Cards):** The `<link>` element above
+is this framework's own convention; no MCP specification defines it or the
+`application/mcp+json` media type. On 6 October 2026 MCP standardized
+pre-connection discovery through a different route. **SEP-2127, "MCP Server
+Cards - HTTP Server Discovery"**, reached Final status on the Extensions Track.
+A Server Card is a static, public document describing a remote MCP server's
+identity, transport endpoints, and supported protocol versions, served with the
+media type `application/mcp-server-card+json`. Cards can be hosted at any
+unreserved URI, with `<streamable-http-url>/server-card` reserved as the
+recommended location, and a domain lists or embeds its cards in an AI Catalog
+at `/.well-known/ai-catalog.json` (`application/ai-catalog+json`). Cards
+deliberately omit tools, resources, and prompts, which are still listed at
+runtime, and the extension is optional. The SEP considered DNS-based and
+header-based discovery and rejected both, and neither the SEP nor its
+normative discovery document mentions HTML `<link>` discovery. A site
+implementing Layer 5 should therefore publish a Server Card and an AI Catalog
+entry as the standard mechanism, and treat the in-page `<link>` as an optional,
+non-standard hint for agents that are already reading the DOM.
 
 **Defensive Design & Safety (ST-WebAgentBench Insights):** Benchmarks like
 **ST-WebAgentBench** emphasize the necessity of safety and trustworthiness. When
@@ -2449,6 +2487,26 @@ resilient, semantic, structured, and protocol-aware.
 5. **Code execution with MCP**:
    https://www.anthropic.com/engineering/code-execution-with-mcp — Anthropic,
    Nov 2025
+6. **MCP Server Cards (SEP-2127)**:
+   https://modelcontextprotocol.io/seps/2127-mcp-server-cards — Extensions
+   Track, Final; merged 6 October 2026 (PR #2127). Normative format and
+   discovery mechanics:
+   https://github.com/modelcontextprotocol/experimental-ext-server-card
+   (`docs/discovery.md`): AI Catalog at `/.well-known/ai-catalog.json`
+   (`application/ai-catalog+json`); cards as `application/mcp-server-card+json`.
+7. **WebMCP, October 2026 changes** (supplements item 2; retrieved 9 October
+   2026, when the header read 9 October 2026): on 8 October 2026 the
+   declarative API was removed from the specification (PR #338), which now
+   covers only the imperative `registerTool()` API. Declarative WebMCP, which
+   proposes `toolname`, `tooldescription`, and `toolautosubmit` attributes on
+   `<form>` and `toolparamdescription` on form controls, continues only in the
+   repository's `declarative-api-explainer.md`, where schema synthesis and
+   response handling are still marked to be determined. On 29 September 2026
+   `implementation-status.md` added **Meta Ray-Ban Display**: "WebMCP for Web
+   Apps is coming soon", letting Meta AI on the glasses call tools registered
+   with `document.modelContext.registerTool()` (PR #325). It is the first
+   wearable client on the page, and is "off by default and enabled per device,
+   either in Developer Mode or for wearers in the rollout."
 
 ### **Rendering & Performance**
 
