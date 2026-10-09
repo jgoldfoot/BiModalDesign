@@ -319,7 +319,10 @@ node tools/validators/fr1-checker.js https://your-site.com --verbose
 </script>
 
 <!-- Layer 4: API documented via OpenAPI -->
-<!-- Layer 5: MCP server discovery for protocol-native agents -->
+<!-- Layer 5: MCP server discovery for protocol-native agents.
+     Standard mechanism (SEP-2127): publish an MCP Server Card and list it in
+     /.well-known/ai-catalog.json. The <link> below is a non-standard in-page
+     hint for agents already reading the DOM. -->
 <link rel="alternate" type="application/mcp+json" href="/mcp-server" />
 ```
 
@@ -602,6 +605,27 @@ npm test
   standardized contract for `tools/call` result forms. Both target the
   discoverability half of the adoption gap. Tasks moved into an official
   extension (SEP-2663). https://blog.modelcontextprotocol.io/posts/mcp-roadmap/
+- **MCP Server Cards (SEP-2127)** — Extensions Track, Final; merged 6
+  October 2026. Standardizes pre-connection discovery of remote MCP servers: a
+  static Server Card (`application/mcp-server-card+json`) describing identity,
+  transport endpoints, and supported protocol versions, listed or embedded in an
+  AI Catalog at `/.well-known/ai-catalog.json`. Cards omit tools, resources, and
+  prompts, which are still listed at runtime. No HTML `<link>` mechanism is
+  defined. https://modelcontextprotocol.io/seps/2127-mcp-server-cards
+- **WebMCP, October 2026** — On 8 October 2026 the declarative API (`toolname` /
+  `tooldescription` / `toolautosubmit` on `<form>`) was removed from the
+  specification, which now covers only imperative `registerTool()`. Declarative
+  WebMCP continues only in the repository's `declarative-api-explainer.md` (PR
+  #338). On 29 September 2026 `implementation-status.md` added **Meta Ray-Ban
+  Display**: "WebMCP for Web Apps is coming soon", off by default (PR #325).
+  Retrieved 9 October 2026.
+- **AX is the New AEO** — Finder, Elovic, Shalev, Yosef (arXiv:2609.34951, v1 28
+  September 2026; v3 6 October 2026). 37,927 agent journeys over 1,056 real
+  businesses and four agent harnesses, matched on fame, prior model knowledge,
+  and two AEO proxies. Agent-ready businesses were clearly recommended 20% of
+  the time against 11% (1.9x); site-built answers got 48.3% of asked facts right
+  against 34.3%. Correlational; readiness is the authors' own proprietary
+  composite score, and all four authors work for the vendor of that score.
 - **Computer-Use Agents for Blind Users** — "Are We There Yet? Assessing
   Computer-Use Agents for Blind Users' Accessible Interaction with Desktop
   Applications" — Kodandaram, Padma Reddy, Bi, Zhou, Ramakrishnan, Ashok
