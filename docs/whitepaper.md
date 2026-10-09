@@ -662,8 +662,8 @@ it's measurable:
   adversarial mindset (arXiv:2605.12673).
 - **AX is the New AEO (2026)**: The largest field study so far of whether a
   site's readability to agents changes what agents say about it. Across 37,927
-  agent journeys over 1,056 real businesses and four independent agent harnesses,
-  with businesses matched on fame, prior model knowledge, and two
+  agent journeys over 1,056 real businesses and four independent agent
+  harnesses, with businesses matched on fame, prior model knowledge, and two
   answer-engine-optimization proxies, those scored agent-ready were clearly
   recommended 20% of the time against 11% for those that were not, or 1.9x.
   Holding business, harness, and question fixed, answers built from the site got
@@ -1261,15 +1261,15 @@ A Server Card is a static, public document describing a remote MCP server's
 identity, transport endpoints, and supported protocol versions, served with the
 media type `application/mcp-server-card+json`. Cards can be hosted at any
 unreserved URI, with `<streamable-http-url>/server-card` reserved as the
-recommended location, and a domain lists or embeds its cards in an AI Catalog
-at `/.well-known/ai-catalog.json` (`application/ai-catalog+json`). Cards
+recommended location, and a domain lists or embeds its cards in an AI Catalog at
+`/.well-known/ai-catalog.json` (`application/ai-catalog+json`). Cards
 deliberately omit tools, resources, and prompts, which are still listed at
 runtime, and the extension is optional. The SEP considered DNS-based and
-header-based discovery and rejected both, and neither the SEP nor its
-normative discovery document mentions HTML `<link>` discovery. A site
-implementing Layer 5 should therefore publish a Server Card and an AI Catalog
-entry as the standard mechanism, and treat the in-page `<link>` as an optional,
-non-standard hint for agents that are already reading the DOM.
+header-based discovery and rejected both, and neither the SEP nor its normative
+discovery document mentions HTML `<link>` discovery. A site implementing Layer 5
+should therefore publish a Server Card and an AI Catalog entry as the standard
+mechanism, and treat the in-page `<link>` as an optional, non-standard hint for
+agents that are already reading the DOM.
 
 **Defensive Design & Safety (ST-WebAgentBench Insights):** Benchmarks like
 **ST-WebAgentBench** emphasize the necessity of safety and trustworthiness. When
@@ -2495,11 +2495,11 @@ resilient, semantic, structured, and protocol-aware.
    (`docs/discovery.md`): AI Catalog at `/.well-known/ai-catalog.json`
    (`application/ai-catalog+json`); cards as `application/mcp-server-card+json`.
 7. **WebMCP, October 2026 changes** (supplements item 2; retrieved 9 October
-   2026, when the header read 9 October 2026): on 8 October 2026 the
-   declarative API was removed from the specification (PR #338), which now
-   covers only the imperative `registerTool()` API. Declarative WebMCP, which
-   proposes `toolname`, `tooldescription`, and `toolautosubmit` attributes on
-   `<form>` and `toolparamdescription` on form controls, continues only in the
+   2026, when the header read 9 October 2026): on 8 October 2026 the declarative
+   API was removed from the specification (PR #338), which now covers only the
+   imperative `registerTool()` API. Declarative WebMCP, which proposes
+   `toolname`, `tooldescription`, and `toolautosubmit` attributes on `<form>`
+   and `toolparamdescription` on form controls, continues only in the
    repository's `declarative-api-explainer.md`, where schema synthesis and
    response handling are still marked to be determined. On 29 September 2026
    `implementation-status.md` added **Meta Ray-Ban Display**: "WebMCP for Web
