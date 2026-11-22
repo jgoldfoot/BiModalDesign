@@ -14,9 +14,13 @@
  * contradiction is found — the gate should grow from real failures, not guesses.
  *
  * Usage: npm run check:consistency        (exit 1 on any FAIL; WARN is advisory)
+ *
+ * CommonJS on purpose: this repo lints .mjs as sourceType "script", so ESM
+ * syntax fails `eslint . --max-warnings=0` without a config change.
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+const { readFileSync, readdirSync, statSync } = require('node:fs');
+const { join } = require('node:path');
+const { execSync } = require('node:child_process');
 
 const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
 
@@ -111,7 +115,6 @@ else {
   // Date is advisory: a released entry's date is a record, and correcting it is a
   // human decision. Compare against the GitHub release when gh is available.
   try {
-    const { execSync } = await import('node:child_process');
     const rel = execSync(`gh release view v${top[1]} --json publishedAt --jq .publishedAt`, {
       stdio: ['ignore', 'pipe', 'ignore'],
     })

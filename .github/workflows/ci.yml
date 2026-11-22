@@ -170,4 +170,4 @@ jobs:
         node-version: 24
 
     - name: Check cross-document consistency
-      run: node scripts/check-consistency.mjs
+      run: node scripts/check-consistency.cjs
