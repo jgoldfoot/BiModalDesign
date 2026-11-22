@@ -163,3 +163,11 @@ jobs:
             echo "✅ Found: $file"
           fi
         done
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: 24
+
+    - name: Check cross-document consistency
+      run: node scripts/check-consistency.mjs
