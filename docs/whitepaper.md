@@ -551,7 +551,13 @@ it's measurable:
   reaches only 41.2%. Its companion trajectory-aware judge — which inspects
   deliverables, files, screenshots, logs, and action traces — found that
   outcome-only grading substantially overestimates agent performance
-  (arXiv:2606.09426).
+  (arXiv:2606.09426). **CUA-Recovery (2026)** isolates one mechanism behind the
+  long-horizon gap: dropped into 2,250 human-verified erroneous states across
+  100 tasks, six agents recognised the inherited error at most 44.0% of the time
+  (Error Awareness Rate) and went on to complete the task at most 25.5% of the
+  time (Pass@3), across six takeover depths (arXiv:2610.27645). Recovery
+  affordances in an interface — undo, clear state indicators, confirmation of
+  what just happened — only help an agent that notices it needs them.
 - **MAG Benchmark (2026)**: Evaluates agents on rendered screenshots using
   Set-of-Mark element selection and raw pixel coordinates, rather than the DOM
   or accessibility-tree representations most prior benchmarks supply. Even the
@@ -632,7 +638,15 @@ it's measurable:
   not make agents use them; SCOUT is a production instance of the corrective
   this framework names — making the tool route cheap to find and cheap to carry
   — and it converges with the progressive-discovery direction the MCP roadmap
-  set out in August 2026.
+  set out in August 2026. That gateway layer now has its own benchmark.
+  **GatewayBench (2026)** evaluates seven widely deployed MCP gateways over 524
+  tasks in six domains and a pool of 11,118 real tools from 251 servers, padding
+  each agent's environment with unrelated tools to simulate large deployments,
+  and reports substantial differences between flattened and hierarchical gateway
+  designs in task completion, tool-use efficiency, and resistance to attack —
+  with the effects depending strongly on the underlying model and harness
+  (arXiv:2610.23449). How tools are surfaced is now a measured variable, not an
+  implementation detail.
 - **CUA-Universe (2026)**: The complement to the previous entry, and a check on
   reading the adoption gap as purely an interface problem. Its App-Forge
   pipeline turns 16 real desktop applications into reproducible hybrid GUI+CLI
@@ -647,7 +661,40 @@ it's measurable:
   around the GUI when a cheaper surface exists, which means tool adoption is not
   the interface's problem alone; and 28.69% in absolute terms says that once
   adoption is trained in, the binding constraint has moved somewhere other than
-  tool availability.
+  tool availability. **OS-Helix (2026)** reports the same boundary from the
+  other direction: in the authors' preliminary experiments, adding a code tool
+  to a GUI agent by prompting alone _degraded_ performance, which is why they
+  train GUI/code routing end-to-end in a single action space; the resulting
+  OS-Helix-27B-RL reaches 66.44% on OSWorld-Verified (arXiv:2610.22234). A
+  cheaper route that is merely available is not a cheaper route that gets taken.
+- **MICA (2026)**: The most controlled evidence so far that the _form_ of a
+  protocol surface, not only its existence, shapes agent behaviour. Matched
+  Interface Comparison and Analysis renders MCP tool calls and a command-line
+  interface from one shared semantic action contract and routes both through the
+  same validation and execution runtime, so what the agent _can_ do is held
+  fixed and only how the capability is presented, realized, and fed back varies.
+  Across six models (Qwen3-4B/8B/14B/32B, DeepSeek-v4-Flash, Gemini-2.5-Flash)
+  and three environments (ALFWorld, WebShop, ScienceWorld), matched interfaces
+  still produced large differences in score and cost, and the direction depended
+  on the model-environment pair: for Qwen3-14B, MCP trailed CLI by 36.6 points
+  on ALFWorld (20.1 vs 56.7) yet beat it by 4.9 on WebShop (64.4 vs 59.5), with
+  token cost reversing at the same time. On WebShop — the environment closest to
+  this framework's commerce examples — MCP lowered the attempt-level failure
+  rate for all six models by 1.1-8.9 percentage points, and the remaining
+  failures moved from surface decoding toward later availability and execution
+  stages. Paired trajectories diverged in a structured way in 1,889 of 2,004
+  episodes (94.3%), usually early, after which histories, costs, and outcomes
+  separated. The authors' repair, DART, keeps a validated semantic decision
+  fixed and re-expresses only its interface-specific realization, lifting
+  Gemini-2.5-Flash in all six settings by up to 9.0 points and cutting MCP
+  tokens by up to 27.1k per task (arXiv:2610.34298). Their conclusion is one
+  this framework arrived at from the adoption gap: interface representation is
+  "part of the agent's decision environment rather than ... a passive access
+  layer." For Layer 5 the implication is concrete. Publishing a tool is a design
+  decision about its schema, its feedback, and how an action gets realized, and
+  the best form is model-dependent in the same way ComponentBench found for
+  Layer 2 observation spaces. None of the three environments is a live website,
+  and the study does not test BiModal Design.
 - **Affora (2026)**: The nearest published analogue to this framework's own
   thesis — a design system for one interface read by two kinds of reader — and
   the first head-to-head test of semantic annotation against alternatives. On
@@ -1287,6 +1334,43 @@ should therefore publish a Server Card and an AI Catalog entry as the standard
 mechanism, and treat the in-page `<link>` as an optional, non-standard hint for
 agents that are already reading the DOM.
 
+**WebMCP, late October 2026 — cross-origin tools and agent-level guardrails.**
+Two changes in the second half of October 2026 bear on how a BiModal site should
+scope the tools it exposes in the browser (spec header 27 October 2026). On 27
+October 2026, §6.3.4 "Interaction with the Same-Origin Policy" specified a
+**two-sided opt-in** for cross-origin tool exposure (PR #326). By default a tool
+is visible and executable only by same-origin documents. For a cross-origin
+document to see or call it, three independent gates must all open: the embedder
+must delegate the `tools` permission to the frame (for example `allow="tools"`
+on the iframe; the Permissions-Policy default allowlist is `'self'`), the
+provider must list the permitted caller origins in `registerTool()`'s
+`exposedTo` option, and the consumer must list the origins it is willing to
+accept tools from in `getTools()`'s `fromOrigins` option — an empty list on
+either side means same-origin only. Provider opt-in stops a parent page from
+invoking an embedded widget's internal tools; consumer opt-in stops an iframe
+from pushing misleadingly named or poisoned tools into the parent's tool list.
+Even with mutual consent the spec treats the origins as separate trust domains:
+providers must treat caller arguments as untrusted input, callers must treat
+cross-origin tool descriptions and return values as untrusted data, and callers
+should check each `RegisteredTool`'s `origin` and `window` to tell apart tools
+that share a name. For a site composing third-party widgets — payment frames,
+chat, embedded maps — this is the mechanism by which Layer 5 tools either do or
+do not cross those boundaries, and the default is that they do not. On 20
+October 2026, §6.2 added that indirect prompt injection from untrusted web
+content and cross-origin data correlation are general agentic-browsing risks
+that "a single web API specification cannot normatively enforce" against, and
+§6.4.6 "Agent-Level Guardrails and Best Practices" now states that agents cannot
+rely solely on site-asserted tool descriptions or annotations, links Chrome's
+"Agent security considerations for WebMCP" and "Secure tools with WebMCP"
+guidance, and links a **draft W3C Agentic Web Working Group charter** whose
+single normative deliverable is WebMCP, adopted from the Web Machine Learning
+Community Group (PR #334). The charter is marked draft with placeholder start
+and end dates; no Call for Participation has been issued and the group does not
+yet exist, so WebMCP remains a Community Group incubation. The repository's
+`implementation-status.md` is unchanged from September: Chrome 149 and Edge 150
+origin trials, Brave Leo experimental, ChatGPT Desktop, and Meta Ray-Ban Display
+"coming soon".
+
 **Defensive Design & Safety (ST-WebAgentBench Insights):** Benchmarks like
 **ST-WebAgentBench** emphasize the necessity of safety and trustworthiness. When
 exposing actions via Layer 2 or tools via Layer 5, explicit constraints are
@@ -1338,6 +1422,19 @@ required sticky sessions and a shared session store can run behind an ordinary
 round-robin load balancer. The revision also adds a formal feature lifecycle
 with a minimum twelve-month deprecation window, and deprecates the Roots,
 Sampling, and Logging features.
+
+**Release cadence (SEP-3398).** On 14 October 2026 the Core Maintainers accepted
+"Release Cycle Updates", a Process SEP that puts specification releases on a
+six-month cadence — generally the last Tuesday of March and September — with
+each release on an eight-month cycle: planning opens eight months out, the Core
+Maintainer review window runs from six months to a soft freeze at 2.5 months,
+Tier 1 SDK betas are due 1.5 months out, and a hard freeze at one month admits
+only security and release-blocking fixes by full Core Maintainer vote.
+Release-bound SEPs must be Final and merged by soft freeze; unfinished work
+moves to the next cycle rather than moving the date. The release previously
+targeted for December 2026 moves to 30 March 2027. For Layer 5 planning this
+means `2026-07-28` is the protocol to build against through Q1 2027, and that
+the next revision's scope will be frozen by mid-January 2027.
 
 **In-protocol discovery (`server/discover`).** With the `initialize` handshake
 removed, `2026-07-28` adds `server/discover`, an RPC that servers **MUST**
@@ -1468,6 +1565,24 @@ users a median of roughly 1.6 hours each and average 318 tool calls, against
 about 30 in OSWorld 1.0. On it, the best frontier agent evaluated (Claude Opus
 4.8 with maximum thinking and batched tool calls) completes only **20.6%** of
 tasks at a 500-step budget, with a 54.8% partial score.
+
+That 20.6% is no longer the highest reported figure, and the way it was passed
+is instructive. **Evolving Agent Interfaces** (Agent S4, arXiv:2610.28601, 20
+October 2026) has a meta-agent build and revise the agent's own interfaces to
+the computer — app-specific object interfaces, cross-app interfaces such as PDF
+reading and a structured browser interface that runs requests inside a logged-in
+tab — from task trajectories, with population-based evolution keeping whatever
+performs best on held-out tasks. With the open-weight Qwen3.8-27B the evolved
+repository scores **21.30%** binary on the full 108-task OSWorld 2.0 set,
+against **5.56%** for the same model on a fixed interface (about 3.8x), and
+above the 20.60% the OSWorld 2.0 paper reports for Claude Opus 4.8 and the
+13.00% for GPT-5.5, at a reported $1.10 per task. Two cautions: Agent S4 ran
+under a 300-step budget where the reference runs used 500, so the comparison is
+not perfectly matched, and "interface" in that paper means the agent's access
+layer, not a website or application UI — it makes no claim about interface
+design in this framework's sense. It belongs here because the entire gain came
+from changing the interface while the model stayed fixed, which is the premise
+of this section applied from the agent's side of the screen.
 
 The lesson for BiModal Design is that short-horizon UI competence and
 long-horizon task completion are different problems, and progress on the first
@@ -2485,6 +2600,44 @@ resilient, semantic, structured, and protocol-aware.
     https://osworld-v1.xlang.ai/static/data/osworld_verified_results.xlsx (last
     modified 7 August 2026). Highest entry 90.19% (agentic framework); highest
     general model 85.96% (`claude-fable-5[1m]`); `claude-opus-5[1m]` 83.39%.
+29. **Evolving Agent Interfaces (Agent S4)**: Agashe, Yang, Gonzalez-Pumariega,
+    Koduru, Li, Yang, Li, Wang; arXiv:2610.28601 (v1, 20 October 2026); work
+    done at Simular. Qwen3.8-27B with evolved agent-side interfaces: 21.30%
+    binary on OSWorld 2.0 (108 tasks, 300-step budget) against 5.56%
+    fixed-interface; ScienceBoard 41.4% to 58.58%. Reference scores for GPT-5.5
+    (13.00%) and Claude Opus 4.8 (20.60%) are taken from the OSWorld 2.0 paper's
+    Table 3 at a 500-step budget. Agent-side interfaces only; no website or
+    application design claim.
+30. **MICA**: "Matched Capabilities, Different Behaviors: A Controlled Study of
+    MCP and CLI Interfaces for Language Agents" — Shi, Pang, Li (Hong Kong
+    Polytechnic University; Institute of Computing Technology, Chinese Academy
+    of Sciences); arXiv:2610.34298 (v1, 25 October 2026). Six models on
+    ALFWorld, WebShop, ScienceWorld; MCP and CLI rendered from one semantic
+    contract with a shared runtime. Qwen3-14B: MCP 20.1 vs CLI 56.7 on ALFWorld,
+    64.4 vs 59.5 on WebShop; MCP lowers WebShop attempt-level failure for all
+    six models by 1.1-8.9pp; 1,889/2,004 paired episodes (94.3%) diverge. DART:
+    +1.5/+9.0 (ALFWorld), +0.8/+4.4 (WebShop), +6.7/+5.3 (ScienceWorld) for
+    CLI/MCP on Gemini-2.5-Flash; MCP token reductions of 27.1k, 11.2k, 4.3k per
+    task. Code: https://github.com/ModalityDance/MICA
+31. **GatewayBench**: "Unified Capability and Security Evaluation Platform for
+    MCP Gateways" — Zheng, Chen, Li, Li; arXiv:2610.23449 (v1, 16 October 2026).
+    524 tasks, six domains, 11,118 tools from 251 MCP servers, seven deployed
+    gateways; flattened vs hierarchical designs; benign and adversarial tasks.
+    Differences in completion, efficiency, and attack resilience are substantial
+    and depend on model and harness.
+32. **OS-Helix**: "Unifying GUI Interaction and Code Execution in Native
+    Computer-Using Agents" — Yang, Jin, Ding, Wu, Li, Liu, Cheng, Xu, Sun, Sun,
+    Qiao; arXiv:2610.22234 (v1, 15 October 2026). Single GUI+code action space,
+    SFT then online RL with Step-balanced GSPO; OS-Helix-27B-RL 66.44% on
+    OSWorld-Verified. Prompting a code tool into a GUI agent degraded
+    performance in preliminary experiments.
+33. **CUA-Recovery**: "Benchmarking Error Recovery in Long-Horizon Computer-Use
+    Agents" — Hu, Li, Wang, Yang, Li, Wang, Kang, Song, Wang, Hu, Yang, Li, Li,
+    Chen; arXiv:2610.27645 (v1, 20 October 2026). 2,250 human-verified erroneous
+    states over 100 tasks; 8.6K training trajectories over 377 tasks; built with
+    ReRail from MyPCBench. Across six agents and six takeover depths, Error
+    Awareness Rate at most 44.0% and Pass@3 at most 25.5%; fine-tuning
+    Qwen3.5-35B-A3B raised EAR from 19.9% to 35.2%.
 
 ### **Agent Protocols**
 
@@ -2501,6 +2654,12 @@ resilient, semantic, structured, and protocol-aware.
    format and its progressive-disclosure model delegated to the Agent Skills
    specification. It is the protocol-level form of the progressive discovery the
    MCP roadmap describes. SDK implementations were still open at merge.
+   **SEP-3398 "Release Cycle Updates"** (Process; created 17 September 2026,
+   Accepted 14 October 2026) sets a six-month release cadence on the last
+   Tuesday of March and September, with eight-month cycles, soft freeze at 2.5
+   months and hard freeze at one month; the release previously targeted for
+   December 2026 moves to 30 March 2027.
+   https://modelcontextprotocol.io/seps/3398-release-cycle-updates
 2. **WebMCP**: https://webmachinelearning.github.io/webmcp/ — W3C Web Machine
    Learning Community Group. Continuously updated editor's draft published as a
    Draft Community Group Report; the document header is regenerated on each
@@ -2569,6 +2728,23 @@ resilient, semantic, structured, and protocol-aware.
    with `document.modelContext.registerTool()` (PR #325). It is the first
    wearable client on the page, and is "off by default and enabled per device,
    either in Developer Mode or for wearers in the rollout."
+8. **WebMCP, late October 2026 changes** (supplements items 2 and 7; retrieved
+   27 October 2026, when the header read 27 October 2026): on 27 October 2026
+   §6.3.4 "Interaction with the Same-Origin Policy" specified two-sided opt-in
+   for cross-origin tools (PR #326, merged by a spec editor): embedder
+   delegation of the `tools` permission (default allowlist `'self'`), provider
+   opt-in via `registerTool()` option `exposedTo`, consumer opt-in via
+   `getTools()` option `fromOrigins`; same-origin only by default; cross-origin
+   descriptions, arguments and return values to be treated as untrusted. On 20
+   October 2026 §6.2 and the new §6.4.6 "Agent-Level Guardrails and Best
+   Practices" were added (PR #334), linking
+   https://developer.chrome.com/docs/agents/security,
+   https://developer.chrome.com/docs/ai/webmcp/secure-tools, and the draft
+   Agentic Web Working Group charter at
+   https://w3c.github.io/charter-drafts/2026/agenticweb-wg.html, which names
+   WebMCP as its normative deliverable adopted from the Community Group. The
+   charter is a draft with placeholder dates. `implementation-status.md`
+   unchanged.
 
 ### **Rendering & Performance**
 
