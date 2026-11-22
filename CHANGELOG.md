@@ -45,6 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - `data-agent-context`, `data-agent-action`, `data-agent-field`,
   `data-agent-component`, `data-agent-intent` from recommended patterns
+
+  > **Clarified 2026-06-07 (commit 5bcce8c) and recorded here 2026-11-22:** `data-agent-*` was not removed. v3.0 is standards-first; `data-agent-*` is **retained as a supplementary layer** for needs no standard covers (`data-agent-action`, `data-agent-component`). Specification: whitepaper §7.2 and `docs/api-reference.md`; rule: `AGENTS.md`. The bullets above describe the migration of *examples*, not deprecation of the namespace.
   (retained only in migration guidance)
 
 ## [Unreleased]

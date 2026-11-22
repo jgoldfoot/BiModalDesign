@@ -2149,7 +2149,7 @@ primary documentation and guide site for the framework. Audited May 2026.
 **Layer 5: Agent Protocols — NOT IMPLEMENTED**
 
 - No MCP server
-- No Agent Card (`/.well-known/agent.json` returns 404)
+- No Agent Card (`/.well-known/agent-card.json` returns 404)
 - No NLWeb endpoint
 
 **Estimated Compliance Score**: Maturity Level 1 — "Semantically Accessible"

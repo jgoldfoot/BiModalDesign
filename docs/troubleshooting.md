@@ -40,7 +40,7 @@ curl -s "https://your-site.com/api/openapi.json" | head -5
 # Expected: OpenAPI spec or API response
 
 # Layer 5: Agent protocols?
-curl -s "https://your-site.com/.well-known/agent.json"
+curl -s "https://your-site.com/.well-known/agent-card.json"
 # Expected: Agent Card (if implemented)
 ```
 
@@ -335,10 +335,10 @@ npx @modelcontextprotocol/inspector your-mcp-server
 
 - A2A agents can't find your service
 
-**Solution:** Ensure `/.well-known/agent.json` is accessible:
+**Solution:** Ensure `/.well-known/agent-card.json` is accessible:
 
 ```bash
-curl -s https://your-site.com/.well-known/agent.json
+curl -s https://your-site.com/.well-known/agent-card.json
 # Should return valid JSON with capabilities
 ```
 
