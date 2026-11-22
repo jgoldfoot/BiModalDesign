@@ -181,7 +181,12 @@ merely possible.
   model-runtime pairing reaches a 41.2% PassRate. Its trajectory-aware judge
   also found that outcome-only grading substantially overestimates agent
   performance — a caution that applies to the benchmark figures the ranges above
-  are derived from.
+  are derived from. **CUA-Recovery** (2026) isolates one reason long horizons
+  stay hard: dropped into 2,250 human-verified erroneous states over 100 tasks,
+  six agents recognised the inherited error at most 44.0% of the time (Error
+  Awareness Rate) and completed the task at most 25.5% of the time (Pass@3)
+  (arXiv:2610.27645). Agents that cannot tell they have gone wrong cannot use
+  the recovery affordances an interface offers.
 - **Exposing a protocol surface is necessary but not sufficient — the agent has
   to choose it.** A 2026 study of hybrid GUI-MCP agents ran one identical
   harness on the **OSWorld-MCP** benchmark (309 tasks) and found that merely
@@ -206,7 +211,33 @@ merely possible.
   full-catalog exposure and no end-to-end agent success rate. It matters here
   because it is the same move the framework argues for at Layer 5 — make the
   tool route cheap and findable — implemented at enterprise scale rather than
-  proposed.
+  proposed. That middleware layer now has a benchmark of its own:
+  **GatewayBench** (2026) evaluates seven deployed MCP gateways over 524 tasks
+  and a pool of 11,118 real tools from 251 servers, padding each agent's
+  environment with unrelated tools to simulate scale, and reports substantial
+  differences between flattened and hierarchical gateway designs in task
+  completion, tool-use efficiency, and attack resilience — differences that
+  depend strongly on the model and harness (arXiv:2610.23449).
+- **The same tools, presented differently, produce different agents.** The
+  cleanest evidence yet that the _form_ of a Layer 4/5 surface matters is
+  **MICA** (2026), which renders MCP tool calls and a command-line interface
+  from one shared semantic action contract and routes both through the same
+  runtime, so the only thing that varies is how the capability is presented to
+  the model. Across six models and three environments (ALFWorld, WebShop,
+  ScienceWorld), matched interfaces still produced large differences in score
+  and cost, and in neither direction consistently: for Qwen3-14B, MCP trailed
+  CLI by **36.6 points on ALFWorld (20.1 vs 56.7)** but beat it by **4.9 on
+  WebShop (64.4 vs 59.5)**, with token cost reversing at the same time. On the
+  shopping environment, MCP lowered the attempt-level failure rate for all six
+  models by **1.1-8.9 percentage points**. Paired trajectories diverged in a
+  structured way in **1,889 of 2,004 episodes (94.3%)**, usually early, after
+  which histories and costs separated (arXiv:2610.34298). The authors' own
+  conclusion is the one this framework has been circling since the adoption gap:
+  interface representation is "part of the agent's decision environment rather
+  than ... a passive access layer." For Layer 5 that means publishing a tool is
+  a design decision about its schema, its feedback, and its realization, not
+  just its existence — and the right form is model-dependent, as ComponentBench
+  already showed for Layer 2.
 - **A populated accessibility tree is the floor, not the finish line.** A
   three-week deployment study put a screen-reader-accessible computer-use agent
   in front of **8 blind users**, collecting **1,258 real commands across 12
@@ -231,7 +262,11 @@ merely possible.
   because it cuts both ways for Layer 5. An agent can be taught to prefer the
   cheaper non-GUI route, so adoption is not solely the interface's problem; and
   28.69% absolute on OSWorld-MCP says the remaining ceiling sits somewhere other
-  than tool availability.
+  than tool availability. **OS-Helix** (2026) reports the same boundary from the
+  other side: in its preliminary experiments, handing a GUI agent a code tool by
+  prompting alone _hurt_ performance, and GUI/code routing had to be trained in;
+  the trained OS-Helix-27B-RL then reached 66.44% on OSWorld-Verified
+  (arXiv:2610.22234). Availability without trained preference is not adoption.
 - **In the one study that tested it head-to-head, semantic markup alone did not
   move agents — making the needed meaning consumable did.** **Affora** (2026) is
   a design system for interfaces read by both people and computer-use agents. On
@@ -489,7 +524,23 @@ npm test
 - **OSWorld 2.0** — "Benchmarking Computer Use Agents on Long-Horizon Real-World
   Tasks" — Yuan, Zhou, Xiong et al., XLANG Lab (arXiv:2606.29537, June 2026).
   108 long-horizon workflows; best frontier agent completes 20.6% at a 500-step
-  budget.
+  budget. That figure has since been edged by an open-weight model whose
+  agent-side interfaces were evolved rather than fixed — see **Evolving Agent
+  Interfaces** below.
+- **Evolving Agent Interfaces (Agent S4)** — Agashe, Yang, Gonzalez-Pumariega,
+  Koduru, Li, Yang, Li, Wang (arXiv:2610.28601, 20 October 2026; work done at
+  Simular). A meta-agent builds and revises the agent's own interfaces to the
+  computer (app-specific, cross-app, and a structured browser interface) from
+  task trajectories, and population-based evolution keeps what performs best.
+  With Qwen3.8-27B the evolved repository scores **21.30%** binary on the full
+  108-task OSWorld 2.0 set under a 300-step budget, against **5.56%** for the
+  same model on a fixed interface (about 3.8x), and above the 20.60% the OSWorld
+  2.0 paper reports for Claude Opus 4.8 and 13.00% for GPT-5.5 at a 500-step
+  budget, at a reported $1.10 per task. ScienceBoard rises from 41.4% to 58.58%.
+  "Interface" here is the agent's access layer, not a website's UI; the paper
+  makes no claim about web or application design. It is recorded because the
+  entire gain came from changing the interface and none from changing the model
+  — the framework's premise, demonstrated on the other side of the screen.
 - **ST-WebAgentBench** — "A Benchmark for Evaluating Safety and Trustworthiness
   in Web Agents" — Levy et al., IBM Research (arXiv:2410.06703, 2024; ICLR 2026)
 - **MCP** — Model Context Protocol (modelcontextprotocol.io). Revision
@@ -618,7 +669,64 @@ npm test
   WebMCP continues only in the repository's `declarative-api-explainer.md` (PR
   #338). On 29 September 2026 `implementation-status.md` added **Meta Ray-Ban
   Display**: "WebMCP for Web Apps is coming soon", off by default (PR #325).
-  Retrieved 9 October 2026.
+  Retrieved 9 October 2026. **Late October 2026** (retrieved 27 October 2026,
+  when the header read 27 October 2026): on **27 October 2026** §6.3.4
+  "Interaction with the Same-Origin Policy" gained a **two-sided opt-in** for
+  cross-origin tools (PR #326). By default a tool is visible and executable only
+  by same-origin documents; a cross-origin document needs three independent
+  gates — the embedder delegates the `tools` permission (e.g. `allow="tools"` on
+  the iframe, default allowlist `'self'`), the provider lists permitted caller
+  origins in `registerTool()`'s `exposedTo`, and the consumer lists the origins
+  it accepts in `getTools()`'s `fromOrigins`. Both sides must consent; callers
+  are told to treat cross-origin tool descriptions and return values as
+  untrusted and to check each `RegisteredTool`'s `origin` and `window`. On **20
+  October 2026** §6.2 added that indirect prompt injection and cross-origin data
+  correlation are general agentic-browsing risks a single web API cannot
+  normatively enforce against, and §6.4.6 "Agent-Level Guardrails and Best
+  Practices" now links Chrome's agent-security and secure-tools guidance and a
+  **draft W3C Agentic Web Working Group charter** that names WebMCP as its
+  normative deliverable, adopted from the Community Group (PR #334). The charter
+  is a draft with placeholder dates; the group does not yet exist.
+  `implementation-status.md` is unchanged.
+- **MCP release cadence (SEP-3398)** — "Release Cycle Updates", Process SEP,
+  **Accepted 14 October 2026**. Specification releases move to a six-month
+  cadence, generally the last Tuesday of March and September, each on an
+  eight-month cycle with a soft freeze 2.5 months out and Tier 1 SDK betas 1.5
+  months out. The release previously targeted for December 2026 moves to **30
+  March 2027**. Layer 5 implementers can plan against that date; `2026-07-28`
+  remains current until then.
+  https://modelcontextprotocol.io/seps/3398-release-cycle-updates
+- **MICA** — "Matched Capabilities, Different Behaviors: A Controlled Study of
+  MCP and CLI Interfaces for Language Agents" — Shi, Pang, Li (Hong Kong
+  Polytechnic University; ICT, Chinese Academy of Sciences) (arXiv:2610.34298,
+  25 October 2026). Renders MCP and CLI from one semantic action contract with a
+  shared runtime; six models (Qwen3-4B/8B/14B/32B, DeepSeek-v4-Flash,
+  Gemini-2.5-Flash) on ALFWorld, WebShop, ScienceWorld. Qwen3-14B: MCP 20.1 vs
+  CLI 56.7 on ALFWorld, 64.4 vs 59.5 on WebShop; MCP lowers WebShop
+  attempt-level failure for all six models by 1.1-8.9pp; 1,889/2,004 paired
+  episodes (94.3%) diverge structurally. DART (commitment-preserving realization
+  repair) lifts Gemini-2.5-Flash by +1.5/+9.0 (ALFWorld), +0.8/+4.4 (WebShop),
+  +6.7/+5.3 (ScienceWorld) for CLI/MCP and cuts MCP tokens by 27.1k, 11.2k, 4.3k
+  per task. Code: https://github.com/ModalityDance/MICA
+- **GatewayBench** — "Unified Capability and Security Evaluation Platform for
+  MCP Gateways" — Zheng, Chen, Li, Li (arXiv:2610.23449, 16 October 2026). 524
+  tasks across six domains; 11,118 real tools from 251 MCP servers; seven
+  deployed gateways, flattened vs hierarchical, benign and adversarial tasks.
+  Reports substantial, model- and harness-dependent differences in completion,
+  efficiency, and attack resilience; no single headline number in the abstract.
+- **OS-Helix** — "Unifying GUI Interaction and Code Execution in Native
+  Computer-Using Agents" — Yang, Jin, Ding, Wu, Li, Liu, Cheng, Xu, Sun, Sun,
+  Qiao (arXiv:2610.22234, 15 October 2026). Single action space for GUI and
+  code, SFT then online RL with Step-balanced GSPO; OS-Helix-27B-RL 66.44% on
+  OSWorld-Verified. Prompting a code tool into a GUI agent hurt performance in
+  the authors' preliminary experiments.
+- **CUA-Recovery** — "Benchmarking Error Recovery in Long-Horizon Computer-Use
+  Agents" — Hu, Li, Wang, Yang, Li, Wang, Kang, Song, Wang, Hu, Yang, Li, Li,
+  Chen (arXiv:2610.27645, 20 October 2026). 2,250 human-verified erroneous
+  states over 100 tasks (test) and 8.6K trajectories over 377 tasks (train),
+  built with ReRail from MyPCBench; across six agents and six takeover depths,
+  Error Awareness Rate at most 44.0%, Pass@3 at most 25.5%. Fine-tuning
+  Qwen3.5-35B-A3B raised EAR from 19.9% to 35.2%.
 - **AX is the New AEO** — Finder, Elovic, Shalev, Yosef (arXiv:2609.34951, v1 28
   September 2026; v3 6 October 2026). 37,927 agent journeys over 1,056 real
   businesses and four agent harnesses, matched on fame, prior model knowledge,
