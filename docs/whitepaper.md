@@ -1304,7 +1304,8 @@ operating in the browser. Note that it is **not** a W3C Standard and is not on
 the W3C Standards Track; treat it as incubation-stage. Incubation is not the
 same as inactivity: as of the 26 August 2026 draft, the specification
 repository's own implementation-status page records origin trials live in Chrome
-149 and Edge 150, experimental support in Brave's Leo AI chat,
+149 and Edge 150, Brave's Leo AI chat (experimental then; recorded as supported
+as of Brave 1.102.2, expected 5 January 2027, in the 12 November 2026 update),
 standards-positions entries for Firefox and Safari, and ChatGPT Desktop — the
 first non-browser client listed — added on 26 August 2026. With that caveat,
 bridging the web (Layers 1-3) with protocols (Layer 5) natively in the browser
@@ -1367,9 +1368,16 @@ single normative deliverable is WebMCP, adopted from the Web Machine Learning
 Community Group (PR #334). The charter is marked draft with placeholder start
 and end dates; no Call for Participation has been issued and the group does not
 yet exist, so WebMCP remains a Community Group incubation. The repository's
-`implementation-status.md` is unchanged from September: Chrome 149 and Edge 150
-origin trials, Brave Leo experimental, ChatGPT Desktop, and Meta Ray-Ban Display
-"coming soon".
+`implementation-status.md` changed on 12 November 2026: Chrome 149 and Edge 150
+origin trials, ChatGPT Desktop, Meta Ray-Ban Display "coming soon", and Brave
+Leo AI chat now recorded as supported as of Brave 1.102.2 (expected 5 January
+2027). The specification itself gained `outputSchema` on `ModelContextTool` and
+`RegisteredTool` (2 November, PR #254; named to match MCP's own, agents may
+reject non-conforming output, the browser does not validate), fired
+`toolactivated` after `execute` (9 November, PR #371), and scoped `getTools()`
+discovery to the caller's traversable so a parent or sibling document can
+contribute tools (11 November, PR #382). Header 19 November 2026, retrieved 22
+November 2026.
 
 **Defensive Design & Safety (ST-WebAgentBench Insights):** Benchmarks like
 **ST-WebAgentBench** emphasize the necessity of safety and trustworthiness. When
@@ -1564,7 +1572,12 @@ execution. OSWorld 2.0 comprises 108 long-horizon workflows that take human
 users a median of roughly 1.6 hours each and average 318 tool calls, against
 about 30 in OSWorld 1.0. On it, the best frontier agent evaluated (Claude Opus
 4.8 with maximum thinking and batched tool calls) completes only **20.6%** of
-tasks at a 500-step budget, with a 54.8% partial score.
+tasks on the maintainers' own page (still the stated figure, with no Opus 5 row,
+as of 22 November 2026). Hybrid Computer Use (arXiv:2610.41432) reports Opus 5's
+official leaderboard result as 31.43% binary and its own hybrid agent at 35.19%;
+that is a different model and is cited as the paper's report, not as the board's
+figure. The 20.6% is the share of tasks at a 500-step budget, with a 54.8%
+partial score.
 
 That 20.6% is no longer the highest reported figure, and the way it was passed
 is instructive. **Evolving Agent Interfaces** (Agent S4, arXiv:2610.28601, 20
@@ -1696,6 +1709,20 @@ Vision and computer-use agents read screenshots. Design considerations:
 - **Readable typography**: Minimum 16px body text; sufficient contrast ratios
 - **Minimal visual noise**: Avoid dense layouts, overlapping elements, and
   excessive animations
+
+**Recovery, staleness and silent failure — November 2026.** Three measurements
+narrow where long horizons break. Hybrid Computer Use reaches 35.19% binary on
+OSWorld 2.0 with Claude Opus 5 against the 31.43% it reports as that model's
+leaderboard result (arXiv:2610.41432). Stale clicks come mostly from page
+loading — 0.4% on fully loaded pages against 17% in the first second after load,
+cut to 0.46% by waiting for network idle at a median 1.24 s (arXiv:2610.39282).
+And a 200 is not content: about one in five static HTTP 200 fetches lacked the
+page's main content, 20.9% by automatic labels and 20.0% on the reviewed split
+(arXiv:2611.00884), which is the measured reason FR-1 is a requirement. Baya's
+compile-then-execute route — the planner never reads live page content — scores
+77.8% on 581 WebArena Verified tasks with 0% WASP attack success, against 55.1%
+and 25.5% for browser-only (arXiv:2611.06039). MiniWeb corroborates the
+drag/drop finding: no open-weight agent above 24% (arXiv:2610.35823).
 
 ---
 
@@ -2765,6 +2792,22 @@ resilient, semantic, structured, and protocol-aware.
    2026
 6. **WCAG 3.0**: https://www.w3.org/TR/2026/WD-wcag-3.0-20260910/ — W3C Working
    Draft, 10 September 2026 (not a Recommendation)
+7. **Hybrid Computer Use** — Wang, Zhang, Fan, Zhang et al. (2026).
+   https://arxiv.org/abs/2610.41432
+8. **When 200 OK Is Not an Answer** — Zhang (2026).
+   https://arxiv.org/abs/2611.00884
+9. **When Neither Side Confirms** — Yao, Yang, Wang, Zhou et al. (2026).
+   https://arxiv.org/abs/2611.02527
+10. **What Does "Now" Mean to Your Computer-Use Agent?** — Srinivasan (2026).
+    https://arxiv.org/abs/2610.39282
+11. **Back to Basics (MiniWeb)** — Pham-Dinh, Ishmam, Yupanqui, Joarder et al.
+    (2026). https://arxiv.org/abs/2610.35823
+12. **Baya: Securing Web Agents with the Compile-Then-Execute Paradigm** — Chow,
+    Zhu, Venuto, Alharbi et al. (2026). https://arxiv.org/abs/2611.06039
+13. **WebArena-Pro** — Kerboua, Zadeh, Lù, Qi et al. (2026).
+    https://arxiv.org/abs/2611.17955
+14. **Trained on What Screen Readers Cannot Read** — Kraishan, Jitkajornwanich
+    (2026). https://arxiv.org/abs/2611.16107
 
 ### **BiModal Design Resources**
 
