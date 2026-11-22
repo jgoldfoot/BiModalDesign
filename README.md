@@ -505,6 +505,51 @@ npm install
 npm test
 ```
 
+- **Recovery is its own bottleneck, and the agent often cannot see the error at
+  all.** Three November measurements sharpen the long-horizon picture. **Hybrid
+  Computer Use** (2026) unifies programmatic, semantic and visual channels in
+  one agent; with Claude Opus 5 it reaches **35.19% binary / 72.06% partial** on
+  OSWorld 2.0 against **31.43% / 68.31%** for what the paper reports as the
+  model's official leaderboard result (arXiv:2610.41432). The OSWorld 2.0
+  maintainers' page itself still states **20.6%** for Claude Opus 4.8 and lists
+  no Opus 5 row (checked 22 November 2026), so the two figures describe
+  different models and the 20.6% remains the primary-source number. **Stale
+  screenshots** come mostly from page loading: 0.4% of clicks planned on fully
+  loaded pages went stale against 17% in the first second after load, and
+  waiting for network idle cut that to 0.46% at a median 1.24 s
+  (arXiv:2610.39282). The paper's 52% layout-shift figure is a self-described
+  unvalidated proxy. **MiniWeb**, the benchmark inside "Back to Basics"
+  (arXiv:2610.35823), found no open-weight agent solving more than 24% of
+  drag-and-gesture instances, corroborating ComponentBench's drag/drop result.
+- **A 200 is not content, and an API route beats screen-driving on both success
+  and safety.** **"When 200 OK Is Not an Answer"** (2026) found about one in
+  five static HTTP 200 fetches lacked the page's main content — 20.9% by
+  automatic labels, 20.0% on the reviewed split (CI 13.3–27.7%) — with app
+  shells, bot challenges and error pages behind the failures; counting every 200
+  as content raises apparent citation drift from 5.8% to 21.9%
+  (arXiv:2611.00884). The sample leans on cited sources, so it is not a web-wide
+  rate, but it is the cleanest measurement yet of why FR-1 is stated as a
+  requirement rather than a preference. **Baya** (2026) compiles a request into
+  a program against a trusted site API so the planner never reads live page
+  content: on 581 WebArena Verified tasks, 77.8% utility against 66.7% for an
+  API-enabled ReAct agent and 55.1% for browser-only, and 0% attack success on
+  WASP against 16.2% and 25.5% (arXiv:2611.06039). It is not a test of BiModal
+  Design; it is outside evidence for Layers 4 and 5.
+- **Destructive MCP tools mostly ship without an enforced approval step.** On a
+  1,000-repository registry sample, about 90% of destructive tools have no
+  server-side confirmation, and 32 of 41 hosts and SDKs have no default approval
+  step; 60.7% of tool-host pairs have no enforced human approval by default.
+  Prompting on every tool not annotated read-only or non-destructive would cut
+  that to an estimated 5.4% (arXiv:2611.02527). This is the strongest external
+  case yet for tool annotations at Layer 5 and for Pattern 7's human-in-the-loop
+  confirmation. Separately, **WebArena-Pro** (2026, NeurIPS 2026 Datasets &
+  Benchmarks) adds audio and video as core observations across 300 tasks on 20
+  self-hosted apps; best score 62.3%, strongest generic-agent configuration
+  30.3% (arXiv:2611.17955). And **accessibility debt** turns out to be baked
+  into the training corpora behind computer-use agents: screen-reader label
+  coverage is 17.74% in Rico and 57.27% in AndroidControl (arXiv:2611.16107) —
+  Android only, so it bears on Layer 2 by analogy.
+
 ---
 
 ## Research & Citations
@@ -524,6 +569,11 @@ npm test
 - **OSWorld 2.0** — "Benchmarking Computer Use Agents on Long-Horizon Real-World
   Tasks" — Yuan, Zhou, Xiong et al., XLANG Lab (arXiv:2606.29537, June 2026).
   108 long-horizon workflows; best frontier agent completes 20.6% at a 500-step
+  budget on the maintainers' own page (Claude Opus 4.8; still the stated figure,
+  with no Opus 5 row, as of 22 November 2026). Hybrid Computer Use
+  (arXiv:2610.41432) reports Opus 5's official leaderboard result as 31.43%
+  binary and its own agent at 35.19% — a different model, cited as that paper's
+  report rather than as the board's figure. The 20.6% figure is at a 500-step
   budget. That figure has since been edged by an open-weight model whose
   agent-side interfaces were evolved rather than fixed — see **Evolving Agent
   Interfaces** below.
@@ -639,10 +689,20 @@ npm test
   **Implementation status as re-checked on 27 September 2026** (unchanged since
   7 September) (per the spec repository's own `implementation-status.md`, which
   is the source for these): origin trials live in **Chrome 149** and **Edge
-  150**; experimental support in Brave's Leo AI chat; **ChatGPT Desktop** listed
-  as supporting WebMCP — the first non-browser client on the page, added 26
-  August 2026 in a pull request from an OpenAI-affiliated author and merged by a
-  spec editor. Firefox and Safari have standards-positions entries only.
+  150**; Brave's Leo AI chat moved from experimental to **supported as of Brave
+  1.102.2** (expected 5 January 2027; implementation-status row updated 12
+  November 2026, PR #383); **ChatGPT Desktop** listed as supporting WebMCP — the
+  first non-browser client on the page, added 26 August 2026 in a pull request
+  from an OpenAI-affiliated author and merged by a spec editor. Firefox and
+  Safari have standards-positions entries only. **November 2026** (retrieved 22
+  November 2026; header then read 19 November 2026): `outputSchema` added to
+  `ModelContextTool` and `RegisteredTool` on 2 November (PR #254), named to
+  match MCP's own; output "is expected to conform" and agents may reject output
+  that does not validate, but the browser does not validate. `toolactivated` now
+  fires after the tool's `execute` callback (9 November, PR #371). `getTools()`
+  discovery starts from the active document of the caller's traversable, so an
+  eligible parent or sibling document can contribute tools (11 November, PR
+  #382; the editor notes this will change again under issue #375).
 - **ComponentBench** — "Diagnosing Component-Level Failures in Computer-Use
   Agents" — Guan, Lin, Cheng-Yue, Wang, Zhou (arXiv:2608.18307, 18 August 2026).
   97 canonical UI components as 2,910 programmatically verified tasks with human
@@ -775,6 +835,47 @@ npm test
   https://modelcontextprotocol.io/seps/2640-skills-extension
 - **Code execution with MCP** — Building more efficient agents (Anthropic,
   Nov 2025)
+
+- **Hybrid Computer Use** — "A Unified Programmatic, Semantic, and Visual
+  Interface for General Agents" — Wang, Zhang, Fan, Zhang et al.
+  (arXiv:2610.41432, 30 October 2026). With Claude Opus 5: 35.19% binary /
+  72.06% partial on OSWorld 2.0 against 31.43% / 68.31% for what the paper
+  reports as the official leaderboard result. The OSWorld 2.0 maintainers' page
+  still states 20.6% for Opus 4.8 and lists no Opus 5 row (checked 22 November
+  2026).
+- **When 200 OK Is Not an Answer** — "Silent Fetch Failures in Agentic Web
+  Content Acquisition" — Zhang (arXiv:2611.00884, 31 October 2026). 20.9% of
+  static HTTP 200 pages lacked main content by automatic labels, 20.0% on the
+  reviewed split (CI 13.3–27.7%); counting every 200 as content raises apparent
+  citation drift from 5.8% to 21.9%.
+- **When Neither Side Confirms** — "Destructive Tool Approval Across MCP Servers
+  and Hosts" — Yao, Yang, Wang, Zhou et al. (arXiv:2611.02527, 2 November 2026).
+  ~90% of destructive tools in a 1,000-repo sample lack server-side
+  confirmation; 32 of 41 hosts/SDKs have no default approval; 60.7% of tool-host
+  pairs unapproved by default, 5.4% if every non-read-only tool prompted.
+- **What Does "Now" Mean to Your Computer-Use Agent?** — Srinivasan
+  (arXiv:2610.39282, 29 October 2026). 0.4% of clicks planned on loaded pages
+  went stale vs 17% in the first second; network-idle waiting cut this to 0.46%
+  at a median 1.24 s. The 52% layout-shift figure is a self-described
+  unvalidated proxy.
+- **Back to Basics (MiniWeb)** — "A Skill-Centric Approach to Generalist Web
+  Agents" — Pham-Dinh, Ishmam, Yupanqui, Joarder et al. (arXiv:2610.35823, 26
+  October 2026). No open-weight agent solved more than 24% of drag-and-gesture
+  instances.
+- **Baya** — "Securing Web Agents with the Compile-Then-Execute Paradigm" —
+  Chow, Zhu, Venuto, Alharbi et al. (arXiv:2611.06039, 4 November 2026). 581
+  WebArena Verified tasks: 77.8% utility vs 66.7% (API-enabled ReAct) and 55.1%
+  (browser-only); WASP attack success 0% vs 16.2% and 25.5%.
+- **WebArena-Pro** — "A Heterogeneous, Multimodal, Reproducible Benchmark for
+  Web Agents" — Kerboua, Zadeh, Lù, Qi et al. (arXiv:2611.17955, 13 November
+  2026; NeurIPS 2026 Datasets & Benchmarks). 300 tasks, 20 self-hosted apps,
+  audio and video as core observations; best 62.3%, strongest generic-agent
+  configuration 30.3%. Cite the arXiv v1 figures only; listing pages show a
+  different top score.
+- **Trained on What Screen Readers Cannot Read** — "Accessibility Debt in the
+  GUI Corpora Behind Computer-Use Agents" — Kraishan, Jitkajornwanich
+  (arXiv:2611.16107, 11 November 2026). Screen-reader label coverage 17.74% in
+  Rico, 57.27% in AndroidControl. Android only; bears on Layer 2 by analogy.
 
 ---
 
