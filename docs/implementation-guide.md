@@ -334,7 +334,7 @@ server.tool('search_products', { query: z.string() }, async ({ query }) => {
 #### Step 5.2: Publish Agent Card (A2A)
 
 ```json
-// /.well-known/agent.json
+// /.well-known/agent-card.json
 {
   "name": "Product Catalog Agent",
   "description": "Search and browse product catalog",
@@ -774,7 +774,7 @@ module.exports = {
 **Layer 5 — Agent Protocols:**
 
 - [ ] MCP tools callable
-- [ ] Agent Card accessible at `/.well-known/agent.json`
+- [ ] Agent Card accessible at `/.well-known/agent-card.json`
 
 ## Performance Optimization
 

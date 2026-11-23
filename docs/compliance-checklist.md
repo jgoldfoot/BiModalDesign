@@ -88,7 +88,7 @@ curl -s https://yoursite.com | grep -E '<(main|nav|h1|article)'
 ### Example: v3.0 Standards-Based Markup
 
 ```html
-<!-- v3.0: Use schema.org instead of data-agent-* -->
+<!-- v3.0: Standards first. data-agent-* is retained as a supplementary layer where no standard covers the need (whitepaper §7.2, AGENTS.md). -->
 <article itemscope itemtype="https://schema.org/Product">
   <h2 itemprop="name">Wireless Headphones</h2>
   <p itemprop="description">High-quality wireless headphones</p>
@@ -138,7 +138,7 @@ Computer-Use Agents)
 
 ### A2A (Agent-to-Agent Protocol)
 
-- [ ] Agent Card published at `/.well-known/agent.json`
+- [ ] Agent Card published at `/.well-known/agent-card.json`
 - [ ] Capabilities declared (what the agent/service can do)
 - [ ] Input/output schemas defined
 
@@ -229,14 +229,14 @@ Computer-Use Agents)
 
 If upgrading from BiModal Design v2.x, replace custom attributes with standards:
 
-| v2.x Attribute                 | v3.0 Replacement                             |
-| ------------------------------ | -------------------------------------------- |
-| `data-agent-context="product"` | `itemscope itemtype="schema.org/Product"`    |
-| `data-agent-action="buy"`      | `aria-label="Add to cart"`                   |
-| `data-agent-field="price"`     | `itemprop="price"`                           |
-| `data-agent-component="nav"`   | `<nav aria-label="Main navigation">`         |
-| `data-agent-intent="checkout"` | `<form aria-label="Checkout" method="POST">` |
-| `data-agent-state="loading"`   | `aria-busy="true"`                           |
+| v2.x Attribute                 | v3.0 Replacement                                                                                                      |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `data-agent-context="product"` | `itemscope itemtype="schema.org/Product"`                                                                             |
+| `data-agent-action="buy"`      | Keep, or pair with `aria-label="Add to cart"` (no standard captures agent-actionable intent)                          |
+| `data-agent-field="price"`     | `itemprop="price"`                                                                                                    |
+| `data-agent-component="nav"`   | Keep (supplementary) alongside `<nav aria-label="Main navigation">` (no standard equivalent for component role hints) |
+| `data-agent-intent="checkout"` | `<form aria-label="Checkout" method="POST">`                                                                          |
+| `data-agent-state="loading"`   | `aria-busy="true"`                                                                                                    |
 
 ---
 
